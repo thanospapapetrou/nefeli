@@ -68,7 +68,7 @@ public class OaiPmh {
     protected XMLGregorianCalendar responseDate;
     @XmlElement(required = true)
     protected RequestType request;
-    protected List<OAIPMHerrorType> error;
+    protected List<Error> error;
     @XmlElement(name = "Identify")
     protected IdentifyType identify;
     @XmlElement(name = "ListMetadataFormats")
@@ -148,13 +148,13 @@ public class OaiPmh {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link OAIPMHerrorType }
+     * {@link Error }
      * 
      * 
      */
-    public List<OAIPMHerrorType> getError() {
+    public List<Error> getError() {
         if (error == null) {
-            error = new ArrayList<OAIPMHerrorType>();
+            error = new ArrayList<Error>();
         }
         return this.error;
     }
