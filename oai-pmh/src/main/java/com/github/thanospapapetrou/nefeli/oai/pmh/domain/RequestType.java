@@ -54,7 +54,7 @@ public class RequestType {
     @XmlSchemaType(name = "anyURI")
     protected String value;
     @XmlAttribute(name = "verb")
-    protected VerbType verb;
+    protected Verb verb;
     @XmlAttribute(name = "identifier")
     protected String identifier;
     @XmlAttribute(name = "metadataPrefix")
@@ -97,10 +97,10 @@ public class RequestType {
      * 
      * @return
      *     possible object is
-     *     {@link VerbType }
+     *     {@link Verb }
      *     
      */
-    public VerbType getVerb() {
+    public Verb getVerb() {
         return verb;
     }
 
@@ -109,10 +109,10 @@ public class RequestType {
      * 
      * @param value
      *     allowed object is
-     *     {@link VerbType }
+     *     {@link Verb }
      *     
      */
-    public void setVerb(VerbType value) {
+    public void setVerb(Verb value) {
         this.verb = value;
     }
 
