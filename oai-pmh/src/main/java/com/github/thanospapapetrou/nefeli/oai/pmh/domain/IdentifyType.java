@@ -70,7 +70,7 @@ public class IdentifyType {
     @XmlElement(required = true)
     protected String earliestDatestamp;
     @XmlElement(required = true)
-    protected DeletedRecordType deletedRecord;
+    protected DeletedRecord deletedRecord;
     @XmlElement(required = true)
     protected GranularityType granularity;
     protected List<String> compression;
@@ -206,10 +206,10 @@ public class IdentifyType {
      * 
      * @return
      *     possible object is
-     *     {@link DeletedRecordType }
+     *     {@link DeletedRecord }
      *     
      */
-    public DeletedRecordType getDeletedRecord() {
+    public DeletedRecord getDeletedRecord() {
         return deletedRecord;
     }
 
@@ -218,10 +218,10 @@ public class IdentifyType {
      * 
      * @param value
      *     allowed object is
-     *     {@link DeletedRecordType }
+     *     {@link DeletedRecord }
      *     
      */
-    public void setDeletedRecord(DeletedRecordType value) {
+    public void setDeletedRecord(DeletedRecord value) {
         this.deletedRecord = value;
     }
 
