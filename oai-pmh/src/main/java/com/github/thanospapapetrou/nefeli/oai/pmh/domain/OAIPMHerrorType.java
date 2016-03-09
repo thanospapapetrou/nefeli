@@ -41,7 +41,7 @@ public class OAIPMHerrorType {
     @XmlValue
     protected String value;
     @XmlAttribute(name = "code", required = true)
-    protected OAIPMHerrorcodeType code;
+    protected Code code;
 
     /**
      * Gets the value of the value property.
@@ -72,10 +72,10 @@ public class OAIPMHerrorType {
      * 
      * @return
      *     possible object is
-     *     {@link OAIPMHerrorcodeType }
+     *     {@link Code }
      *     
      */
-    public OAIPMHerrorcodeType getCode() {
+    public Code getCode() {
         return code;
     }
 
@@ -84,10 +84,10 @@ public class OAIPMHerrorType {
      * 
      * @param value
      *     allowed object is
-     *     {@link OAIPMHerrorcodeType }
+     *     {@link Code }
      *     
      */
-    public void setCode(OAIPMHerrorcodeType value) {
+    public void setCode(Code value) {
         this.code = value;
     }
 
