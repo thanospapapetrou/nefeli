@@ -17,41 +17,41 @@ public enum Verb {
 	 * <code>Identify</code>
 	 */
 	@XmlEnumValue("Identify")
-	@XmlSchemaType(name = "verbType")
+	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
 	IDENTIFY,
 
 	/**
 	 * <code>ListMetadataFormats</code>
 	 */
 	@XmlEnumValue("ListMetadataFormats")
-	@XmlSchemaType(name = "verbType")
+	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
 	LIST_METADATA_FORMATS,
 
 	/**
 	 * <code>ListSets</code>
 	 */
 	@XmlEnumValue("ListSets")
-	@XmlSchemaType(name = "verbType")
+	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
 	LIST_SETS,
 
 	/**
 	 * <code>GetRecord</code>
 	 */
 	@XmlEnumValue("GetRecord")
-	@XmlSchemaType(name = "verbType")
+	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
 	GET_RECORD,
 
 	/**
 	 * <code>ListIdentifiers</code>
 	 */
 	@XmlEnumValue("ListIdentifiers")
-	@XmlSchemaType(name = "verbType")
+	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
 	LIST_IDENTIFIERS,
 
 	/**
 	 * <code>ListRecords</code>
 	 */
 	@XmlEnumValue("ListRecords")
-	@XmlSchemaType(name = "verbType")
+	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
 	LIST_RECORDS;
 }

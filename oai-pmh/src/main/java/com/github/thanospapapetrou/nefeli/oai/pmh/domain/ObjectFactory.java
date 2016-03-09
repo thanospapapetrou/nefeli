@@ -41,11 +41,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link OAIPMHtype }
+     * Create an instance of {@link OaiPmh }
      * 
      */
-    public OAIPMHtype createOAIPMHtype() {
-        return new OAIPMHtype();
+    public OaiPmh createOAIPMHtype() {
+        return new OaiPmh();
     }
 
     /**
@@ -177,12 +177,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link OAIPMHtype }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link OaiPmh }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.openarchives.org/OAI/2.0/", name = "OAI-PMH")
-    public JAXBElement<OAIPMHtype> createOAIPMH(OAIPMHtype value) {
-        return new JAXBElement<OAIPMHtype>(_OAIPMH_QNAME, OAIPMHtype.class, null, value);
+    public JAXBElement<OaiPmh> createOAIPMH(OaiPmh value) {
+        return new JAXBElement<OaiPmh>(_OAIPMH_QNAME, OaiPmh.class, null, value);
     }
 
 }

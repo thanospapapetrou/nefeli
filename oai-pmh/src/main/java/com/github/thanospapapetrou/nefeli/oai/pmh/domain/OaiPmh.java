@@ -59,7 +59,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "listIdentifiers",
     "listRecords"
 })
-public class OAIPMHtype {
+public class OaiPmh {
+	public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
+	public static final String SCHEMA = "http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd";
 
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")

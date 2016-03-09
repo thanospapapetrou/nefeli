@@ -59,7 +59,7 @@ public class HeaderType {
     protected String datestamp;
     protected List<String> setSpec;
     @XmlAttribute(name = "status")
-    protected StatusType status;
+    protected Status status;
 
     /**
      * Gets the value of the identifier property.
@@ -143,10 +143,10 @@ public class HeaderType {
      * 
      * @return
      *     possible object is
-     *     {@link StatusType }
+     *     {@link Status }
      *     
      */
-    public StatusType getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -155,10 +155,10 @@ public class HeaderType {
      * 
      * @param value
      *     allowed object is
-     *     {@link StatusType }
+     *     {@link Status }
      *     
      */
-    public void setStatus(StatusType value) {
+    public void setStatus(Status value) {
         this.status = value;
     }
 
