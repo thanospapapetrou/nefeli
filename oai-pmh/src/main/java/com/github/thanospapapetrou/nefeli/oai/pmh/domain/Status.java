@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "statusType")
 public enum Status {
 	/**
-	 * <code>deleted</code>
+	 * deleted record (<code>deleted</code>)
 	 */
 	@XmlEnumValue("deleted")
 	DELETED;

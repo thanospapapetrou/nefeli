@@ -13,49 +13,49 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "OAI-PMHerrorcodeType")
 public enum Code {
 	/**
-	 * <code>cannotDisseminateFormat</code>
+	 * the metadata format identified by the value given for the <code>metadataPrefix</code> argument is not supported by the item or by the repository (<code>cannotDisseminateFormat</code>)
 	 */
 	@XmlEnumValue("cannotDisseminateFormat")
 	CANNOT_DISSEMINATE_FORMAT,
 
 	/**
-	 * <code>idDoesNotExist</code>
+	 * he value of the <code>identifier</code> argument is unknown or illegal in this repository (<code>idDoesNotExist</code>)
 	 */
 	@XmlEnumValue("idDoesNotExist")
 	ID_DOES_NOT_EXIST,
 	
 	/**
-	 * <code>badArgument</code>
+	 * the request includes illegal arguments, is missing required arguments, includes a repeated argument, or values for arguments have an illegal syntax (<code>badArgument</code>)
 	 */
 	@XmlEnumValue("badArgument")
 	BAD_ARGUMENT,
 	
 	/**
-	 * <code>badVerb</code>
+	 * value of the <code>verb<code> argument is not a legal OAI-PMH verb, the <code>verb</code> argument is missing, or the <code>verb</code argument is repeated (<code>badVerb</code>)
 	 */
 	@XmlEnumValue("badVerb")
 	BAD_VERB,
 	
 	/**
-	 * <code>noMetadataFormats</code>
+	 * there are no metadata formats available for the specified item (<code>noMetadataFormats</code>)
 	 */
 	@XmlEnumValue("noMetadataFormats")
 	NO_METADATA_FORMATS,
 	
 	/**
-	 * <code>noRecordsMatch</code>
+	 * the combination of the values of the <code>from</code>, <code>until</code>, <code>set</code> and <code>metadataPrefix</code> arguments results in an empty list (<code>noRecordsMatch</code>)
 	 */
 	@XmlEnumValue("noRecordsMatch")
 	NO_RECORDS_MATCH,
 	
 	/**
-	 * <code>badResumptionToken</code>
+	 * the value of the <code>resumptionToken</code> argument is invalid or expired (<code>badResumptionToken</code>)
 	 */
 	@XmlEnumValue("badResumptionToken")
 	BAD_RESUMPTION_TOKEN,
 	
 	/**
-	 * <code>noSetHierarchy</code>
+	 * the repository does not support sets (<code>noSetHierarchy</code>)
 	 */
 	@XmlEnumValue("noSetHierarchy")
 	NO_SET_HIERARCHY;

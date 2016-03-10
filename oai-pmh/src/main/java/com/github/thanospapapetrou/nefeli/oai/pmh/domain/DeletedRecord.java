@@ -13,19 +13,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "deletedRecordType")
 public enum DeletedRecord {
 	/**
-	 * <code>no</code>
+	 * the repository does not maintain information about deletions (<code>no</code>)
 	 */
 	@XmlEnumValue("no")
 	NO,
 	
 	/**
-	 * <code>persistent</code>
+	 * the repository maintains information about deletions with no time limit (<code>persistent</code>)
 	 */
 	@XmlEnumValue("persistent")
 	PERSISTENT,
 	
 	/**
-	 * <code>transient</code>
+	 * the repository does not guarantee that a list of deletions is maintained persistently or consistently (<code>transient</code>)
 	 */
 	@XmlEnumValue("transient")
 	TRANSIENT;
