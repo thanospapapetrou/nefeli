@@ -72,7 +72,7 @@ public class IdentifyType {
     @XmlElement(required = true)
     protected DeletedRecord deletedRecord;
     @XmlElement(required = true)
-    protected GranularityType granularity;
+    protected Granularity granularity;
     protected List<String> compression;
     protected List<Description> description;
 
@@ -230,10 +230,10 @@ public class IdentifyType {
      * 
      * @return
      *     possible object is
-     *     {@link GranularityType }
+     *     {@link Granularity }
      *     
      */
-    public GranularityType getGranularity() {
+    public Granularity getGranularity() {
         return granularity;
     }
 
@@ -242,10 +242,10 @@ public class IdentifyType {
      * 
      * @param value
      *     allowed object is
-     *     {@link GranularityType }
+     *     {@link Granularity }
      *     
      */
-    public void setGranularity(GranularityType value) {
+    public void setGranularity(Granularity value) {
         this.granularity = value;
     }
 
