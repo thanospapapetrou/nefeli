@@ -51,7 +51,7 @@ public class RecordType {
     @XmlElement(required = true)
     protected HeaderType header;
     protected MetadataType metadata;
-    protected List<AboutType> about;
+    protected List<About> about;
 
     /**
      * Gets the value of the header property.
@@ -119,13 +119,13 @@ public class RecordType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link AboutType }
+     * {@link About }
      * 
      * 
      */
-    public List<AboutType> getAbout() {
+    public List<About> getAbout() {
         if (about == null) {
-            about = new ArrayList<AboutType>();
+            about = new ArrayList<About>();
         }
         return this.about;
     }
