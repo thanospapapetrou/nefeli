@@ -74,7 +74,7 @@ public class IdentifyType {
     @XmlElement(required = true)
     protected GranularityType granularity;
     protected List<String> compression;
-    protected List<DescriptionType> description;
+    protected List<Description> description;
 
     /**
      * Gets the value of the repositoryName property.
@@ -296,13 +296,13 @@ public class IdentifyType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DescriptionType }
+     * {@link Description }
      * 
      * 
      */
-    public List<DescriptionType> getDescription() {
+    public List<Description> getDescription() {
         if (description == null) {
-            description = new ArrayList<DescriptionType>();
+            description = new ArrayList<Description>();
         }
         return this.description;
     }

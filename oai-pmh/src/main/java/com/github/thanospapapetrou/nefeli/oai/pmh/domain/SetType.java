@@ -49,7 +49,7 @@ public class SetType {
     protected String setSpec;
     @XmlElement(required = true)
     protected String setName;
-    protected List<DescriptionType> setDescription;
+    protected List<Description> setDescription;
 
     /**
      * Gets the value of the setSpec property.
@@ -117,13 +117,13 @@ public class SetType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DescriptionType }
+     * {@link Description }
      * 
      * 
      */
-    public List<DescriptionType> getSetDescription() {
+    public List<Description> getSetDescription() {
         if (setDescription == null) {
-            setDescription = new ArrayList<DescriptionType>();
+            setDescription = new ArrayList<Description>();
         }
         return this.setDescription;
     }

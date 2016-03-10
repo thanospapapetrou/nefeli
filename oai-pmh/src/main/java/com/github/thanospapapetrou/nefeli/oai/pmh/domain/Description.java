@@ -11,29 +11,29 @@ import javax.xml.bind.annotation.XmlType;
 import org.w3c.dom.Element;
 
 /**
- * Class representing the <code>about</code> OAI-PMH element.
+ * Class representing the <code>description</code> and <code>setDescription</code> OAI-PMH elements.
  * 
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "aboutType", propOrder = {"any"})
-public class About {
+@XmlType(name = "descriptionType", propOrder = {"any"})
+public class Description {
 	@XmlAnyElement
 	@XmlSchemaType(name = "anyType")
 	private final Element element;
 
 	/**
-	 * Construct a new <code>about</code> element.
+	 * Construct a new <code>description</code> or <code>setDescription</code> element.
 	 * 
 	 * @param element
 	 *            the nested element
 	 */
-	public About(final Element element) {
+	public Description(final Element element) {
 		this.element = Objects.requireNonNull(element, "Element must not be null");
 	}
 
 	@SuppressWarnings("unused")
-	private About() {
+	private Description() {
 		element = null;
 	}
 
@@ -42,7 +42,7 @@ public class About {
 	 * 
 	 * @return the nested element
 	 */
-	public Element getElement() {
+	public Object getElement() {
 		return element;
 	}
 }
