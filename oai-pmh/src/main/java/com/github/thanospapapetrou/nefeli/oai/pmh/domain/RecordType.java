@@ -50,7 +50,7 @@ public class RecordType {
 
     @XmlElement(required = true)
     protected HeaderType header;
-    protected MetadataType metadata;
+    protected Metadata metadata;
     protected List<About> about;
 
     /**
@@ -82,10 +82,10 @@ public class RecordType {
      * 
      * @return
      *     possible object is
-     *     {@link MetadataType }
+     *     {@link Metadata }
      *     
      */
-    public MetadataType getMetadata() {
+    public Metadata getMetadata() {
         return metadata;
     }
 
@@ -94,10 +94,10 @@ public class RecordType {
      * 
      * @param value
      *     allowed object is
-     *     {@link MetadataType }
+     *     {@link Metadata }
      *     
      */
-    public void setMetadata(MetadataType value) {
+    public void setMetadata(Metadata value) {
         this.metadata = value;
     }
 
