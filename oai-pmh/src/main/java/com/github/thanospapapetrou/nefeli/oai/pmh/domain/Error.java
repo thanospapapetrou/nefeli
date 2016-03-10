@@ -27,12 +27,25 @@ public class Error {
 
 	/**
 	 * Construct a new <code>error</code> element.
-	 * @param code the <code>code</code> attribute
-	 * @param value the value
+	 * 
+	 * @param code
+	 *            the <code>code</code> attribute
+	 * @param value
+	 *            the value or <code>null</code> to leave it unspecified
 	 */
 	public Error(final Code code, final String value) {
 		this.code = Objects.requireNonNull(code, "Code must not be null");
-		this.value = Objects.requireNonNull(value, "Value must not be null");
+		this.value = value;
+	}
+
+	/**
+	 * Construct a new <code>error</code> element with the value left unspecified.
+	 * 
+	 * @param code
+	 *            the <code>code</code> attribute
+	 */
+	public Error(final Code code) {
+		this(code, null);
 	}
 
 	@SuppressWarnings("unused")
@@ -42,18 +55,18 @@ public class Error {
 	}
 
 	/**
-	 * Gets the value of the code property.
+	 * Get the <code>code</code> attribute.
 	 * 
-	 * @return possible object is {@link Code }
+	 * @return the <code>code</code> attribute
 	 */
 	public Code getCode() {
 		return code;
 	}
 
 	/**
-	 * Gets the value of the value property.
+	 * Get the value.
 	 * 
-	 * @return possible object is {@link String }
+	 * @return the value or <code>null</code> if unspecified
 	 */
 	public String getValue() {
 		return value;
