@@ -1,0 +1,146 @@
+package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+
+/**
+ * Class representing the <code>header</code> OAI-PMH element.
+ * 
+ * @author thanos
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "headerType", propOrder = {"identifier", "datestamp", "setSpecs"})
+public class Header {
+	@XmlAttribute(name = "status")
+	@XmlSchemaType(name = "statusType", namespace = OaiPmh.NAMESPACE)
+	private final Status status;
+
+	@XmlElement(name = "identifier", required = true)
+	@XmlSchemaType(name = "identifierType", namespace = OaiPmh.NAMESPACE)
+	private final URI identifier;
+
+	@XmlElement(name = "datestamp", required = true)
+	@XmlSchemaType(name = "UTCdatetimeType", namespace = OaiPmh.NAMESPACE)
+	// TODO @XmlJavaTypeAdapter String
+	private final Date datestamp;
+
+	@XmlElement(name = "setSpec")
+	@XmlSchemaType(name = "setSpecType", namespace = OaiPmh.NAMESPACE)
+	// TODO @XmlJavaTypeAdapter String
+	private final List<String> setSpecs;
+
+	/**
+	 * Construct a new <code>header</code> element.
+	 * 
+	 * @param status
+	 *            the <code>status</code> attribute or <code>null</code> to leave it unspecified
+	 * @param identifier
+	 *            the <code>identifier</code> element
+	 * @param datestamp
+	 *            the <code>datestamp</code> element
+	 * @param setSpecs
+	 *            the <code>setSpec</code> elements or <code>null</code> to leave them unspecified
+	 */
+	public Header(final Status status, final URI identifier, final Date datestamp, final List<String> setSpecs) {
+		this.status = status;
+		this.identifier = Objects.requireNonNull(identifier, "Identifier must not be null");
+		this.datestamp = Objects.requireNonNull(datestamp, "Datestamp must not be null");
+		this.setSpecs = (setSpecs == null) ? new ArrayList<String>() : new ArrayList<String>(setSpecs);
+		this.setSpecs.removeAll(Collections.singleton(null));
+	}
+
+	/**
+	 * Construct a new <code>header</code> element with the <code>status</code> attribute left unspecified.
+	 * 
+	 * @param identifier
+	 *            the <code>identifier</code> element
+	 * @param datestamp
+	 *            the <code>datestamp</code> element
+	 * @param setSpecs
+	 *            the <code>setSpec</code> elements or <code>null</code> to leave them unspecified
+	 */
+	public Header(final URI identifier, final Date datestamp, final List<String> setSpecs) {
+		this(null, identifier, datestamp, setSpecs);
+	}
+
+	/**
+	 * Construct a new <code>header</code> element with the <code>setSpec</code> elements left unspecified.
+	 * 
+	 * @param status
+	 *            the <code>status</code> attribute or <code>null</code> to leave it unspecified
+	 * @param identifier
+	 *            the <code>identifier</code> element
+	 * @param datestamp
+	 *            the <code>datestamp</code> element
+	 */
+	public Header(final Status status, final URI identifier, final Date datestamp) {
+		this(status, identifier, datestamp, null);
+	}
+
+	/**
+	 * Construct a new <code>header</code> element with the <code>status</code> attribute and the <code>setSpec</code> elements left unspecified.
+	 * 
+	 * @param identifier
+	 *            the <code>identifier</code> element
+	 * @param datestamp
+	 *            the <code>datestamp</code> element
+	 */
+	public Header(final URI identifier, final Date datestamp) {
+		this(null, identifier, datestamp);
+	}
+
+	@SuppressWarnings("unused")
+	private Header() {
+		status = null;
+		identifier = null;
+		datestamp = null;
+		setSpecs = new ArrayList<String>();
+	}
+
+	/**
+	 * Get the <code>status</code> attribute.
+	 * 
+	 * @return the <code>status</code> attribute or <code>null</code> if unspecified
+	 */
+	public Status getStatus() {
+		return status;
+	}
+
+	/**
+	 * Get the <code>identifier</code> element.
+	 * 
+	 * @return the <code>identifier</code> element
+	 */
+	public URI getIdentifier() {
+		return identifier;
+	}
+
+	/**
+	 * Get the <code>datestamp</code> element.
+	 * 
+	 * @return the <code>datestamp</code> element
+	 */
+	public Date getDatestamp() {
+		return datestamp;
+	}
+
+	/**
+	 * Get the <code>setSpec</code> elements.
+	 * 
+	 * @return the <code>setSpec</code> elements
+	 */
+	public List<String> getSetSpecs() {
+		return Collections.unmodifiableList(setSpecs);
+	}
+}

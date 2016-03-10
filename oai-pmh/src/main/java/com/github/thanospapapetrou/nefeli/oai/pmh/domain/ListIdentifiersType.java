@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ListIdentifiersType {
 
     @XmlElement(required = true)
-    protected List<HeaderType> header;
+    protected List<Header> header;
     protected ResumptionToken resumptionToken;
 
     /**
@@ -65,13 +65,13 @@ public class ListIdentifiersType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link HeaderType }
+     * {@link Header }
      * 
      * 
      */
-    public List<HeaderType> getHeader() {
+    public List<Header> getHeader() {
         if (header == null) {
-            header = new ArrayList<HeaderType>();
+            header = new ArrayList<Header>();
         }
         return this.header;
     }

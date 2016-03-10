@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.XmlType;
 public class RecordType {
 
     @XmlElement(required = true)
-    protected HeaderType header;
+    protected Header header;
     protected Metadata metadata;
     protected List<About> about;
 
@@ -58,10 +58,10 @@ public class RecordType {
      * 
      * @return
      *     possible object is
-     *     {@link HeaderType }
+     *     {@link Header }
      *     
      */
-    public HeaderType getHeader() {
+    public Header getHeader() {
         return header;
     }
 
@@ -70,10 +70,10 @@ public class RecordType {
      * 
      * @param value
      *     allowed object is
-     *     {@link HeaderType }
+     *     {@link Header }
      *     
      */
-    public void setHeader(HeaderType value) {
+    public void setHeader(Header value) {
         this.header = value;
     }
 
