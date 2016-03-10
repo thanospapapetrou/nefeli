@@ -45,7 +45,7 @@ public class ListRecordsType {
 
     @XmlElement(required = true)
     protected List<RecordType> record;
-    protected ResumptionTokenType resumptionToken;
+    protected ResumptionToken resumptionToken;
 
     /**
      * Gets the value of the record property.
@@ -81,10 +81,10 @@ public class ListRecordsType {
      * 
      * @return
      *     possible object is
-     *     {@link ResumptionTokenType }
+     *     {@link ResumptionToken }
      *     
      */
-    public ResumptionTokenType getResumptionToken() {
+    public ResumptionToken getResumptionToken() {
         return resumptionToken;
     }
 
@@ -93,10 +93,10 @@ public class ListRecordsType {
      * 
      * @param value
      *     allowed object is
-     *     {@link ResumptionTokenType }
+     *     {@link ResumptionToken }
      *     
      */
-    public void setResumptionToken(ResumptionTokenType value) {
+    public void setResumptionToken(ResumptionToken value) {
         this.resumptionToken = value;
     }
 
