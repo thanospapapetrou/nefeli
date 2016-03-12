@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ListSetsType {
 
     @XmlElement(required = true)
-    protected List<SetType> set;
+    protected List<Set> set;
     protected ResumptionToken resumptionToken;
 
     /**
@@ -65,13 +65,13 @@ public class ListSetsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SetType }
+     * {@link Set }
      * 
      * 
      */
-    public List<SetType> getSet() {
+    public List<Set> getSet() {
         if (set == null) {
-            set = new ArrayList<SetType>();
+            set = new ArrayList<Set>();
         }
         return this.set;
     }
