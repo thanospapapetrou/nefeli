@@ -47,4 +47,13 @@ public enum Verb {
 	 */
 	@XmlEnumValue("ListRecords")
 	LIST_RECORDS;
+
+	@Override
+	public String toString() {
+		try {
+			return getClass().getDeclaredField(name()).getAnnotation(XmlEnumValue.class).value();
+		} catch (final NoSuchFieldException e) {
+			return null;
+		}
+	}
 }

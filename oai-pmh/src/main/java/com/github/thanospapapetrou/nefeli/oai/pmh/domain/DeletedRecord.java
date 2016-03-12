@@ -29,4 +29,13 @@ public enum DeletedRecord {
 	 */
 	@XmlEnumValue("transient")
 	TRANSIENT;
+
+	@Override
+	public String toString() {
+		try {
+			return getClass().getDeclaredField(name()).getAnnotation(XmlEnumValue.class).value();
+		} catch (final NoSuchFieldException e) {
+			return null;
+		}
+	}
 }

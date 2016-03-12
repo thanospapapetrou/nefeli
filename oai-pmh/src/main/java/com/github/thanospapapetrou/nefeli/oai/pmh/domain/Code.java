@@ -59,4 +59,13 @@ public enum Code {
 	 */
 	@XmlEnumValue("noSetHierarchy")
 	NO_SET_HIERARCHY;
+
+	@Override
+	public String toString() {
+		try {
+			return getClass().getDeclaredField(name()).getAnnotation(XmlEnumValue.class).value();
+		} catch (final NoSuchFieldException e) {
+			return null;
+		}
+	}
 }
