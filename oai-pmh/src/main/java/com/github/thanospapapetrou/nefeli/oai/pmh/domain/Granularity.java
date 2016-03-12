@@ -16,11 +16,22 @@ public enum Granularity {
 	 * day granularity (<code>YYYY-MM-DD</code>)
 	 */
 	@XmlEnumValue("YYYY-MM-DD")
-	YYYY_MM_DD,
+	YYYY_MM_DD("day"),
 
 	/**
 	 * seconds granularity (<code>YYYY-MM-DDThh:mm:ssZ</code>)
 	 */
 	@XmlEnumValue("YYYY-MM-DDThh:mm:ssZ")
-	YYYY_MM_DD_THH_MM_SS_Z;
+	YYYY_MM_DD_THH_MM_SS_Z("seconds");
+
+	private final String string;
+	
+	private Granularity(final String string) {
+		this.string = string;
+	}
+	
+	@Override
+	public String toString() {
+		return string;
+	}
 }
