@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ListMetadataFormatsType {
 
     @XmlElement(required = true)
-    protected List<MetadataFormatType> metadataFormat;
+    protected List<MetadataFormat> metadataFormat;
 
     /**
      * Gets the value of the metadataFormat property.
@@ -62,13 +62,13 @@ public class ListMetadataFormatsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MetadataFormatType }
+     * {@link MetadataFormat }
      * 
      * 
      */
-    public List<MetadataFormatType> getMetadataFormat() {
+    public List<MetadataFormat> getMetadataFormat() {
         if (metadataFormat == null) {
-            metadataFormat = new ArrayList<MetadataFormatType>();
+            metadataFormat = new ArrayList<MetadataFormat>();
         }
         return this.metadataFormat;
     }
