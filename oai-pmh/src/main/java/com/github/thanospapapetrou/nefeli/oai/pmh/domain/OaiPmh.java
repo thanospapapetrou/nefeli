@@ -70,7 +70,7 @@ public class OaiPmh {
     protected RequestType request;
     protected List<Error> error;
     @XmlElement(name = "Identify")
-    protected IdentifyType identify;
+    protected Identify identify;
     @XmlElement(name = "ListMetadataFormats")
     protected ListMetadataFormats listMetadataFormats;
     @XmlElement(name = "ListSets")
@@ -164,10 +164,10 @@ public class OaiPmh {
      * 
      * @return
      *     possible object is
-     *     {@link IdentifyType }
+     *     {@link Identify }
      *     
      */
-    public IdentifyType getIdentify() {
+    public Identify getIdentify() {
         return identify;
     }
 
@@ -176,10 +176,10 @@ public class OaiPmh {
      * 
      * @param value
      *     allowed object is
-     *     {@link IdentifyType }
+     *     {@link Identify }
      *     
      */
-    public void setIdentify(IdentifyType value) {
+    public void setIdentify(Identify value) {
         this.identify = value;
     }
 
