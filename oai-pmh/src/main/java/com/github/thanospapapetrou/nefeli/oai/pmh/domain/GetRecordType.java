@@ -40,17 +40,17 @@ import javax.xml.bind.annotation.XmlType;
 public class GetRecordType {
 
     @XmlElement(required = true)
-    protected RecordType record;
+    protected Record record;
 
     /**
      * Gets the value of the record property.
      * 
      * @return
      *     possible object is
-     *     {@link RecordType }
+     *     {@link Record }
      *     
      */
-    public RecordType getRecord() {
+    public Record getRecord() {
         return record;
     }
 
@@ -59,10 +59,10 @@ public class GetRecordType {
      * 
      * @param value
      *     allowed object is
-     *     {@link RecordType }
+     *     {@link Record }
      *     
      */
-    public void setRecord(RecordType value) {
+    public void setRecord(Record value) {
         this.record = value;
     }
 

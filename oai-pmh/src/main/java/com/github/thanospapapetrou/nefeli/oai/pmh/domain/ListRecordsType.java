@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ListRecordsType {
 
     @XmlElement(required = true)
-    protected List<RecordType> record;
+    protected List<Record> record;
     protected ResumptionToken resumptionToken;
 
     /**
@@ -65,13 +65,13 @@ public class ListRecordsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link RecordType }
+     * {@link Record }
      * 
      * 
      */
-    public List<RecordType> getRecord() {
+    public List<Record> getRecord() {
         if (record == null) {
-            record = new ArrayList<RecordType>();
+            record = new ArrayList<Record>();
         }
         return this.record;
     }
