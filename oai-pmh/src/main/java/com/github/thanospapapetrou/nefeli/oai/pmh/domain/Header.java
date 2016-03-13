@@ -61,20 +61,6 @@ public class Header {
 	}
 
 	/**
-	 * Construct a new <code>header</code> element with the <code>status</code> attribute left unspecified.
-	 * 
-	 * @param identifier
-	 *            the <code>identifier</code> element
-	 * @param datestamp
-	 *            the <code>datestamp</code> element
-	 * @param setSpecs
-	 *            the <code>setSpec</code> elements or <code>null</code> to leave them unspecified
-	 */
-	public Header(final URI identifier, final Date datestamp, final List<String> setSpecs) {
-		this(null, identifier, datestamp, setSpecs);
-	}
-
-	/**
 	 * Construct a new <code>header</code> element with the <code>setSpec</code> elements left unspecified.
 	 * 
 	 * @param status
@@ -86,6 +72,20 @@ public class Header {
 	 */
 	public Header(final Status status, final URI identifier, final Date datestamp) {
 		this(status, identifier, datestamp, null);
+	}
+
+	/**
+	 * Construct a new <code>header</code> element with the <code>status</code> attribute left unspecified.
+	 * 
+	 * @param identifier
+	 *            the <code>identifier</code> element
+	 * @param datestamp
+	 *            the <code>datestamp</code> element
+	 * @param setSpecs
+	 *            the <code>setSpec</code> elements or <code>null</code> to leave them unspecified
+	 */
+	public Header(final URI identifier, final Date datestamp, final List<String> setSpecs) {
+		this(null, identifier, datestamp, setSpecs);
 	}
 
 	/**

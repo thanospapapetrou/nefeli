@@ -75,10 +75,68 @@ public class ResumptionToken {
 	}
 
 	/**
+	 * Construct a new <code>resumptionToken</code> element with <code>completeListSize</code> and <code>cursor</code> attributes left unspecified.
+	 * 
+	 * @param expirationDate
+	 *            the <code>expirationDate</code> attribute or <code>null</code> to leave it unspecified
+	 * @param value
+	 *            the value or <code>null</code> to leave it unspecified
+	 */
+	public ResumptionToken(final Date expirationDate, final String value) {
+		this(expirationDate, null, null, value);
+	}
+
+	/**
+	 * Construct a new <code>resumptionToken</code> element with <code>completeListSize</code> and <code>cursor</code> attributes and value left unspecified.
+	 * 
+	 * @param expirationDate
+	 *            the <code>expirationDate</code> attribute or <code>null</code> to leave it unspecified
+	 */
+	public ResumptionToken(final Date expirationDate) {
+		this(expirationDate, null);
+	}
+
+	/**
+	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code> attribute left unspecified.
+	 * 
+	 * @param completeListSize
+	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
+	 * @param cursor
+	 *            the <code>cursor</code> attribute or <code>null</code> to leave it unspecified
+	 * @param value
+	 *            the value or <code>null</code> to leave it unspecified
+	 */
+	public ResumptionToken(final BigInteger completeListSize, final BigInteger cursor, final String value) {
+		this(null, completeListSize, cursor, value);
+	}
+
+	/**
+	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code> attribute and value left unspecified.
+	 * 
+	 * @param completeListSize
+	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
+	 * @param cursor
+	 *            the <code>cursor</code> attribute or <code>null</code> to leave it unspecified
+	 */
+	public ResumptionToken(final BigInteger completeListSize, final BigInteger cursor) {
+		this(completeListSize, cursor, null);
+	}
+
+	/**
+	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code>, <code>completeListSize</code> and <code>cursor</code> attributes left unspecified.
+	 * 
+	 * @param value
+	 *            the value or <code>null</code> to leave it unspecified
+	 */
+	public ResumptionToken(final String value) {
+		this(null, null, value);
+	}
+
+	/**
 	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code>, <code>completeListSize</code> and <code>cursor</code> attributes and value left unspecified.
 	 */
 	public ResumptionToken() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	/**
