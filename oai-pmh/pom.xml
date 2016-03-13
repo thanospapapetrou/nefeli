@@ -9,6 +9,14 @@
 		<artifactId>nefeli</artifactId>
 		<version>1.0.0</version>
 	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.5</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
 	<name>OAI-PMH</name>
 	<description>Java implementation of OAI-PMH 2.0</description>
 </project>
