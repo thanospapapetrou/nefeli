@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
- * Class representing the <code>resumptionToken</code> OAI-PMH element.
+ * Class representing a <code>resumptionToken</code> OAI-PMH element.
  * 
  * @author thanos
  */

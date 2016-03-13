@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.w3c.dom.Element;
 
 /**
- * Class representing the <code>metadata</code> OAI-PMH element.
+ * Class representing a <code>metadata</code> OAI-PMH element.
  * 
  * @author thanos
  */

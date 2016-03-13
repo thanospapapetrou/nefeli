@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Enumeration defining the <code>verb</code> attribute of the <code>request</code> OAI-PMH element.
+ * Enumeration defining the <code>verb</code> attribute of a <code>request</code> OAI-PMH element.
  * 
  * @author thanos
  */

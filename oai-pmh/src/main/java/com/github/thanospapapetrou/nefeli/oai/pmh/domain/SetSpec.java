@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
- * Class representing the <code>setSpec</code> OAI-PMH element.
+ * Class representing a <code>setSpec</code> OAI-PMH element.
  * 
  * @author thanos
  */

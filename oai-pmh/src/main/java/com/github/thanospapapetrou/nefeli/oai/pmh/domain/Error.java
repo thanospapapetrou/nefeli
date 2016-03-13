@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
- * Class representing the <code>error</code> OAI-PMH element.
+ * Class representing an <code>error</code> OAI-PMH element.
  * 
  * @author thanos
  */

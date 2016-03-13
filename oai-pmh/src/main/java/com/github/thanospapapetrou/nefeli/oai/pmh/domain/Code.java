@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Enumeration defining <code>code</code> attribute of <code>error</code> OAI-PMH element.
+ * Enumeration defining the <code>code</code> attribute of an <code>error</code> OAI-PMH element.
  * 
  * @author thanos
  */

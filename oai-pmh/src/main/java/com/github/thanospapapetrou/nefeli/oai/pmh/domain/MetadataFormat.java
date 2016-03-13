@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Class representing the <code>metadataFormat</code> OAI-PMH element.
+ * Class representing a <code>metadataFormat</code> OAI-PMH element.
  * 
  * @author thanos
  */

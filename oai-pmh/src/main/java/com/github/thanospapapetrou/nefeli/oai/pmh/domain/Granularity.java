@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Enumeration defining the <code>granularity</code> OAI-PMH element.
+ * Enumeration defining a <code>granularity</code> OAI-PMH element.
  * 
  * @author thanos
  */

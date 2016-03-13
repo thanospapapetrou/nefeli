@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Enumeration defining the <code>status</code> attribute of <code>header</code> OAI-PMH element.
+ * Enumeration defining the <code>status</code> attribute of a <code>header</code> OAI-PMH element.
  * 
  * @author thanos
  */
