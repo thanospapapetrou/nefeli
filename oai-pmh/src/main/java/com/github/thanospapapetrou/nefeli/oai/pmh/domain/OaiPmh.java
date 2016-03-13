@@ -76,7 +76,7 @@ public class OaiPmh {
     @XmlElement(name = "ListSets")
     protected ListSetsType listSets;
     @XmlElement(name = "GetRecord")
-    protected GetRecordType getRecord;
+    protected GetRecord getRecord;
     @XmlElement(name = "ListIdentifiers")
     protected ListIdentifiersType listIdentifiers;
     @XmlElement(name = "ListRecords")
@@ -236,10 +236,10 @@ public class OaiPmh {
      * 
      * @return
      *     possible object is
-     *     {@link GetRecordType }
+     *     {@link GetRecord }
      *     
      */
-    public GetRecordType getGetRecord() {
+    public GetRecord getGetRecord() {
         return getRecord;
     }
 
@@ -248,10 +248,10 @@ public class OaiPmh {
      * 
      * @param value
      *     allowed object is
-     *     {@link GetRecordType }
+     *     {@link GetRecord }
      *     
      */
-    public void setGetRecord(GetRecordType value) {
+    public void setGetRecord(GetRecord value) {
         this.getRecord = value;
     }
 
