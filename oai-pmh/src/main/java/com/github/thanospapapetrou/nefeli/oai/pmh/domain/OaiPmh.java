@@ -74,7 +74,7 @@ public class OaiPmh {
     @XmlElement(name = "ListMetadataFormats")
     protected ListMetadataFormats listMetadataFormats;
     @XmlElement(name = "ListSets")
-    protected ListSetsType listSets;
+    protected ListSets listSets;
     @XmlElement(name = "GetRecord")
     protected GetRecord getRecord;
     @XmlElement(name = "ListIdentifiers")
@@ -212,10 +212,10 @@ public class OaiPmh {
      * 
      * @return
      *     possible object is
-     *     {@link ListSetsType }
+     *     {@link ListSets }
      *     
      */
-    public ListSetsType getListSets() {
+    public ListSets getListSets() {
         return listSets;
     }
 
@@ -224,10 +224,10 @@ public class OaiPmh {
      * 
      * @param value
      *     allowed object is
-     *     {@link ListSetsType }
+     *     {@link ListSets }
      *     
      */
-    public void setListSets(ListSetsType value) {
+    public void setListSets(ListSets value) {
         this.listSets = value;
     }
 
