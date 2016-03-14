@@ -60,18 +60,6 @@ public class Record {
 	}
 
 	/**
-	 * Construct a new <code>record</code> element with the <code>metadata</code> element left unspecified.
-	 * 
-	 * @param header
-	 *            the <code>header</code> element
-	 * @param abouts
-	 *            the <code>about</code> elements or <code>null</code> to leave them unspecified
-	 */
-	public Record(final Header header, final List<About> abouts) {
-		this(header, null, abouts);
-	}
-
-	/**
 	 * Construct a new <code>record</code> element with the <code>metadata</code> and the <code>about</code> elements left unspecified.
 	 * 
 	 * @param header
