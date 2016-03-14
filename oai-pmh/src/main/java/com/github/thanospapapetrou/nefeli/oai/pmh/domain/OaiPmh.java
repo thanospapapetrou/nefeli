@@ -80,7 +80,7 @@ public class OaiPmh {
     @XmlElement(name = "ListIdentifiers")
     protected ListIdentifiers listIdentifiers;
     @XmlElement(name = "ListRecords")
-    protected ListRecordsType listRecords;
+    protected ListRecords listRecords;
 
     /**
      * Gets the value of the responseDate property.
@@ -284,10 +284,10 @@ public class OaiPmh {
      * 
      * @return
      *     possible object is
-     *     {@link ListRecordsType }
+     *     {@link ListRecords }
      *     
      */
-    public ListRecordsType getListRecords() {
+    public ListRecords getListRecords() {
         return listRecords;
     }
 
@@ -296,10 +296,10 @@ public class OaiPmh {
      * 
      * @param value
      *     allowed object is
-     *     {@link ListRecordsType }
+     *     {@link ListRecords }
      *     
      */
-    public void setListRecords(ListRecordsType value) {
+    public void setListRecords(ListRecords value) {
         this.listRecords = value;
     }
 
