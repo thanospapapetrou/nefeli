@@ -45,7 +45,7 @@ public class ListIdentifiers {
 	}
 
 	/**
-	 * Construct a new <code>ListIdentifiers</code> element with <code>resumptionToken</code> element left unspecified.
+	 * Construct a new <code>ListIdentifiers</code> element with the <code>resumptionToken</code> element left unspecified.
 	 * 
 	 * @param headers
 	 *            the <code>header</code> elements

@@ -48,7 +48,7 @@ public class Record {
 	}
 
 	/**
-	 * Construct a new <code>record</code> element with <code>about</code> elements left unspecified.
+	 * Construct a new <code>record</code> element with the <code>about</code> elements left unspecified.
 	 * 
 	 * @param header
 	 *            the <code>header</code> element
@@ -60,7 +60,7 @@ public class Record {
 	}
 
 	/**
-	 * Construct a new <code>record</code> element with <code>metadata</code> element left unspecified.
+	 * Construct a new <code>record</code> element with the <code>metadata</code> element left unspecified.
 	 * 
 	 * @param header
 	 *            the <code>header</code> element
@@ -72,7 +72,7 @@ public class Record {
 	}
 
 	/**
-	 * Construct a new <code>record</code> element with <code>metadata</code> and <code>about</code> elements left unspecified.
+	 * Construct a new <code>record</code> element with the <code>metadata</code> and the <code>about</code> elements left unspecified.
 	 * 
 	 * @param header
 	 *            the <code>header</code> element

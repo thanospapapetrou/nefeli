@@ -97,7 +97,7 @@ public class Identify {
 	}
 
 	/**
-	 * Construct a new <code>Identify</code> element with <code>compression</code> and <code>description</code> elements left unspecified.
+	 * Construct a new <code>Identify</code> element with the <code>compression</code> and the <code>description</code> elements left unspecified.
 	 * 
 	 * @param repositoryName
 	 *            the <code>repositoryName</code> element

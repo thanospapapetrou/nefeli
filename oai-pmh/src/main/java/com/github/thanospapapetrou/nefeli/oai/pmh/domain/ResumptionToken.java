@@ -61,7 +61,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with value left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the value left unspecified.
 	 * 
 	 * @param expirationDate
 	 *            the <code>expirationDate</code> attribute or <code>null</code> to leave it unspecified
@@ -75,7 +75,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with <code>completeListSize</code> and <code>cursor</code> attributes left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>completeListSize</code> and the <code>cursor</code> attributes left unspecified.
 	 * 
 	 * @param expirationDate
 	 *            the <code>expirationDate</code> attribute or <code>null</code> to leave it unspecified
@@ -87,7 +87,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with <code>completeListSize</code> and <code>cursor</code> attributes and value left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>completeListSize</code> and the <code>cursor</code> attributes and the value left unspecified.
 	 * 
 	 * @param expirationDate
 	 *            the <code>expirationDate</code> attribute or <code>null</code> to leave it unspecified
@@ -97,7 +97,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code> attribute left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>expirationDate</code> attribute left unspecified.
 	 * 
 	 * @param completeListSize
 	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
@@ -111,7 +111,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code> attribute and value left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>expirationDate</code> attribute and the value left unspecified.
 	 * 
 	 * @param completeListSize
 	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
@@ -123,7 +123,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code>, <code>completeListSize</code> and <code>cursor</code> attributes left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>expirationDate</code>, the <code>completeListSize</code> and the <code>cursor</code> attributes left unspecified.
 	 * 
 	 * @param value
 	 *            the value or <code>null</code> to leave it unspecified
@@ -133,7 +133,7 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with <code>expirationDate</code>, <code>completeListSize</code> and <code>cursor</code> attributes and value left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>expirationDate</code>, the <code>completeListSize</code> and the <code>cursor</code> attributes and the value left unspecified.
 	 */
 	public ResumptionToken() {
 		this(null, null, null, null);
