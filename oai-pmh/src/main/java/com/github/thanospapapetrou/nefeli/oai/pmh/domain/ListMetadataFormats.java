@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ListMetadataFormats {
 	@XmlElement(name = "metadataFormat", required = true)
 	@XmlSchemaType(name = "metadataFormatType", namespace = OaiPmh.NAMESPACE)
-	private final List<MetadataFormat> metadataFormats; // TODO set?
+	private final List<MetadataFormat> metadataFormats;
 
 	/**
 	 * Construct a new <code>ListMetadataFormats</code> element.

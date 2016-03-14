@@ -36,7 +36,7 @@ public class Identify {
 
 	@XmlElement(name = "adminEmail", required = true)
 	@XmlSchemaType(name = "emailType", namespace = OaiPmh.NAMESPACE)
-	private final List<InternetAddress> adminEmails; // TODO use set
+	private final List<InternetAddress> adminEmails;
 
 	@XmlElement(name = "earliestDatestamp", required = true)
 	@XmlSchemaType(name = "UTCdatetimeType", namespace = OaiPmh.NAMESPACE)
@@ -52,11 +52,11 @@ public class Identify {
 
 	@XmlElement(name = "compression")
 	@XmlSchemaType(name = "string")
-	private final List<Compression> compressions; // TODO use set
+	private final List<Compression> compressions;
 
 	@XmlElement(name = "description")
 	@XmlSchemaType(name = "descriptionType", namespace = OaiPmh.NAMESPACE)
-	private final List<Description> descriptions; // TODO use set
+	private final List<Description> descriptions;
 
 	/**
 	 * Construct a new <code>Identify</code> element.

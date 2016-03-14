@@ -29,7 +29,7 @@ public class Set {
 
 	@XmlElement(name = "setDescription")
 	@XmlSchemaType(name = "descriptionType", namespace = OaiPmh.NAMESPACE)
-	private final List<Description> setDescriptions; // TODO should it be set?
+	private final List<Description> setDescriptions;
 
 	/**
 	 * Construct a new <code>set</code>element.
