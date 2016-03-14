@@ -67,7 +67,7 @@ public class OaiPmh {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar responseDate;
     @XmlElement(required = true)
-    protected RequestType request;
+    protected Request request;
     protected List<Error> error;
     @XmlElement(name = "Identify")
     protected Identify identify;
@@ -111,10 +111,10 @@ public class OaiPmh {
      * 
      * @return
      *     possible object is
-     *     {@link RequestType }
+     *     {@link Request }
      *     
      */
-    public RequestType getRequest() {
+    public Request getRequest() {
         return request;
     }
 
@@ -123,10 +123,10 @@ public class OaiPmh {
      * 
      * @param value
      *     allowed object is
-     *     {@link RequestType }
+     *     {@link Request }
      *     
      */
-    public void setRequest(RequestType value) {
+    public void setRequest(Request value) {
         this.request = value;
     }
 

@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Class representing the <code>GetRecord</code> OAI-PMH element.
+ * Class representing a <code>GetRecord</code> OAI-PMH element.
  * 
  * @author thanos
  */

@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
- * Class representing a <code>metadataPrefix</code> OAI-PMH element.
+ * Class representing a <code>metadataPrefix</code> OAI-PMH element or the <code>metadataPrefix</code> attribute of a <code>request</code> OAI-PMH element.
  * 
  * @author thanos
  */
