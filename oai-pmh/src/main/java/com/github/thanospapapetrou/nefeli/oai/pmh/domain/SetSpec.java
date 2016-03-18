@@ -22,20 +22,20 @@ public class SetSpec {
 
 	@XmlValue
 	@XmlSchemaType(name = "string")
-	private final String value;
+	private final String setSpec;
 
 	/**
 	 * Construct a new <code>setSpec</code> element.
 	 * 
-	 * @param value
-	 *            the value
+	 * @param setSpec
+	 *            the setSpec
 	 */
-	public SetSpec(final String value) {
-		Objects.requireNonNull(value, "Value must not be null");
-		if (!PATTERN.matcher(value).matches()) {
-			throw new IllegalArgumentException("Value must adhere to pattern " + PATTERN);
+	public SetSpec(final String setSpec) {
+		Objects.requireNonNull(setSpec, "Set spec must not be null");
+		if (!PATTERN.matcher(setSpec).matches()) {
+			throw new IllegalArgumentException("Set spec must adhere to pattern " + PATTERN);
 		}
-		this.value = value;
+		this.setSpec = setSpec;
 	}
 
 	/**
@@ -44,12 +44,12 @@ public class SetSpec {
 	 * @return the hierarchical parent of this <code>setSpec</code> or <code>null</code> if this <code>setSpec</code> has no parent
 	 */
 	public SetSpec getParent() {
-		final int index = value.lastIndexOf(SEPARATOR);
-		return (index == -1) ? null : new SetSpec(value.substring(0, index));
+		final int index = setSpec.lastIndexOf(SEPARATOR);
+		return (index == -1) ? null : new SetSpec(setSpec.substring(0, index));
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return setSpec;
 	}
 }

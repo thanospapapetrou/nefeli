@@ -17,22 +17,26 @@ public enum Compression {
 	/**
 	 * the gzip encoding format (<code>gzip</code>)
 	 */
-	@XmlEnumValue("gzip") GZIP,
+	@XmlEnumValue("gzip")
+	GZIP,
 
 	/**
 	 * the compress encoding format (<code>compress</code>)
 	 */
-	@XmlEnumValue("compress") COMPRESS,
+	@XmlEnumValue("compress")
+	COMPRESS,
 
 	/**
 	 * the deflate encoding format (<code>deflate</code>)
 	 */
-	@XmlEnumValue("deflate") DEFLATE,
+	@XmlEnumValue("deflate")
+	DEFLATE,
 
 	/**
 	 * the default (identity) encoding format (<code>identity</code>)
 	 */
-	@XmlEnumValue("identity") IDENTITY;
+	@XmlEnumValue("identity")
+	IDENTITY;
 
 	@Override
 	public String toString() {

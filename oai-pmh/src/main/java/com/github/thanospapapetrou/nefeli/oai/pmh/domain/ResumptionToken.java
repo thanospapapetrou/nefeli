@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "resumptionTokenType", propOrder = {"value"})
+@XmlType(name = "resumptionTokenType", propOrder = {"resumptionToken"})
 public class ResumptionToken {
 	@XmlAttribute(name = "expirationDate")
 	@XmlSchemaType(name = "dateTime")
@@ -33,7 +33,7 @@ public class ResumptionToken {
 
 	@XmlValue
 	@XmlSchemaType(name = "string")
-	private final String value;
+	private final String resumptionToken;
 
 	/**
 	 * Construct a new <code>resumptionToken</code> element.
@@ -44,10 +44,10 @@ public class ResumptionToken {
 	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
 	 * @param cursor
 	 *            the <code>cursor</code> attribute or <code>null</code> to leave it unspecified
-	 * @param value
-	 *            the value or <code>null</code> to leave it unspecified
+	 * @param resumptionToken
+	 *            the resumption token or <code>null</code> to leave it unspecified
 	 */
-	public ResumptionToken(final Date expirationDate, final BigInteger completeListSize, final BigInteger cursor, final String value) {
+	public ResumptionToken(final Date expirationDate, final BigInteger completeListSize, final BigInteger cursor, final String resumptionToken) {
 		if ((completeListSize != null) && (completeListSize.compareTo(BigInteger.ZERO) <= 0)) {
 			throw new IllegalArgumentException("Complete list size must be positive");
 		}
@@ -57,11 +57,11 @@ public class ResumptionToken {
 		this.expirationDate = expirationDate;
 		this.completeListSize = completeListSize;
 		this.cursor = cursor;
-		this.value = value;
+		this.resumptionToken = resumptionToken;
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with the value left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the resumption token left unspecified.
 	 * 
 	 * @param expirationDate
 	 *            the <code>expirationDate</code> attribute or <code>null</code> to leave it unspecified
@@ -81,15 +81,15 @@ public class ResumptionToken {
 	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
 	 * @param cursor
 	 *            the <code>cursor</code> attribute or <code>null</code> to leave it unspecified
-	 * @param value
-	 *            the value or <code>null</code> to leave it unspecified
+	 * @param resumptionToken
+	 *            the resumption token or <code>null</code> to leave it unspecified
 	 */
-	public ResumptionToken(final BigInteger completeListSize, final BigInteger cursor, final String value) {
-		this(null, completeListSize, cursor, value);
+	public ResumptionToken(final BigInteger completeListSize, final BigInteger cursor, final String resumptionToken) {
+		this(null, completeListSize, cursor, resumptionToken);
 	}
 
 	/**
-	 * Construct a new <code>resumptionToken</code> element with the <code>expirationDate</code> attribute and the value left unspecified.
+	 * Construct a new <code>resumptionToken</code> element with the <code>expirationDate</code> attribute and the resumption token left unspecified.
 	 * 
 	 * @param completeListSize
 	 *            the <code>completeListSize</code> attribute or <code>null</code> to leave it unspecified
@@ -128,11 +128,11 @@ public class ResumptionToken {
 	}
 
 	/**
-	 * Get the value.
+	 * Get the resumption token.
 	 * 
-	 * @return the value or <code>null</code> if unspecified
+	 * @return the resumption token or <code>null</code> if unspecified
 	 */
-	public String getValue() {
-		return value;
+	public String getResumptionToken() {
+		return resumptionToken;
 	}
 }

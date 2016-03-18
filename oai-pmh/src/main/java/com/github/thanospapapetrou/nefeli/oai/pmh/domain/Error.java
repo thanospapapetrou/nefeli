@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OAI-PMHerrorType", propOrder = {"value"})
+@XmlType(name = "OAI-PMHerrorType", propOrder = {"error"})
 public class Error {
 	@XmlAttribute(name = "code", required = true)
 	@XmlSchemaType(name = "OAI-PMHerrorcodeType", namespace = OaiPmh.NAMESPACE)
@@ -23,23 +23,23 @@ public class Error {
 
 	@XmlValue
 	@XmlSchemaType(name = "string")
-	private final String value;
+	private final String error;
 
 	/**
 	 * Construct a new <code>error</code> element.
 	 * 
 	 * @param code
 	 *            the <code>code</code> attribute
-	 * @param value
-	 *            the value or <code>null</code> to leave it unspecified
+	 * @param error
+	 *            the error or <code>null</code> to leave it unspecified
 	 */
-	public Error(final Code code, final String value) {
+	public Error(final Code code, final String error) {
 		this.code = Objects.requireNonNull(code, "Code must not be null");
-		this.value = value;
+		this.error = error;
 	}
 
 	/**
-	 * Construct a new <code>error</code> element with the value left unspecified.
+	 * Construct a new <code>error</code> element with the error left unspecified.
 	 * 
 	 * @param code
 	 *            the <code>code</code> attribute
@@ -51,7 +51,7 @@ public class Error {
 	@SuppressWarnings("unused")
 	private Error() {
 		code = null;
-		value = null;
+		error = null;
 	}
 
 	/**
@@ -64,11 +64,11 @@ public class Error {
 	}
 
 	/**
-	 * Get the value.
+	 * Get the error.
 	 * 
-	 * @return the value or <code>null</code> if unspecified
+	 * @return the error or <code>null</code> if unspecified
 	 */
-	public String getValue() {
-		return value;
+	public String getError() {
+		return error;
 	}
 }

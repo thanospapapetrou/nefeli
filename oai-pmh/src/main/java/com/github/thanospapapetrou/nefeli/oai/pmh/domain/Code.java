@@ -19,7 +19,7 @@ public enum Code {
 	CANNOT_DISSEMINATE_FORMAT,
 
 	/**
-	 * he value of the <code>identifier</code> argument is unknown or illegal in this repository (<code>idDoesNotExist</code>)
+	 * the value of the <code>identifier</code> argument is unknown or illegal in this repository (<code>idDoesNotExist</code>)
 	 */
 	@XmlEnumValue("idDoesNotExist")
 	ID_DOES_NOT_EXIST,

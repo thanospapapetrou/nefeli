@@ -21,24 +21,24 @@ public class MetadataPrefix {
 
 	@XmlValue
 	@XmlSchemaType(name = "string")
-	private final String value;
+	private final String metadataPrefix;
 
 	/**
 	 * Construct a new <code>metadataPrefix</code> element.
 	 * 
-	 * @param value
-	 *            the value
+	 * @param metadataPrefix
+	 *            the metadataPrefix
 	 */
-	public MetadataPrefix(final String value) {
-		Objects.requireNonNull(value, "Value must not be null");
-		if (!PATTERN.matcher(value).matches()) {
-			throw new IllegalArgumentException("Value must adhere to pattern " + PATTERN);
+	public MetadataPrefix(final String metadataPrefix) {
+		Objects.requireNonNull(metadataPrefix, "Metadata prefix must not be null");
+		if (!PATTERN.matcher(metadataPrefix).matches()) {
+			throw new IllegalArgumentException("Metadata prefix must adhere to pattern " + PATTERN);
 		}
-		this.value = value;
+		this.metadataPrefix = metadataPrefix;
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return metadataPrefix;
 	}
 }

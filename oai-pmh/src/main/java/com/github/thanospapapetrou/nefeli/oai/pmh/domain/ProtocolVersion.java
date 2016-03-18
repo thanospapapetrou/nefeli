@@ -15,7 +15,8 @@ public enum ProtocolVersion {
 	/**
 	 * OAI-PMH 2.0 (<code>2.0</code>)
 	 */
-	@XmlEnumValue("2.0") OAI_PMH_2_0;
+	@XmlEnumValue("2.0")
+	OAI_PMH_2_0;
 
 	@Override
 	public String toString() {
