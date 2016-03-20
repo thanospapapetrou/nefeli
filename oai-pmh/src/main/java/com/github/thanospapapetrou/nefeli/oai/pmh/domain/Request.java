@@ -18,30 +18,32 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "requestType", propOrder = {"baseUrl"})
+@XmlType(name = Request.TYPE, propOrder = {"baseUrl"})
 public class Request {
+	static final String TYPE = "requestType";
+	
 	@XmlAttribute(name = "verb")
-	@XmlSchemaType(name = "verbType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Verb.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Verb verb;
 
 	@XmlAttribute(name = "identifier")
-	@XmlSchemaType(name = "identifierType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmh.IDENTIFIER_TYPE, namespace = OaiPmh.NAMESPACE)
 	private final URI identifier;
 
 	@XmlAttribute(name = "metadataPrefix")
-	@XmlSchemaType(name = "metadataPrefixType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final MetadataPrefix metadataPrefix;
 
 	@XmlAttribute(name = "from")
-	@XmlSchemaType(name = "UTCdatetimeType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Date from;
 
 	@XmlAttribute(name = "until")
-	@XmlSchemaType(name = "UTCdatetimeType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Date until;
 
 	@XmlAttribute(name = "set")
-	@XmlSchemaType(name = "setSpecType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final SetSpec set;
 
 	@XmlAttribute(name = "resumptionToken")

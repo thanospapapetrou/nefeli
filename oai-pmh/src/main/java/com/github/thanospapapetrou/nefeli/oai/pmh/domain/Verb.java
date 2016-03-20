@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlEnum
-@XmlType(name = "verbType")
+@XmlType(name = Verb.TYPE)
 public enum Verb {
 	/**
 	 * <code>Identify</code>
@@ -48,6 +48,8 @@ public enum Verb {
 	@XmlEnumValue("ListRecords")
 	LIST_RECORDS;
 
+	static final String TYPE = "verbType";
+	
 	@Override
 	public String toString() {
 		try {

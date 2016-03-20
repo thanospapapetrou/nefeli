@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlEnum
-@XmlType(name = "granularityType")
+@XmlType(name = Granularity.TYPE)
 public enum Granularity {
 	/**
 	 * day granularity (<code>YYYY-MM-DD</code>)
@@ -23,6 +23,8 @@ public enum Granularity {
 	 */
 	@XmlEnumValue("YYYY-MM-DDThh:mm:ssZ")
 	YYYY_MM_DD_THH_MM_SS_Z("seconds");
+	
+	static final String TYPE = "granularityType";
 
 	private final String string;
 	

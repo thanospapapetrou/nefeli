@@ -16,8 +16,10 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "resumptionTokenType", propOrder = {"resumptionToken"})
+@XmlType(name = ResumptionToken.TYPE, propOrder = {"resumptionToken"})
 public class ResumptionToken {
+	static final String TYPE = "resumptionTokenType";
+	
 	@XmlAttribute(name = "expirationDate")
 	@XmlSchemaType(name = "dateTime")
 	// @XmlJavaTypeAdapter() TODO XMLGregorianCalendar

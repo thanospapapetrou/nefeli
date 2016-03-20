@@ -17,18 +17,20 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "recordType", propOrder = {"header", "metadata", "abouts"})
+@XmlType(name = Record.TYPE, propOrder = {"header", "metadata", "abouts"})
 public class Record {
+	static final String TYPE = "recordType";
+	
 	@XmlElement(name = "header", required = true)
-	@XmlSchemaType(name = "headerType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Header header;
 
 	@XmlElement(name = "metadata")
-	@XmlSchemaType(name = "metadataType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Metadata.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Metadata metadata;
 
 	@XmlElement(name = "about")
-	@XmlSchemaType(name = "aboutType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = About.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<About> abouts;
 
 	/**

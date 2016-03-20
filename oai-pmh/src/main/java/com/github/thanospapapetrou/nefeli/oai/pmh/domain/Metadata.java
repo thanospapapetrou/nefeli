@@ -16,8 +16,10 @@ import org.w3c.dom.Element;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "metadataType", propOrder = {"any"})
+@XmlType(name = Metadata.TYPE, propOrder = {"element"})
 public class Metadata {
+	static final String TYPE = "metadataType";
+	
 	@XmlAnyElement
 	@XmlSchemaType(name = "anyType")
 	private final Element element;

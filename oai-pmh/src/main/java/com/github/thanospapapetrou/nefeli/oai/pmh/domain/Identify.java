@@ -20,8 +20,10 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "IdentifyType", propOrder = {"repositoryName", "baseURL", "protocolVersion", "adminEmails", "earliestDatestamp", "deletedRecord", "granularity", "compressions", "descriptions"})
+@XmlType(name = Identify.TYPE, propOrder = {"repositoryName", "baseURL", "protocolVersion", "adminEmails", "earliestDatestamp", "deletedRecord", "granularity", "compressions", "descriptions"})
 public class Identify {
+	static final String TYPE = "IdentifyType";
+	
 	@XmlElement(name = "repositoryName", required = true)
 	@XmlSchemaType(name = "string")
 	private final String repositoryName;
@@ -31,7 +33,7 @@ public class Identify {
 	private final URL baseUrl;
 
 	@XmlElement(name = "protocolVersion", required = true)
-	@XmlSchemaType(name = "protocolVersionType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ProtocolVersion.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final ProtocolVersion protocolVersion;
 
 	@XmlElement(name = "adminEmail", required = true)
@@ -39,23 +41,23 @@ public class Identify {
 	private final List<InternetAddress> adminEmails;
 
 	@XmlElement(name = "earliestDatestamp", required = true)
-	@XmlSchemaType(name = "UTCdatetimeType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Date earliestDatestamp;
 
 	@XmlElement(name = "deletedRecord", required = true)
-	@XmlSchemaType(name = "deletedRecordType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = DeletedRecord.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final DeletedRecord deletedRecord;
 
 	@XmlElement(name = "granularity", required = true)
-	@XmlSchemaType(name = "granularityType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Granularity.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Granularity granularity;
 
 	@XmlElement(name = "compression")
-	@XmlSchemaType(name = "string")
+	@XmlSchemaType(name = Compression.TYPE)
 	private final List<Compression> compressions;
 
 	@XmlElement(name = "description")
-	@XmlSchemaType(name = "descriptionType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Description.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<Description> descriptions;
 
 	/**

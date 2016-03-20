@@ -16,10 +16,12 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "metadataFormatType", propOrder = {"metadataPrefix", "schema", "metadataNamespace"})
+@XmlType(name = MetadataFormat.TYPE, propOrder = {"metadataPrefix", "schema", "metadataNamespace"})
 public class MetadataFormat {
+	static final String TYPE = "metadataFormatType";
+	
 	@XmlElement(name = "metadataPrefix", required = true)
-	@XmlSchemaType(name = "metadataPrefixType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final MetadataPrefix metadataPrefix;
 
 	@XmlElement(name = "schema", required = true)

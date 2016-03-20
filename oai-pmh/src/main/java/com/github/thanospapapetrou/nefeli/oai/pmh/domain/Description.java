@@ -16,8 +16,10 @@ import org.w3c.dom.Element;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "descriptionType", propOrder = {"any"})
+@XmlType(name = Description.TYPE, propOrder = {"any"})
 public class Description {
+	static final String TYPE = "descriptionType";
+	
 	@XmlAnyElement
 	@XmlSchemaType(name = "anyType")
 	private final Element element;

@@ -62,6 +62,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class OaiPmh {
 	public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
 	public static final String SCHEMA = "http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd";
+	static final String IDENTIFIER_TYPE = "identifierType";
+	static final String UTC_DATETIME_TYPE = "UTCdatetimeType";
 
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")

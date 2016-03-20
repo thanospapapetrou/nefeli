@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
  * @see <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1</a>
  */
 @XmlEnum
-@XmlType(name = "string", namespace = XMLConstants.W3C_XML_SCHEMA_NS_URI)
+@XmlType(name = Compression.TYPE, namespace = XMLConstants.W3C_XML_SCHEMA_NS_URI)
 public enum Compression {
 	/**
 	 * the gzip encoding format (<code>gzip</code>)
@@ -37,6 +37,8 @@ public enum Compression {
 	 */
 	@XmlEnumValue("identity")
 	IDENTITY;
+	
+	static final String TYPE = "string";
 
 	@Override
 	public String toString() {

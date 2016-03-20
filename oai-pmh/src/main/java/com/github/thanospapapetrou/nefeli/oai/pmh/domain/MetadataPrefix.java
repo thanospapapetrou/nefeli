@@ -15,8 +15,9 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "metadataPrefixType")
+@XmlType(name = MetadataPrefix.TYPE)
 public class MetadataPrefix {
+	static final String TYPE = "metadataPrefixType";
 	private static final Pattern PATTERN = Pattern.compile("[A-Za-z0-9\\-_\\.!~\\*'\\(\\)]+");
 
 	@XmlValue

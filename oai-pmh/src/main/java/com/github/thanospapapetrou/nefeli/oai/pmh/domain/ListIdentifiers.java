@@ -17,14 +17,16 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ListIdentifiersType", propOrder = {"headers", "resumptionToken"})
+@XmlType(name = ListIdentifiers.TYPE, propOrder = {"headers", "resumptionToken"})
 public class ListIdentifiers {
+	static final String TYPE = "ListIdentifiersType";
+	
 	@XmlElement(name = "header", required = true)
-	@XmlSchemaType(name = "headerType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<Header> headers;
 
 	@XmlElement(name = "resumptionToken")
-	@XmlSchemaType(name = "resumptionTokenType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final ResumptionToken resumptionToken;
 
 	/**

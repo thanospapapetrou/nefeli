@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlEnum
-@XmlType(name = "OAI-PMHerrorcodeType")
+@XmlType(name = Code.TYPE)
 public enum Code {
 	/**
 	 * the metadata format identified by the value given for the <code>metadataPrefix</code> argument is not supported by the item or by the repository (<code>cannotDisseminateFormat</code>)
@@ -60,6 +60,8 @@ public enum Code {
 	@XmlEnumValue("noSetHierarchy")
 	NO_SET_HIERARCHY;
 
+	static final String TYPE = "OAI-PMHerrorcodeType";
+	
 	@Override
 	public String toString() {
 		try {

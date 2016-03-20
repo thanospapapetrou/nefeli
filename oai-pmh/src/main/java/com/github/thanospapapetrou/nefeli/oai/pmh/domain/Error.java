@@ -15,10 +15,12 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "OAI-PMHerrorType", propOrder = {"string"})
+@XmlType(name = Error.TYPE, propOrder = {"string"})
 public class Error {
+	static final String TYPE = "OAI-PMHerrorType";
+	
 	@XmlAttribute(name = "code", required = true)
-	@XmlSchemaType(name = "OAI-PMHerrorcodeType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Code.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Code code;
 
 	@XmlValue

@@ -10,13 +10,15 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlEnum
-@XmlType(name = "statusType")
+@XmlType(name = Status.TYPE)
 public enum Status {
 	/**
 	 * deleted record (<code>deleted</code>)
 	 */
 	@XmlEnumValue("deleted")
 	DELETED;
+	
+	static final String TYPE = "statusType";
 
 	@Override
 	public String toString() {

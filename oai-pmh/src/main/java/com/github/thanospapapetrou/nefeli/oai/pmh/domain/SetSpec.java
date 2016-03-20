@@ -15,8 +15,9 @@ import javax.xml.bind.annotation.XmlValue;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "setSpecType", propOrder = {"setSpec"})
+@XmlType(name = SetSpec.TYPE, propOrder = {"setSpec"})
 public class SetSpec {
+	static final String TYPE = "setSpecType";
 	private static final Pattern PATTERN = Pattern.compile("([A-Za-z0-9\\-_\\.!~\\*'\\(\\)])+(:[A-Za-z0-9\\-_\\.!~\\*'\\(\\)]+)*");
 	private static final char SEPARATOR = ':';
 

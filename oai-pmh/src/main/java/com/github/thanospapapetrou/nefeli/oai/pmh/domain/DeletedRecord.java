@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlEnum
-@XmlType(name = "deletedRecordType")
+@XmlType(name = DeletedRecord.TYPE)
 public enum DeletedRecord {
 	/**
 	 * the repository does not maintain information about deletions (<code>no</code>)
@@ -29,6 +29,8 @@ public enum DeletedRecord {
 	 */
 	@XmlEnumValue("transient")
 	TRANSIENT;
+	
+	static final String TYPE = "deletedRecordType";
 
 	@Override
 	public String toString() {

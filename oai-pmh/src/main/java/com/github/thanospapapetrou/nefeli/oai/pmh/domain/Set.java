@@ -17,10 +17,12 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "setType", propOrder = {"setSpec", "setName", "setDescriptions"})
+@XmlType(name = Set.TYPE, propOrder = {"setSpec", "setName", "setDescriptions"})
 public class Set {
+	static final String TYPE = "setType";
+	
 	@XmlElement(name = "setSpec", required = true)
-	@XmlSchemaType(name = "setSpecType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final SetSpec setSpec;
 
 	@XmlElement(name = "setName", required = true)
@@ -28,7 +30,7 @@ public class Set {
 	private final String setName;
 
 	@XmlElement(name = "setDescription")
-	@XmlSchemaType(name = "descriptionType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Description.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<Description> setDescriptions;
 
 	/**

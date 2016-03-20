@@ -20,23 +20,25 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "headerType", propOrder = {"identifier", "datestamp", "setSpecs"})
+@XmlType(name = Header.TYPE, propOrder = {"identifier", "datestamp", "setSpecs"})
 public class Header {
+	static final String TYPE = "headerType";
+	
 	@XmlAttribute(name = "status")
-	@XmlSchemaType(name = "statusType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Status.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Status status;
 
 	@XmlElement(name = "identifier", required = true)
-	@XmlSchemaType(name = "identifierType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmh.IDENTIFIER_TYPE, namespace = OaiPmh.NAMESPACE)
 	private final URI identifier;
 
 	@XmlElement(name = "datestamp", required = true)
-	@XmlSchemaType(name = "UTCdatetimeType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
 	// TODO @XmlJavaTypeAdapter String
 	private final Date datestamp;
 
 	@XmlElement(name = "setSpec")
-	@XmlSchemaType(name = "setSpecType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
 	// TODO @XmlJavaTypeAdapter String
 	private final List<String> setSpecs;
 

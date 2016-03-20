@@ -14,10 +14,12 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetRecordType", propOrder = {"record"})
+@XmlType(name = GetRecord.TYPE, propOrder = {"record"})
 public class GetRecord {
+	static final String TYPE = "GetRecordType";
+	
 	@XmlElement(name = "record", required = true)
-	@XmlSchemaType(name = "recordType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Record record;
 
 	/**

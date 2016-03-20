@@ -17,10 +17,12 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ListMetadataFormatsType", propOrder = {"metadataFormats"})
+@XmlType(name = ListMetadataFormats.TYPE, propOrder = {"metadataFormats"})
 public class ListMetadataFormats {
+	static final String TYPE = "ListMetadataFormatsType";
+	
 	@XmlElement(name = "metadataFormat", required = true)
-	@XmlSchemaType(name = "metadataFormatType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = MetadataFormat.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<MetadataFormat> metadataFormats;
 
 	/**

@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlEnum
-@XmlType(name = "protocolVersionType")
+@XmlType(name = ProtocolVersion.TYPE)
 public enum ProtocolVersion {
 	/**
 	 * OAI-PMH 2.0 (<code>2.0</code>)
@@ -18,6 +18,8 @@ public enum ProtocolVersion {
 	@XmlEnumValue("2.0")
 	OAI_PMH_2_0;
 
+	static final String TYPE = "protocolVersionType";
+	
 	@Override
 	public String toString() {
 		try {
