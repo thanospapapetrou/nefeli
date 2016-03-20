@@ -6,7 +6,7 @@
  */
 @XmlSchema(namespace = OaiPmh.NAMESPACE, xmlns = {
 	@XmlNs(namespaceURI = OaiPmh.NAMESPACE, prefix = "oai")
-}, location = OaiPmh.SCHEMA, elementFormDefault = XmlNsForm.QUALIFIED)
+}, location = "http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd", elementFormDefault = XmlNsForm.QUALIFIED)
 package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
 
 import javax.xml.bind.annotation.XmlNs;

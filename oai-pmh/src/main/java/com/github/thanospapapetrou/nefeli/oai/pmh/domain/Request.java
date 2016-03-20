@@ -55,7 +55,7 @@ public class Request {
 	private final URL baseUrl;
 
 	/**
-	 * Construct a new <code>request<code> element corresponding to a <code>Identify</code> OAI-PMH request.
+	 * Construct a new <code>request<code> element corresponding to an <code>Identify</code> OAI-PMH request.
 	 * 
 	 * @param baseUrl
 	 *            the base URL
