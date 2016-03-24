@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
  * Enumeration defining a <code>compression</code> OAI-PMH element.
  * 
  * @author thanos
- * @see <a href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616 Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * @see <a href="http://www.ietf.org/rfc/rfc2616.txt">Hypertext Transfer Protocol -- HTTP/1.1</a>
  */
 @XmlEnum
 @XmlType(name = Compression.TYPE, namespace = XMLConstants.W3C_XML_SCHEMA_NS_URI)
