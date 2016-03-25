@@ -1,0 +1,18 @@
+rename project
+manifest
+use additional HTTP status codes
+
+Responses to GetRecord request for a deleted record must then include a header with the attribute status="deleted", and must not include metadata or about parts. Similarly, responses to selective harvesting requests with set membership and date range criteria that include deleted records must include the headers of these records. Incremental harvesting will thus discover deletions from repositories that keep track of them.
+When a setSpec is used as an argument, the response must include records or headers from all items in the set specified by the setSpec , and all records or headers from items in sets that are descendant from the specified set. Using the previous example of a set hierarchy, a setSpec of institution to the ListRecords request will return all records from metadata organized within the set with a setSpec value equal to institution and within the descendent sets with setSpec values equal to institution:florida and institution:nebraska.
+Range limits are inclusive: from specifies a bound that must be interpreted as "greater than or equal to", until specifies a bound that must be interpreted as "less than or equal to". Therefore, the from argument must be less than or equal to the until argument. Otherwise, a repository must issue a badArgument error.
+Repositories must use the following rules to create a ListRecords response matching the specified datestamp range according to the type of change that occurred within the repository. The response to a ListIdentifiers request follows the same rules but is abbreviated to include only headers rather than records.
+	modification - the response must include records, corresponding to the metadataPrefix argument, which have changed within the bounds of the from and until arguments.
+	creation - the response must include records, corresponding to the metadataPrefix argument, that have become available from the repository within the bounds of the from and until arguments.
+	deletion - depending on the level at which a repository keeps track of deleted records, the response may include headers of records, corresponding to the metadataPrefix argument, which have been withdrawn from the repository within the bounds of the from and until arguments. Deleted status is indicated via the status attribute of the header element and no metadata is included.
+When a setSpec is used as an argument, the response must include:
+	the records corresponding to the metadataPrefix argument, or headers thereof in the case of deleted records, available from those items in the set specified by the setSpec;
+	the records corresponding to the metadataPrefix argument, or headers thereof in the case of deleted records, available from those items in sets that are descendant from the specified set.
+Keyword arguments are carried in the message body of the HTTP POST. The Content-Type of the request must be application/x-www-form-urlencoded.
+The Content-Type returned for all OAI-PMH requests must be text/xml.
+Encoding of the XML must use the UTF-8 representation of Unicode.
+3.4
