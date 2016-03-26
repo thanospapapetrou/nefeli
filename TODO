@@ -1,6 +1,6 @@
 add description in pom.xml and project on gitlab
-add url in pom.xml
-add organization in pom.xml
+add url in pom.xml and use it as Implementation-URL
+add organization in pom.xml and use it as Implementation-Vendor
 add issueManagement in pom.xml
 add ciManagement in pom.xml
 add mailingLists in pom.xml

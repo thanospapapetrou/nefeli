@@ -1,5 +1,3 @@
-rename project
-manifest
 use additional HTTP status codes
 
 Responses to GetRecord request for a deleted record must then include a header with the attribute status="deleted", and must not include metadata or about parts. Similarly, responses to selective harvesting requests with set membership and date range criteria that include deleted records must include the headers of these records. Incremental harvesting will thus discover deletions from repositories that keep track of them.
@@ -16,3 +14,4 @@ Keyword arguments are carried in the message body of the HTTP POST. The Content-
 The Content-Type returned for all OAI-PMH requests must be text/xml.
 Encoding of the XML must use the UTF-8 representation of Unicode.
 3.4
+
