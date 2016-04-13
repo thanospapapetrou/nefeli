@@ -19,12 +19,14 @@ public enum Granularity {
 	/**
 	 * day granularity (<code>YYYY-MM-DD</code>)
 	 */
-	@XmlEnumValue("YYYY-MM-DD") YYYY_MM_DD("day", "yyyy-MM-dd"),
+	@XmlEnumValue("YYYY-MM-DD")
+	YYYY_MM_DD("day", "yyyy-MM-dd"),
 
 	/**
 	 * seconds granularity (<code>YYYY-MM-DDThh:mm:ssZ</code>)
 	 */
-	@XmlEnumValue("YYYY-MM-DDThh:mm:ssZ") YYYY_MM_DD_THH_MM_SS_Z("seconds", "yyyy-MM-dd'T'HH:mm:ss'Z'");
+	@XmlEnumValue("YYYY-MM-DDThh:mm:ssZ")
+	YYYY_MM_DD_THH_MM_SS_Z("seconds", "yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 	static final String TYPE = "granularityType";
 	private static final TimeZone UTC = TimeZone.getTimeZone("GMT+00:00");
