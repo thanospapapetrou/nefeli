@@ -34,7 +34,7 @@ public class SetSpec {
 	public SetSpec(final String setSpec) {
 		Objects.requireNonNull(setSpec, "Set spec must not be null");
 		if (!PATTERN.matcher(setSpec).matches()) {
-			throw new IllegalArgumentException("Set spec must adhere to pattern " + PATTERN);
+			throw new IllegalArgumentException(String.format("Set spec must adhere to pattern %1$s", PATTERN));
 		}
 		this.setSpec = setSpec;
 	}

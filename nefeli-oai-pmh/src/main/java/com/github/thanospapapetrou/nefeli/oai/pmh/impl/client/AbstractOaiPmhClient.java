@@ -129,14 +129,14 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 		}, parameters);
 		final String contentType = response.getHeaderString(HttpHeaders.CONTENT_TYPE);
 		if (contentType == null) {
-			throw new IOException("Response must specify a " + HttpHeaders.CONTENT_TYPE + " header");
+			throw new IOException(String.format("Response must specify a %1$s header", HttpHeaders.CONTENT_TYPE));
 		}
 		final MediaType mediaType = MediaType.valueOf(contentType);
 		if (!MediaType.TEXT_XML_TYPE.isCompatible(mediaType)) {
-			throw new IOException("Response content type must be " + MediaType.TEXT_XML_TYPE.toString());
+			throw new IOException(String.format("Response content type must be %1$s", MediaType.TEXT_XML_TYPE.toString()));
 		}
 		if (mediaType.getParameters().containsKey(MediaType.CHARSET_PARAMETER) && StandardCharsets.UTF_8.equals(Charset.forName(mediaType.getParameters().get(MediaType.CHARSET_PARAMETER)))) {
-			throw new IOException("Response charset is not " + StandardCharsets.UTF_8.name());
+			throw new IOException(String.format("Response charset is not %1$s", StandardCharsets.UTF_8.name()));
 		}
 		return response;
 	}
@@ -245,7 +245,7 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 				response.close();
 			}
 		} catch (final URISyntaxException e) {
-			throw new IOException("Invalid URI " + url, e);
+			throw new IOException(String.format("Invalid URI %1$s", url), e);
 		} finally {
 			client.close();
 		}
@@ -303,7 +303,7 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 				response.close();
 			}
 		} catch (final URISyntaxException e) {
-			throw new IOException("Invalid URI " + url, e);
+			throw new IOException(String.format("Invalid URI %1$s", url), e);
 		} finally {
 			client.close();
 		}

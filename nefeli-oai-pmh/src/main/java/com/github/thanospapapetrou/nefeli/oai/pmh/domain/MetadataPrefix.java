@@ -33,7 +33,7 @@ public class MetadataPrefix {
 	public MetadataPrefix(final String metadataPrefix) {
 		Objects.requireNonNull(metadataPrefix, "Metadata prefix must not be null");
 		if (!PATTERN.matcher(metadataPrefix).matches()) {
-			throw new IllegalArgumentException("Metadata prefix must adhere to pattern " + PATTERN);
+			throw new IllegalArgumentException(String.format("Metadata prefix must adhere to pattern %1$s", PATTERN));
 		}
 		this.metadataPrefix = metadataPrefix;
 	}
