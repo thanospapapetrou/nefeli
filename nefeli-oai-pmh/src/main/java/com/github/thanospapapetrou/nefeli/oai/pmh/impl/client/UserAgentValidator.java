@@ -71,11 +71,13 @@ public class UserAgentValidator {
 	 * 
 	 * @param userAgent
 	 *            the <code>User-Agent</code> HTTP header value to validate
+	 * @return the validated <code>User-Agent</code> HTTP header value
 	 * @throws ParseException
 	 *             if the <code>User-Agent</code> HTTP header value can not be validated
 	 */
-	public static void validate(final String userAgent) throws ParseException {
+	public static String validate(final String userAgent) throws ParseException {
 		new UserAgentValidator(userAgent).parseUserAgent();
+		return userAgent;
 	}
 
 	private static String or(final Token... tokens) {
