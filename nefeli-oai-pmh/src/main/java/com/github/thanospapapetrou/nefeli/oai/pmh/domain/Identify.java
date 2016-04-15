@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = Identify.TYPE, propOrder = {"repositoryName", "baseURL", "protocolVersion", "adminEmails", "earliestDatestamp", "deletedRecord", "granularity", "compressions", "descriptions"})
+@XmlType(name = Identify.TYPE, propOrder = {"repositoryName", "baseUrl", "protocolVersion", "adminEmails", "earliestDatestamp", "deletedRecord", "granularity", "compressions", "descriptions"})
 public class Identify {
 	static final String TYPE = "IdentifyType";
 	

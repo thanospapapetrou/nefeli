@@ -5,7 +5,6 @@ import java.util.Objects;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 import org.w3c.dom.Element;
@@ -16,12 +15,11 @@ import org.w3c.dom.Element;
  * @author thanos
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = About.TYPE, propOrder = {"any"})
+@XmlType(name = About.TYPE, propOrder = {"element"})
 public class About {
 	static final String TYPE = "aboutType";
 	
 	@XmlAnyElement
-	@XmlSchemaType(name = "anyType")
 	private final Element element;
 
 	/**

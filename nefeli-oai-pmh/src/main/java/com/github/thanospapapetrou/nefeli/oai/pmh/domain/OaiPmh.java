@@ -1,17 +1,33 @@
 package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchema;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.xml.sax.SAXException;
 
 /**
  * Class representing an <code>OAI-PMH</code> element.
@@ -25,6 +41,21 @@ public class OaiPmh {
 	static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
 	static final String IDENTIFIER_TYPE = "identifierType";
 	static final String UTC_DATETIME_TYPE = "UTCdatetimeType";
+	private static final JAXBContext CONTEXT;
+	private static final Schema MARSHAL_SCHEMA;
+	private static final Schema UNMARSHAL_SCHEMA;
+	private static final String SCHEMA_LOCATION = "%1$s %2$s";
+
+	static {
+		try {
+			CONTEXT = JAXBContext.newInstance(OaiPmh.class);
+			final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			MARSHAL_SCHEMA = schemaFactory.newSchema(new URL(OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
+			UNMARSHAL_SCHEMA = schemaFactory.newSchema();
+		} catch (final IOException | JAXBException | SAXException e) {
+			throw new ExceptionInInitializerError(e);
+		}
+	}
 
 	@XmlElement(name = "responseDate", required = true)
 	@XmlSchemaType(name = "dateTime")
@@ -61,6 +92,26 @@ public class OaiPmh {
 	@XmlElement(name = "ListRecords")
 	@XmlSchemaType(name = ListRecords.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final ListRecords listRecords;
+
+	/**
+	 * Unmarshal an <code>OAI-PMH</code> element from an input stream.
+	 * 
+	 * @param inputStream
+	 *            the input stream to unmarshal from
+	 * @return the <code>OAI-PMH</code> element unmarshaled
+	 * @throws IOException
+	 *             if any errors occur
+	 */
+	public static OaiPmh unmarshal(final InputStream inputStream) throws IOException {
+		try (final InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+			final Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
+			unmarshaller.setSchema(UNMARSHAL_SCHEMA);
+			// unmarshaller.setEventHandler(handler); // TODO
+			return (OaiPmh) unmarshaller.unmarshal(reader);
+		} catch (final JAXBException e) {
+			throw new IOException("Error unmarshalling OAI-PMH", e);
+		}
+	}
 
 	/**
 	 * Construct a new <code>OAI-PMH</code> element corresponding to an OAI-PMH error.
@@ -268,5 +319,27 @@ public class OaiPmh {
 	 */
 	public ListRecords getListRecords() {
 		return listRecords;
+	}
+
+	/**
+	 * Marshal this <code>OAI-PMH</code> element to an output stream.
+	 * 
+	 * @param outputStream
+	 *            the output stream to marshal to
+	 * @throws IOException
+	 *             if any errors occur
+	 */
+	public void marshal(final OutputStream outputStream) throws IOException {
+		try {
+			final Marshaller marshaller = CONTEXT.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
+			marshaller.setSchema(MARSHAL_SCHEMA);
+			// marshaller.setEventHandler(handler); // TODO
+			marshaller.marshal(this, outputStream);
+		} catch (final JAXBException e) {
+			throw new IOException("Error marshalling OAI-PMH", e);
+		}
 	}
 }
