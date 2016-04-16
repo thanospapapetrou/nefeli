@@ -31,6 +31,11 @@ public class GetRecord {
 	public GetRecord(final Record record) {
 		this.record = Objects.requireNonNull(record, "Record must not be null");
 	}
+	
+	@SuppressWarnings("unused")
+	private GetRecord() {
+		record = null;
+	}
 
 	/**
 	 * Get the <code>record</code> element.

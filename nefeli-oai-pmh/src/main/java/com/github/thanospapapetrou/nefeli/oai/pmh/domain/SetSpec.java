@@ -38,6 +38,11 @@ public class SetSpec {
 		}
 		this.setSpec = setSpec;
 	}
+	
+	@SuppressWarnings("unused")
+	private SetSpec() {
+		setSpec = null;
+	}
 
 	/**
 	 * Get the hierarchical parent of this <code>setSpec</code>.

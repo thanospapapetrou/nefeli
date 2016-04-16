@@ -101,6 +101,14 @@ public class ResumptionToken {
 	public ResumptionToken(final BigInteger completeListSize, final BigInteger cursor) {
 		this(completeListSize, cursor, null);
 	}
+	
+	@SuppressWarnings("unused")
+	private ResumptionToken() {
+		expirationDate = null;
+		completeListSize = null;
+		cursor = null;
+		resumptionToken = null;
+	}
 
 	/**
 	 * Get the <code>expirationDate</code> attribute.

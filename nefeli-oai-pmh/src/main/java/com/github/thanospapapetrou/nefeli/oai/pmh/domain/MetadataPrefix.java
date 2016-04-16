@@ -38,6 +38,11 @@ public class MetadataPrefix {
 		this.metadataPrefix = metadataPrefix;
 	}
 
+	@SuppressWarnings("unused")
+	private MetadataPrefix() {
+		metadataPrefix = null;
+	}
+
 	@Override
 	public String toString() {
 		return metadataPrefix;

@@ -31,6 +31,11 @@ public class Metadata {
 	public Metadata(final Element element) {
 		this.element = Objects.requireNonNull(element, "Element must not be null");
 	}
+	
+	@SuppressWarnings("unused")
+	private Metadata() {
+		element = null;
+	}
 
 	/**
 	 * Get the nested element.
