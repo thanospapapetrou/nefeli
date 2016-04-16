@@ -2,30 +2,59 @@ package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+/**
+ * Test for {@link OaiPmh}.
+ * 
+ * @author thanos
+ */
 @Test
 public class OaiPmhTest {
+	private static final String EXAMPLES = "/com/github/thanospapapetrou/nefeli/oai/pmh/examples";
+
 	@DataProvider(name = "marshalUnmarshal")
-	private static Iterator<Object[]> testMarshalUnmarshalData() {
-		final List<Object[]> data = new ArrayList<Object[]>();
-		for (final String example : new String[] {"/com/github/thanospapapetrou/nefeli/oai/pmh/domain/Error.xml"}) {
-			data.add(new Object[] {example});
-		}
-		return data.iterator();
+	private static Iterator<Object[]> testMarshalUnmarshalData() throws URISyntaxException {
+		final Iterator<File> files = Arrays.asList(new File(OaiPmhTest.class.getResource(EXAMPLES).toURI()).listFiles()).iterator();
+		return new Iterator<Object[]>() {
+			@Override
+			public boolean hasNext() {
+				return files.hasNext();
+			}
+
+			@Override
+			public Object[] next() {
+				return new Object[] {files.next()};
+			}
+
+			@Override
+			public void remove() {
+				files.remove();
+			}
+		};
 	}
-	
+
+	/**
+	 * Test for {@link OaiPmh#marshal(java.io.OutputStream)} and {@link OaiPmh#unmarshal(InputStream)}.
+	 * 
+	 * @param example
+	 *            the example to test with
+	 * @throws IOException
+	 *             if any errors occur
+	 */
 	@Test(dataProvider = "marshalUnmarshal")
-	public void testMarshalUnmarshal(final String example) throws IOException {
-		try (final InputStream inputStream = this.getClass().getResourceAsStream(example)) {
+	public void testMarshalUnmarshal(final File example) throws IOException {
+		try (final InputStream inputStream = new FileInputStream(example)) {
 			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream);
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			oaiPmh.marshal(outputStream);
