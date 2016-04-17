@@ -36,10 +36,12 @@ public class Request {
 
 	@XmlAttribute(name = "from")
 	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
+	// TODO adapter
 	private final Date from;
 
 	@XmlAttribute(name = "until")
 	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
+	// TODO adapter
 	private final Date until;
 
 	@XmlAttribute(name = "set")

@@ -59,6 +59,7 @@ public class OaiPmh {
 
 	@XmlElement(name = "responseDate", required = true)
 	@XmlSchemaType(name = "dateTime")
+	// TODO adapter
 	private final Date responseDate;
 
 	@XmlElement(name = "request", required = true)
