@@ -2,6 +2,7 @@ package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = ResumptionToken.TYPE, propOrder = {"resumptionToken"})
 public class ResumptionToken {
 	static final String TYPE = "resumptionTokenType";
-	
+
 	@XmlAttribute(name = "expirationDate")
 	@XmlSchemaType(name = "dateTime")
 	// @XmlJavaTypeAdapter() TODO XMLGregorianCalendar
@@ -101,7 +102,7 @@ public class ResumptionToken {
 	public ResumptionToken(final BigInteger completeListSize, final BigInteger cursor) {
 		this(completeListSize, cursor, null);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private ResumptionToken() {
 		expirationDate = null;
@@ -144,5 +145,19 @@ public class ResumptionToken {
 	 */
 	public String getResumptionToken() {
 		return resumptionToken;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof ResumptionToken) {
+			final ResumptionToken resumptionToken = (ResumptionToken) object;
+			return Objects.equals(expirationDate, resumptionToken.expirationDate) && Objects.equals(completeListSize, resumptionToken.completeListSize) && Objects.equals(cursor, resumptionToken.cursor) && Objects.equals(this.resumptionToken, resumptionToken.resumptionToken);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(expirationDate, completeListSize, cursor, resumptionToken);
 	}
 }

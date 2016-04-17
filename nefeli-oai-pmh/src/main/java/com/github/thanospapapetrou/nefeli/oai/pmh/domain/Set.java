@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = Set.TYPE, propOrder = {"setSpec", "setName", "setDescriptions"})
 public class Set {
 	static final String TYPE = "setType";
-	
+
 	@XmlElement(name = "setSpec", required = true)
 	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final SetSpec setSpec;
@@ -87,5 +87,19 @@ public class Set {
 	 */
 	public List<Description> getSetDescriptions() {
 		return Collections.unmodifiableList(setDescriptions);
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof Set) {
+			final Set set = (Set) object;
+			return setSpec.equals(set.setSpec) && setName.equals(set.setName) && setDescriptions.equals(set.setDescriptions);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(setSpec, setName, setDescriptions);
 	}
 }

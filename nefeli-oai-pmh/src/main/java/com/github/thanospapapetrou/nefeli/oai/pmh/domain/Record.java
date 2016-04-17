@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = Record.TYPE, propOrder = {"header", "metadata", "abouts"})
 public class Record {
 	static final String TYPE = "recordType";
-	
+
 	@XmlElement(name = "header", required = true)
 	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Header header;
@@ -103,5 +103,19 @@ public class Record {
 	 */
 	public List<About> getAbouts() {
 		return Collections.unmodifiableList(abouts);
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof Record) {
+			final Record record = (Record) object;
+			return header.equals(record.header) && Objects.equals(metadata, record.metadata) && abouts.equals(record.abouts);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(header, metadata, abouts);
 	}
 }

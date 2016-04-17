@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = Error.TYPE, propOrder = {"string"})
 public class Error {
 	static final String TYPE = "OAI-PMHerrorType";
-	
+
 	@XmlAttribute(name = "code", required = true)
 	@XmlSchemaType(name = Code.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Code code;
@@ -72,5 +72,19 @@ public class Error {
 	 */
 	public String getString() {
 		return string;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof Error) {
+			final Error error = (Error) object;
+			return code.equals(error.code) && Objects.equals(string, error.string);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(code, string);
 	}
 }

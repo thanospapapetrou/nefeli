@@ -42,6 +42,16 @@ public class MetadataPrefix {
 	private MetadataPrefix() {
 		metadataPrefix = null;
 	}
+	
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof MetadataPrefix) && metadataPrefix.equals(((MetadataPrefix) object).metadataPrefix);
+	}
+	
+	@Override
+	public int hashCode() {
+		return metadataPrefix.hashCode();
+	}
 
 	@Override
 	public String toString() {

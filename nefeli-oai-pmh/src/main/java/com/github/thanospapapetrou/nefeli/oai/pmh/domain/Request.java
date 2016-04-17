@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = Request.TYPE, propOrder = {"baseUrl"})
 public class Request {
 	static final String TYPE = "requestType";
-	
+
 	@XmlAttribute(name = "verb")
 	@XmlSchemaType(name = Verb.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Verb verb;
@@ -385,5 +385,19 @@ public class Request {
 	 */
 	public URL getBaseUrl() {
 		return baseUrl;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof Request) {
+			final Request request = (Request) object;
+			return Objects.equals(verb, request.verb) && Objects.equals(identifier, request.identifier) && Objects.equals(metadataPrefix, request.metadataPrefix) && Objects.equals(from, request.from) && Objects.equals(until, request.until) && Objects.equals(set, request.set) && Objects.equals(resumptionToken, request.resumptionToken) && baseUrl.equals(request.baseUrl);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(verb, identifier, metadataPrefix, from, until, set, resumptionToken, baseUrl);
 	}
 }

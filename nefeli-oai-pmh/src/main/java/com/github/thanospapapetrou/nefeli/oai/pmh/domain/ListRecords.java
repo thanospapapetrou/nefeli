@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = ListRecords.TYPE, propOrder = {"records", "resumptionToken"})
 public class ListRecords {
 	static final String TYPE = "ListRecordsType";
-	
+
 	@XmlElement(name = "record", required = true)
 	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<Record> records;
@@ -78,5 +78,19 @@ public class ListRecords {
 	 */
 	public ResumptionToken getResumptionToken() {
 		return resumptionToken;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof ListRecords) {
+			final ListRecords listRecords = (ListRecords) object;
+			return records.equals(listRecords.records) && Objects.equals(resumptionToken, listRecords.resumptionToken);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(records, resumptionToken);
 	}
 }

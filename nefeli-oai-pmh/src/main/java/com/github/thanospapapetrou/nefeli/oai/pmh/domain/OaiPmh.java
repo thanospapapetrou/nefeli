@@ -342,4 +342,18 @@ public class OaiPmh {
 			throw new IOException("Error marshalling OAI-PMH", e);
 		}
 	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof OaiPmh) {
+			final OaiPmh oaiPmh = (OaiPmh) object;
+			return responseDate.equals(oaiPmh.responseDate) && request.equals(oaiPmh.request) && errors.equals(oaiPmh.errors) && Objects.equals(identify, oaiPmh.identify) && Objects.equals(listMetadataFormats, oaiPmh.listMetadataFormats) && Objects.equals(listSets, oaiPmh.listSets) && Objects.equals(getRecord, oaiPmh.getRecord) && Objects.equals(listIdentifiers, oaiPmh.listIdentifiers) && Objects.equals(listRecords, oaiPmh.listRecords);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(responseDate, request, errors, identify, listMetadataFormats, listSets, getRecord, listIdentifiers, listRecords);
+	}
 }

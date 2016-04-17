@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 @XmlType(name = Metadata.TYPE, propOrder = {"element"})
 public class Metadata {
 	static final String TYPE = "metadataType";
-	
+
 	@XmlAnyElement
 	private final Element element;
 
@@ -31,7 +31,7 @@ public class Metadata {
 	public Metadata(final Element element) {
 		this.element = Objects.requireNonNull(element, "Element must not be null");
 	}
-	
+
 	@SuppressWarnings("unused")
 	private Metadata() {
 		element = null;
@@ -44,5 +44,15 @@ public class Metadata {
 	 */
 	public Element getElement() {
 		return element;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof Metadata) && element.isEqualNode(((Metadata) object).element);
+	}
+
+	@Override
+	public int hashCode() {
+		return element.hashCode();
 	}
 }

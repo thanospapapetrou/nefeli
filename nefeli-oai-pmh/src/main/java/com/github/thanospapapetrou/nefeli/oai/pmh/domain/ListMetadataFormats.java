@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = ListMetadataFormats.TYPE, propOrder = {"metadataFormats"})
 public class ListMetadataFormats {
 	static final String TYPE = "ListMetadataFormatsType";
-	
+
 	@XmlElement(name = "metadataFormat", required = true)
 	@XmlSchemaType(name = MetadataFormat.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<MetadataFormat> metadataFormats;
@@ -51,5 +51,15 @@ public class ListMetadataFormats {
 	 */
 	public List<MetadataFormat> getMetadataFormats() {
 		return Collections.unmodifiableList(metadataFormats);
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof ListMetadataFormats) && metadataFormats.equals(((ListMetadataFormats) object).metadataFormats);
+	}
+
+	@Override
+	public int hashCode() {
+		return metadataFormats.hashCode();
 	}
 }

@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = MetadataFormat.TYPE, propOrder = {"metadataPrefix", "schema", "metadataNamespace"})
 public class MetadataFormat {
 	static final String TYPE = "metadataFormatType";
-	
+
 	@XmlElement(name = "metadataPrefix", required = true)
 	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final MetadataPrefix metadataPrefix;
@@ -80,5 +80,19 @@ public class MetadataFormat {
 	 */
 	public URI getMetadataNamespace() {
 		return metadataNamespace;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof MetadataFormat) {
+			final MetadataFormat metadataFormat = (MetadataFormat) object;
+			return metadataPrefix.equals(metadataFormat.metadataPrefix) && schema.equals(metadataFormat.schema) && metadataNamespace.equals(metadataFormat.metadataNamespace);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(metadataPrefix, schema, metadataNamespace);
 	}
 }

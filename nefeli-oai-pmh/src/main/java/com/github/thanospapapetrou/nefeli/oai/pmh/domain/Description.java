@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 @XmlType(name = Description.TYPE, propOrder = {"element"})
 public class Description {
 	static final String TYPE = "descriptionType";
-	
+
 	@XmlAnyElement
 	private final Element element;
 
@@ -44,5 +44,15 @@ public class Description {
 	 */
 	public Object getElement() {
 		return element;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof Description) && element.isEqualNode(((Description) object).element);
+	}
+
+	@Override
+	public int hashCode() {
+		return element.hashCode();
 	}
 }

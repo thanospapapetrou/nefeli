@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = GetRecord.TYPE, propOrder = {"record"})
 public class GetRecord {
 	static final String TYPE = "GetRecordType";
-	
+
 	@XmlElement(name = "record", required = true)
 	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Record record;
@@ -31,7 +31,7 @@ public class GetRecord {
 	public GetRecord(final Record record) {
 		this.record = Objects.requireNonNull(record, "Record must not be null");
 	}
-	
+
 	@SuppressWarnings("unused")
 	private GetRecord() {
 		record = null;
@@ -44,5 +44,15 @@ public class GetRecord {
 	 */
 	public Record getRecord() {
 		return record;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof GetRecord) && record.equals(((GetRecord) object).record);
+	}
+
+	@Override
+	public int hashCode() {
+		return record.hashCode();
 	}
 }

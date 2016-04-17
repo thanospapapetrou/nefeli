@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = Identify.TYPE, propOrder = {"repositoryName", "baseUrl", "protocolVersion", "adminEmails", "earliestDatestamp", "deletedRecord", "granularity", "compressions", "descriptions"})
 public class Identify {
 	static final String TYPE = "IdentifyType";
-	
+
 	@XmlElement(name = "repositoryName", required = true)
 	@XmlSchemaType(name = "string")
 	private final String repositoryName;
@@ -210,5 +210,19 @@ public class Identify {
 	 */
 	public List<Description> getDescriptions() {
 		return Collections.unmodifiableList(descriptions);
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof Identify) {
+			final Identify identify = (Identify) object;
+			return repositoryName.equals(identify.repositoryName) && baseUrl.equals(identify.baseUrl) && protocolVersion.equals(identify.protocolVersion) && adminEmails.equals(identify.adminEmails) && earliestDatestamp.equals(identify.earliestDatestamp) && deletedRecord.equals(identify.deletedRecord) && granularity.equals(identify.granularity) && compressions.equals(identify.compressions) && descriptions.equals(identify.descriptions);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(repositoryName, baseUrl, protocolVersion, adminEmails, earliestDatestamp, deletedRecord, granularity, compressions, descriptions);
 	}
 }

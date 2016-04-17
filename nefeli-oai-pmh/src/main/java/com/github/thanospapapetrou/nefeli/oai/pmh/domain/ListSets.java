@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = ListSets.TYPE, propOrder = {"sets", "resumptionToken"})
 public class ListSets {
 	static final String TYPE = "ListSetsType";
-	
+
 	@XmlElement(name = "set", required = true)
 	@XmlSchemaType(name = Set.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final List<Set> sets;
@@ -78,5 +78,19 @@ public class ListSets {
 	 */
 	public ResumptionToken getResumptionToken() {
 		return resumptionToken;
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof ListSets) {
+			final ListSets listSets = (ListSets) object;
+			return sets.equals(listSets.sets) && Objects.equals(resumptionToken, listSets.resumptionToken);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(sets, resumptionToken);
 	}
 }

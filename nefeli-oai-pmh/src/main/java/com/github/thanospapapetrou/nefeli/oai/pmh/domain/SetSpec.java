@@ -53,6 +53,16 @@ public class SetSpec {
 		final int index = setSpec.lastIndexOf(SEPARATOR);
 		return (index == -1) ? null : new SetSpec(setSpec.substring(0, index));
 	}
+	
+	@Override
+	public boolean equals(final Object object) {
+		return (object instanceof SetSpec) && setSpec.equals(((SetSpec) object).setSpec);
+	}
+	
+	@Override
+	public int hashCode() {
+		return setSpec.hashCode();
+	}
 
 	@Override
 	public String toString() {

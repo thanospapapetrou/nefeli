@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = Header.TYPE, propOrder = {"identifier", "datestamp", "setSpecs"})
 public class Header {
 	static final String TYPE = "headerType";
-	
+
 	@XmlAttribute(name = "status")
 	@XmlSchemaType(name = Status.TYPE, namespace = OaiPmh.NAMESPACE)
 	private final Status status;
@@ -144,5 +144,19 @@ public class Header {
 	 */
 	public List<String> getSetSpecs() {
 		return Collections.unmodifiableList(setSpecs);
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (object instanceof Header) {
+			final Header header = (Header) object;
+			return Objects.equals(status, header.status) && identifier.equals(header.identifier) && datestamp.equals(header.datestamp) && setSpecs.equals(header.setSpecs);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(status, identifier, datestamp, setSpecs);
 	}
 }
