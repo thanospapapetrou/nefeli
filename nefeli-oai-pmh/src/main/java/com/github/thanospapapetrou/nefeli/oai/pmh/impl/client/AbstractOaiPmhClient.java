@@ -142,15 +142,7 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 	}
 
 	protected com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh parseOaiPmh(final InputStream inputStream) throws IOException, OaiPmhException {
-		try (final InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-			final com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh oaiPmh = (com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh) JAXBContext.newInstance(com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh.class).createUnmarshaller().unmarshal(reader);
-			if (!oaiPmh.getErrors().isEmpty()) {
-				throw new OaiPmhException(oaiPmh.getErrors());
-			}
-			return oaiPmh;
-		} catch (final JAXBException e) {
-			throw new IOException("Error parsing OAI-PMH response", e);
-		}
+		return com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh.unmarshal(inputStream);
 	}
 
 	private com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh request(final Verb verb) throws HTTPException, InterruptedException, IOException, OaiPmhException {

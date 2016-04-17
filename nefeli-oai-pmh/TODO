@@ -15,3 +15,5 @@ The Content-Type returned for all OAI-PMH requests must be text/xml.
 Encoding of the XML must use the UTF-8 representation of Unicode.
 3.4
 
+Granularity must not have format
+Abstract OaiPmhClient must not have baseUrl
