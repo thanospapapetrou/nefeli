@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateSecondsGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampSecondsGranularityXmlAdapter;
 
 /**
  * Class representing a <code>resumptionToken</code> OAI-PMH element.
@@ -26,7 +26,7 @@ public class ResumptionToken {
 
 	@XmlAttribute(name = "expirationDate")
 	@XmlSchemaType(name = "dateTime")
-	@XmlJavaTypeAdapter(DateSecondsGranularityXmlAdapter.class)
+	@XmlJavaTypeAdapter(DatestampSecondsGranularityXmlAdapter.class)
 	private final Date expirationDate;
 
 	@XmlAttribute(name = "completeListSize")

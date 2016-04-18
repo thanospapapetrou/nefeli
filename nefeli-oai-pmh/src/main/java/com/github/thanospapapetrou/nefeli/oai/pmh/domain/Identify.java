@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranularityXmlAdapter;
 
 /**
  * Class representing an <code>Identify</code> OAI-PMH element.
@@ -45,7 +45,7 @@ public class Identify {
 
 	@XmlElement(name = "earliestDatestamp", required = true)
 	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
-	@XmlJavaTypeAdapter(DateGranularityXmlAdapter.class)
+	@XmlJavaTypeAdapter(DatestampGranularityXmlAdapter.class)
 	private final Date earliestDatestamp;
 
 	@XmlElement(name = "deletedRecord", required = true)

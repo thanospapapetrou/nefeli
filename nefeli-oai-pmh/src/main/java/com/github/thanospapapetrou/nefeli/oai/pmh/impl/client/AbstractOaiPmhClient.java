@@ -37,7 +37,7 @@ import com.github.thanospapapetrou.nefeli.oai.pmh.domain.ListSets;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.MetadataPrefix;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.SetSpec;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.Verb;
-import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranularityXmlAdapter;
 
 public abstract class AbstractOaiPmhClient implements OaiPmh {
 	private static final String VERB = "verb";
@@ -166,10 +166,10 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 				put(VERB, verb.toString());
 				put(METADATA_PREFIX, Objects.requireNonNull(metadataPrefix, "Metadata prefix must not be null").toString());
 				if (from != null) {
-					put(FROM, new DateGranularityXmlAdapter(identify.getGranularity()).marshal(from));
+					put(FROM, new DatestampGranularityXmlAdapter(identify.getGranularity()).marshal(from));
 				}
 				if (until != null) {
-					put(UNTIL, new DateGranularityXmlAdapter(identify.getGranularity()).marshal(until));
+					put(UNTIL, new DatestampGranularityXmlAdapter(identify.getGranularity()).marshal(until));
 				}
 				if ((from != null) && (until != null) && from.after(until)) {
 					throw new IllegalArgumentException("Until must be after before");

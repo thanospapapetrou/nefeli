@@ -13,7 +13,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.Granularity;
 
-public class DateGranularityXmlAdapter extends XmlAdapter<String, Date> {
+/**
+ * XML adapter that marshals/unmarshals datestamps to/from strings using the granularity specified.
+ * 
+ * @author thanos
+ */
+public class DatestampGranularityXmlAdapter extends XmlAdapter<String, Date> {
 	private static final TimeZone UTC = TimeZone.getTimeZone("GMT+00:00");
 	private static final Map<Granularity, String> PATTERNS = new HashMap<Granularity, String>() {
 		private static final long serialVersionUID = 0L;
@@ -27,7 +32,12 @@ public class DateGranularityXmlAdapter extends XmlAdapter<String, Date> {
 
 	private final DateFormat dateFormat;
 
-	public DateGranularityXmlAdapter(final Granularity granularity) {
+	/**
+	 * Construct a new datestamp granularity XML adapter.
+	 * 
+	 * @param granularity the granularity to use when marshaling/unmarshaling datestamps
+	 */
+	public DatestampGranularityXmlAdapter(final Granularity granularity) {
 		dateFormat = new SimpleDateFormat(PATTERNS.get(Objects.requireNonNull(granularity, "Granularity must not be null")));
 	}
 

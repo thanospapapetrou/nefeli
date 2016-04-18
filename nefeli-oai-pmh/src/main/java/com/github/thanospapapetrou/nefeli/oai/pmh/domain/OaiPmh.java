@@ -30,8 +30,8 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
-import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
-import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateSecondsGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampSecondsGranularityXmlAdapter;
 
 /**
  * Class representing an <code>OAI-PMH</code> element.
@@ -63,7 +63,7 @@ public class OaiPmh {
 
 	@XmlElement(name = "responseDate", required = true)
 	@XmlSchemaType(name = "dateTime")
-	@XmlJavaTypeAdapter(DateSecondsGranularityXmlAdapter.class)
+	@XmlJavaTypeAdapter(DatestampSecondsGranularityXmlAdapter.class)
 	private final Date responseDate;
 
 	@XmlElement(name = "request", required = true)
@@ -116,7 +116,7 @@ public class OaiPmh {
 			final Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
 			unmarshaller.setSchema(UNMARSHAL_SCHEMA);
 			// unmarshaller.setEventHandler(handler); // TODO
-			unmarshaller.setAdapter(DateGranularityXmlAdapter.class, new DateGranularityXmlAdapter(granularity));
+			unmarshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
 			return (OaiPmh) unmarshaller.unmarshal(reader);
 		} catch (final JAXBException e) {
 			throw new IOException("Error unmarshalling OAI-PMH", e);
@@ -351,7 +351,7 @@ public class OaiPmh {
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
 			marshaller.setSchema(MARSHAL_SCHEMA);
 			// marshaller.setEventHandler(handler); // TODO
-			marshaller.setAdapter(DateGranularityXmlAdapter.class, new DateGranularityXmlAdapter(granularity));
+			marshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
 			marshaller.marshal(this, outputStream);
 		} catch (final JAXBException e) {
 			throw new IOException("Error marshalling OAI-PMH", e);
