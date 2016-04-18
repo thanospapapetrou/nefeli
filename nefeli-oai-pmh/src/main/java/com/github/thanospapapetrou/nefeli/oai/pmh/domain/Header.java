@@ -13,6 +13,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
 
 /**
  * Class representing a <code>header</code> OAI-PMH element.
@@ -34,13 +37,12 @@ public class Header {
 
 	@XmlElement(name = "datestamp", required = true)
 	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
-	// TODO @XmlJavaTypeAdapter String
+	@XmlJavaTypeAdapter(DateGranularityXmlAdapter.class)
 	private final Date datestamp;
 
 	@XmlElement(name = "setSpec")
 	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
-	// TODO @XmlJavaTypeAdapter String
-	private final List<String> setSpecs;
+	private final List<SetSpec> setSpecs;
 
 	/**
 	 * Construct a new <code>header</code> element.
@@ -54,11 +56,11 @@ public class Header {
 	 * @param setSpecs
 	 *            the <code>setSpec</code> elements or <code>null</code> to leave them unspecified
 	 */
-	public Header(final Status status, final URI identifier, final Date datestamp, final List<String> setSpecs) {
+	public Header(final Status status, final URI identifier, final Date datestamp, final List<SetSpec> setSpecs) {
 		this.status = status;
 		this.identifier = Objects.requireNonNull(identifier, "Identifier must not be null");
 		this.datestamp = Objects.requireNonNull(datestamp, "Datestamp must not be null");
-		this.setSpecs = (setSpecs == null) ? new ArrayList<String>() : new ArrayList<String>(setSpecs);
+		this.setSpecs = (setSpecs == null) ? new ArrayList<SetSpec>() : new ArrayList<SetSpec>(setSpecs);
 		this.setSpecs.removeAll(Collections.singleton(null));
 	}
 
@@ -86,7 +88,7 @@ public class Header {
 	 * @param setSpecs
 	 *            the <code>setSpec</code> elements or <code>null</code> to leave them unspecified
 	 */
-	public Header(final URI identifier, final Date datestamp, final List<String> setSpecs) {
+	public Header(final URI identifier, final Date datestamp, final List<SetSpec> setSpecs) {
 		this(null, identifier, datestamp, setSpecs);
 	}
 
@@ -107,7 +109,7 @@ public class Header {
 		status = null;
 		identifier = null;
 		datestamp = null;
-		setSpecs = new ArrayList<String>();
+		setSpecs = new ArrayList<SetSpec>();
 	}
 
 	/**
@@ -142,7 +144,7 @@ public class Header {
 	 * 
 	 * @return the <code>setSpec</code> elements
 	 */
-	public List<String> getSetSpecs() {
+	public List<SetSpec> getSetSpecs() {
 		return Collections.unmodifiableList(setSpecs);
 	}
 

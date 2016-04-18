@@ -55,10 +55,10 @@ public class OaiPmhTest {
 	@Test(dataProvider = "marshalUnmarshal")
 	public void testMarshalUnmarshal(final File example) throws IOException {
 		try (final InputStream inputStream = new FileInputStream(example)) {
-			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream);
+			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream, Granularity.SECONDS);
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			oaiPmh.marshal(outputStream);
-			Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray())), oaiPmh);
+			oaiPmh.marshal(outputStream, Granularity.SECONDS);
+			Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), Granularity.SECONDS), oaiPmh);
 		}
 	}
 }

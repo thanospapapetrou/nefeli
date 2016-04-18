@@ -11,6 +11,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
 
 /**
  * Class representing a <code>request</code> OAI-PMH element.
@@ -36,12 +39,12 @@ public class Request {
 
 	@XmlAttribute(name = "from")
 	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
-	// TODO adapter
+	@XmlJavaTypeAdapter(DateGranularityXmlAdapter.class)
 	private final Date from;
 
 	@XmlAttribute(name = "until")
 	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
-	// TODO adapter
+	@XmlJavaTypeAdapter(DateGranularityXmlAdapter.class)
 	private final Date until;
 
 	@XmlAttribute(name = "set")

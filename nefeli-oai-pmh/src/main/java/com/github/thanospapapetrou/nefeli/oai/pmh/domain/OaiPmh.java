@@ -24,10 +24,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchema;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
+
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateSecondsGranularityXmlAdapter;
 
 /**
  * Class representing an <code>OAI-PMH</code> element.
@@ -59,7 +63,7 @@ public class OaiPmh {
 
 	@XmlElement(name = "responseDate", required = true)
 	@XmlSchemaType(name = "dateTime")
-	// TODO adapter
+	@XmlJavaTypeAdapter(DateSecondsGranularityXmlAdapter.class)
 	private final Date responseDate;
 
 	@XmlElement(name = "request", required = true)
@@ -99,15 +103,20 @@ public class OaiPmh {
 	 * 
 	 * @param inputStream
 	 *            the input stream to unmarshal from
+	 * @param granularity
+	 *            the granularity to use for unmarshaling datestamps
 	 * @return the <code>OAI-PMH</code> element unmarshaled
 	 * @throws IOException
 	 *             if any errors occur
 	 */
-	public static OaiPmh unmarshal(final InputStream inputStream) throws IOException {
+	public static OaiPmh unmarshal(final InputStream inputStream, final Granularity granularity) throws IOException {
+		Objects.requireNonNull(inputStream, "Input stream must not be null");
+		Objects.requireNonNull(granularity, "Granularity must not be null");
 		try (final InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
 			final Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
 			unmarshaller.setSchema(UNMARSHAL_SCHEMA);
 			// unmarshaller.setEventHandler(handler); // TODO
+			unmarshaller.setAdapter(DateGranularityXmlAdapter.class, new DateGranularityXmlAdapter(granularity));
 			return (OaiPmh) unmarshaller.unmarshal(reader);
 		} catch (final JAXBException e) {
 			throw new IOException("Error unmarshalling OAI-PMH", e);
@@ -327,10 +336,14 @@ public class OaiPmh {
 	 * 
 	 * @param outputStream
 	 *            the output stream to marshal to
+	 * @param granularity
+	 *            the granularity to use for marshaling datestamps
 	 * @throws IOException
 	 *             if any errors occur
 	 */
-	public void marshal(final OutputStream outputStream) throws IOException {
+	public void marshal(final OutputStream outputStream, final Granularity granularity) throws IOException {
+		Objects.requireNonNull(outputStream, "Output stream must not be null");
+		Objects.requireNonNull(granularity, "Granularity must not be null");
 		try {
 			final Marshaller marshaller = CONTEXT.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
@@ -338,6 +351,7 @@ public class OaiPmh {
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
 			marshaller.setSchema(MARSHAL_SCHEMA);
 			// marshaller.setEventHandler(handler); // TODO
+			marshaller.setAdapter(DateGranularityXmlAdapter.class, new DateGranularityXmlAdapter(granularity));
 			marshaller.marshal(this, outputStream);
 		} catch (final JAXBException e) {
 			throw new IOException("Error marshalling OAI-PMH", e);

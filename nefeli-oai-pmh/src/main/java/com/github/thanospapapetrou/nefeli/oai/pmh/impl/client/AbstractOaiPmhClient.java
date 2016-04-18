@@ -2,7 +2,6 @@ package com.github.thanospapapetrou.nefeli.oai.pmh.impl.client;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,8 +24,6 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.ws.http.HTTPException;
 
 import com.github.thanospapapetrou.nefeli.oai.pmh.api.OaiPmh;
@@ -40,6 +37,7 @@ import com.github.thanospapapetrou.nefeli.oai.pmh.domain.ListSets;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.MetadataPrefix;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.SetSpec;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.Verb;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DateGranularityXmlAdapter;
 
 public abstract class AbstractOaiPmhClient implements OaiPmh {
 	private static final String VERB = "verb";
@@ -142,7 +140,7 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 	}
 
 	protected com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh parseOaiPmh(final InputStream inputStream) throws IOException, OaiPmhException {
-		return com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh.unmarshal(inputStream);
+		return com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh.unmarshal(inputStream, identify.getGranularity());
 	}
 
 	private com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh request(final Verb verb) throws HTTPException, InterruptedException, IOException, OaiPmhException {
@@ -168,10 +166,10 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 				put(VERB, verb.toString());
 				put(METADATA_PREFIX, Objects.requireNonNull(metadataPrefix, "Metadata prefix must not be null").toString());
 				if (from != null) {
-					put(FROM, identify.getGranularity().format(from));
+					put(FROM, new DateGranularityXmlAdapter(identify.getGranularity()).marshal(from));
 				}
 				if (until != null) {
-					put(UNTIL, identify.getGranularity().format(until));
+					put(UNTIL, new DateGranularityXmlAdapter(identify.getGranularity()).marshal(until));
 				}
 				if ((from != null) && (until != null) && from.after(until)) {
 					throw new IllegalArgumentException("Until must be after before");
