@@ -45,7 +45,7 @@ public class OaiPmhTest {
 	}
 
 	/**
-	 * Test for {@link OaiPmh#marshal(java.io.OutputStream)} and {@link OaiPmh#unmarshal(InputStream)}.
+	 * Test for {@link OaiPmh#marshal(java.io.OutputStream, Granularity)} and {@link OaiPmh#unmarshal(InputStream, Granularity)}.
 	 * 
 	 * @param example
 	 *            the example to test with
@@ -55,10 +55,10 @@ public class OaiPmhTest {
 	@Test(dataProvider = "marshalUnmarshal")
 	public void testMarshalUnmarshal(final File example) throws IOException {
 		try (final InputStream inputStream = new FileInputStream(example)) {
-			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream, Granularity.SECONDS);
+			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream, Granularity.DAY);
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			oaiPmh.marshal(outputStream, Granularity.SECONDS);
-			Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), Granularity.SECONDS), oaiPmh);
+			oaiPmh.marshal(outputStream, Granularity.DAY);
+			Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), Granularity.DAY), oaiPmh);
 		}
 	}
 }

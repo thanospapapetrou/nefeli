@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,17 +45,14 @@ public class OaiPmh {
 	static final String IDENTIFIER_TYPE = "identifierType";
 	static final String UTC_DATETIME_TYPE = "UTCdatetimeType";
 	private static final JAXBContext CONTEXT;
-	private static final Schema MARSHAL_SCHEMA;
-	private static final Schema UNMARSHAL_SCHEMA;
+	private static final Schema SCHEMA;
 	private static final String SCHEMA_LOCATION = "%1$s %2$s";
 
 	static {
 		try {
 			CONTEXT = JAXBContext.newInstance(OaiPmh.class);
-			final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			MARSHAL_SCHEMA = schemaFactory.newSchema(new URL(OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
-			UNMARSHAL_SCHEMA = schemaFactory.newSchema();
-		} catch (final IOException | JAXBException | SAXException e) {
+			SCHEMA = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema();
+		} catch (final JAXBException | SAXException e) {
 			throw new ExceptionInInitializerError(e);
 		}
 	}
@@ -114,7 +110,7 @@ public class OaiPmh {
 		Objects.requireNonNull(granularity, "Granularity must not be null");
 		try (final InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
 			final Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-			unmarshaller.setSchema(UNMARSHAL_SCHEMA);
+			unmarshaller.setSchema(SCHEMA);
 			// unmarshaller.setEventHandler(handler); // TODO
 			unmarshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
 			return (OaiPmh) unmarshaller.unmarshal(reader);
@@ -349,7 +345,7 @@ public class OaiPmh {
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
-			marshaller.setSchema(MARSHAL_SCHEMA);
+			marshaller.setSchema(SCHEMA);
 			// marshaller.setEventHandler(handler); // TODO
 			marshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
 			marshaller.marshal(this, outputStream);

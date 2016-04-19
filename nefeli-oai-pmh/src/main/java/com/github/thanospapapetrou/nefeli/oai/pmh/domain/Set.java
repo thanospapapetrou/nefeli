@@ -61,6 +61,13 @@ public class Set {
 	public Set(final SetSpec setSpec, final String setName) {
 		this(setSpec, setName, null);
 	}
+	
+	@SuppressWarnings("unused")
+	private Set() {
+		setSpec = null;
+		setName = null;
+		setDescriptions = new ArrayList<Description>();
+	}
 
 	/**
 	 * Get the <code>setSpec</code> element.
