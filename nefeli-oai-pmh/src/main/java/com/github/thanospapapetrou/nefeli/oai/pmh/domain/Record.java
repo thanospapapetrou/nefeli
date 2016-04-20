@@ -46,7 +46,7 @@ public class Record {
 	public Record(final Header header, final Metadata metadata, final List<About> abouts) {
 		this.header = Objects.requireNonNull(header, "Header must not be null");
 		this.metadata = metadata;
-		this.abouts = (abouts == null) ? new ArrayList<About>() : new ArrayList<About>(abouts);
+		this.abouts = (abouts == null) ? new ArrayList<About>() : abouts;
 	}
 
 	/**

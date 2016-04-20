@@ -38,7 +38,7 @@ public class ListSets {
 	 *            the <code>resumptionToken</code> element or <code>null</code> to leave it unspecified
 	 */
 	public ListSets(final List<Set> sets, final ResumptionToken resumptionToken) {
-		this.sets = new ArrayList<Set>(Objects.requireNonNull(sets, "Sets must not be null"));
+		this.sets = Objects.requireNonNull(sets, "Sets must not be null");
 		this.sets.removeAll(Collections.singleton(null));
 		if (this.sets.isEmpty()) {
 			throw new IllegalArgumentException("Sets must contain at least one non null element");

@@ -38,7 +38,7 @@ public class ListIdentifiers {
 	 *            the <code>resumptionToken</code> element or <code>null</code> to leave it unspecified
 	 */
 	public ListIdentifiers(final List<Header> headers, final ResumptionToken resumptionToken) {
-		this.headers = new ArrayList<Header>(Objects.requireNonNull(headers, "Headers must not be null"));
+		this.headers = Objects.requireNonNull(headers, "Headers must not be null");
 		this.headers.removeAll(Collections.singleton(null));
 		if (this.headers.isEmpty()) {
 			throw new IllegalArgumentException("Headers must contain at least one non null element");

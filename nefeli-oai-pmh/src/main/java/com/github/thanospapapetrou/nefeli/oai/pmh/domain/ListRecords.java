@@ -38,7 +38,7 @@ public class ListRecords {
 	 *            the <code>resumptionToken</code> element or <code>null</code> to leave it unspecified
 	 */
 	public ListRecords(final List<Record> records, final ResumptionToken resumptionToken) {
-		this.records = new ArrayList<Record>(Objects.requireNonNull(records, "Records must not be null"));
+		this.records = Objects.requireNonNull(records, "Records must not be null");
 		this.records.removeAll(Collections.singleton(null));
 		if (this.records.isEmpty()) {
 			throw new IllegalArgumentException("Records must contain at least one non null element");

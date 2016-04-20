@@ -32,7 +32,7 @@ public class ListMetadataFormats {
 	 *            the <code>metadataFormat</code> elements
 	 */
 	public ListMetadataFormats(final List<MetadataFormat> metadataFormats) {
-		this.metadataFormats = new ArrayList<MetadataFormat>(Objects.requireNonNull(metadataFormats, "Metadata formats must not be null"));
+		this.metadataFormats = Objects.requireNonNull(metadataFormats, "Metadata formats must not be null");
 		this.metadataFormats.removeAll(Collections.singleton(null));
 		if (this.metadataFormats.isEmpty()) {
 			throw new IllegalArgumentException("Metadata formats must contain at least one non null element");

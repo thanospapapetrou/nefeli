@@ -88,7 +88,7 @@ public class Identify {
 		this.repositoryName = Objects.requireNonNull(repositoryName, "Repository name must not be null");
 		this.baseUrl = Objects.requireNonNull(baseUrl, "Base URL must not be null");
 		protocolVersion = ProtocolVersion.OAI_PMH_2_0;
-		this.adminEmails = new ArrayList<InternetAddress>(Objects.requireNonNull(adminEmails, "Admin emails must not be null"));
+		this.adminEmails = Objects.requireNonNull(adminEmails, "Admin emails must not be null");
 		this.adminEmails.removeAll(Collections.singleton(null));
 		if (this.adminEmails.isEmpty()) {
 			throw new IllegalArgumentException("Admin emails must contain at least one non null element");
@@ -96,9 +96,9 @@ public class Identify {
 		this.earliestDatestamp = Objects.requireNonNull(earliestDatestamp, "Earliest datestamp must not be null");
 		this.deletedRecord = Objects.requireNonNull(deletedRecord, "Deleted record must not be null");
 		this.granularity = Objects.requireNonNull(granularity, "Granularity must not be null");
-		this.compressions = (compressions == null) ? new ArrayList<Compression>() : new ArrayList<Compression>(compressions);
+		this.compressions = (compressions == null) ? new ArrayList<Compression>() : compressions;
 		this.compressions.removeAll(Collections.singleton(null));
-		this.descriptions = (descriptions == null) ? new ArrayList<Description>() : new ArrayList<Description>(descriptions);
+		this.descriptions = (descriptions == null) ? new ArrayList<Description>() : descriptions;
 		this.descriptions.removeAll(Collections.singleton(null));
 	}
 

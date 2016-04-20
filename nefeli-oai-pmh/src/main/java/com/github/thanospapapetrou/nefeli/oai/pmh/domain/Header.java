@@ -60,7 +60,7 @@ public class Header {
 		this.status = status;
 		this.identifier = Objects.requireNonNull(identifier, "Identifier must not be null");
 		this.datestamp = Objects.requireNonNull(datestamp, "Datestamp must not be null");
-		this.setSpecs = (setSpecs == null) ? new ArrayList<SetSpec>() : new ArrayList<SetSpec>(setSpecs);
+		this.setSpecs = (setSpecs == null) ? new ArrayList<SetSpec>() : setSpecs;
 		this.setSpecs.removeAll(Collections.singleton(null));
 	}
 

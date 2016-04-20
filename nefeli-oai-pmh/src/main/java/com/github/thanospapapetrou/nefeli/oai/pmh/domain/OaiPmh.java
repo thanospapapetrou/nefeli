@@ -223,7 +223,7 @@ public class OaiPmh {
 	private OaiPmh(final Date responseDate, final Request request, final List<Error> errors, final Identify identify, final ListMetadataFormats listMetadataFormats, final ListSets listSets, final GetRecord getRecord, final ListIdentifiers listIdentifiers, final ListRecords listRecords) {
 		this.responseDate = Objects.requireNonNull(responseDate, "Response date must not be null");
 		this.request = Objects.requireNonNull(request, "Request must not be null");
-		this.errors = (errors == null) ? new ArrayList<Error>() : new ArrayList<Error>(errors);
+		this.errors = (errors == null) ? new ArrayList<Error>() : errors;
 		this.errors.removeAll(Collections.singleton(null));
 		this.identify = identify;
 		this.listMetadataFormats = listMetadataFormats;

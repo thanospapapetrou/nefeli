@@ -46,7 +46,7 @@ public class Set {
 	public Set(final SetSpec setSpec, final String setName, final List<Description> setDescriptions) {
 		this.setSpec = Objects.requireNonNull(setSpec, "Set spec must not be null");
 		this.setName = Objects.requireNonNull(setName, "Set name must not be null");
-		this.setDescriptions = (setDescriptions == null) ? new ArrayList<Description>() : new ArrayList<Description>(setDescriptions);
+		this.setDescriptions = (setDescriptions == null) ? new ArrayList<Description>() : setDescriptions;
 		this.setDescriptions.removeAll(Collections.singleton(null));
 	}
 
