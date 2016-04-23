@@ -30,6 +30,7 @@ public class About {
 	 */
 	public About(final Element element) {
 		this.element = Objects.requireNonNull(element, "Element must not be null");
+		this.element.normalize();
 	}
 
 	@SuppressWarnings("unused")
