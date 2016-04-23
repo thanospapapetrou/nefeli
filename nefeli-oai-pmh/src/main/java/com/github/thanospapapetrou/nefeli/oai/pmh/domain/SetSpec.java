@@ -26,7 +26,7 @@ public class SetSpec {
 	private final String setSpec;
 
 	/**
-	 * Construct a new <code>setSpec</code> element.
+	 * Construct a new <code>setSpec</code> element or <code>set</code> attribute for a <code>request</code> element.
 	 * 
 	 * @param setSpec
 	 *            the setSpec
