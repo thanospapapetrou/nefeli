@@ -23,6 +23,16 @@
 				<version>6.9.10</version>
 			</dependency>
 			<dependency>
+				<groupId>com.github.thanospapapetrou.nefeli</groupId>
+				<artifactId>nefeli-commons</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.thanospapapetrou.nefeli</groupId>
+				<artifactId>nefeli-oai-pmh</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.sun.mail</groupId>
 				<artifactId>javax.mail</artifactId>
 				<version>1.5.5</version>
@@ -30,6 +40,8 @@
 		</dependencies>
 	</dependencyManagement>
 	<modules>
+		<module>nefeli-commons</module>
+		<module>nefeli-core</module>
 		<module>nefeli-oai-pmh</module>
 	</modules>
 	<properties>
