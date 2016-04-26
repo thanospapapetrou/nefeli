@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @author thanos
  */
 public class InternetAddresXmlAdapter extends XmlAdapter<String, InternetAddress> {
-
 	@Override
 	public InternetAddress unmarshal(final String string) throws Exception {
 		return (string == null) ? null : new InternetAddress(string, true);
