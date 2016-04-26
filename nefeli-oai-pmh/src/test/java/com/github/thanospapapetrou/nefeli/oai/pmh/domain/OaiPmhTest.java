@@ -25,21 +25,21 @@ public class OaiPmhTest {
 
 	@DataProvider(name = "marshalUnmarshal")
 	private static Iterator<Object[]> testMarshalUnmarshalData() throws URISyntaxException {
-		final Iterator<File> files = Arrays.asList(new File(OaiPmhTest.class.getResource(EXAMPLES).toURI()).listFiles()).iterator();
+		final Iterator<File> examples = Arrays.asList(new File(OaiPmhTest.class.getResource(EXAMPLES).toURI()).listFiles()).iterator();
 		return new Iterator<Object[]>() {
 			@Override
 			public boolean hasNext() {
-				return files.hasNext();
+				return examples.hasNext();
 			}
 
 			@Override
 			public Object[] next() {
-				return new Object[] {files.next()};
+				return new Object[] {examples.next()};
 			}
 
 			@Override
 			public void remove() {
-				files.remove();
+				examples.remove();
 			}
 		};
 	}
