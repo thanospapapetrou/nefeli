@@ -24,6 +24,11 @@
 			<artifactId>javax.mail</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.thanospapapetrou.nefeli</groupId>
+			<artifactId>nefeli-commons</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<parent>
 		<groupId>com.github.thanospapapetrou.nefeli</groupId>

@@ -24,7 +24,7 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 /**
- * A comparator for DOM nodes.
+ * A comparator for DOM nodes that ignores their namespace prefix.
  * 
  * @author thanos
  */
@@ -436,11 +436,17 @@ public class NodeComparator implements Comparator<Node> {
 		case Node.COMMENT_NODE:
 			return compare((Comment) node1, (Comment) node2);
 		case Node.DOCUMENT_FRAGMENT_NODE:
+			return compare((DocumentFragment) node1, (DocumentFragment) node2);
 		case Node.DOCUMENT_NODE:
+			return compare((Document) node1, (Document) node2);
 		case Node.DOCUMENT_TYPE_NODE:
+			return compare((DocumentType) node1, (DocumentType) node2);
 		case Node.ELEMENT_NODE:
+			return compare((Element) node1, (Element) node2);
 		case Node.ENTITY_NODE:
+			return compare((Entity) node1, (Entity) node2);
 		case Node.ENTITY_REFERENCE_NODE:
+			return compare((EntityReference) node1, (EntityReference) node2);
 		case Node.NOTATION_NODE:
 			return compare((Notation) node1, (Notation) node2);
 		case Node.PROCESSING_INSTRUCTION_NODE:
@@ -459,16 +465,18 @@ public class NodeComparator implements Comparator<Node> {
 	private int compare(final NamedNodeMap namedNodeMap1, final NamedNodeMap namedNodeMap2) {
 		int i = 0;
 		int j = 0;
-		while ((i < namedNodeMap1.getLength()) || (j < namedNodeMap2.getLength())) {
+		while ((i < namedNodeMap1.getLength()) && (j < namedNodeMap2.getLength())) {
 			while ((i < namedNodeMap1.getLength()) && XMLConstants.XMLNS_ATTRIBUTE.equals(namedNodeMap1.item(i).getPrefix())) {
 				i++;
 			}
 			while ((j < namedNodeMap2.getLength()) && XMLConstants.XMLNS_ATTRIBUTE.equals(namedNodeMap2.item(j).getPrefix())) {
 				j++;
 			}
-			final int nodeComparison = compare(namedNodeMap1.item(i), namedNodeMap2.item(j));
-			if (nodeComparison != 0) {
-				return nodeComparison;
+			if ((i < namedNodeMap1.getLength()) && (j < namedNodeMap2.getLength())) {
+				final int nodeComparison = compare(namedNodeMap1.item(i++), namedNodeMap2.item(j++));
+				if (nodeComparison != 0) {
+					return nodeComparison;
+				}
 			}
 		}
 		return (namedNodeMap1.getLength() - i) - (namedNodeMap2.getLength() - j);

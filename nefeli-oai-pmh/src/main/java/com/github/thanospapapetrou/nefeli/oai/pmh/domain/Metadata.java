@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.w3c.dom.Element;
 
+import com.github.thanospapapetrou.nefeli.commons.NodeComparator;
+
 /**
  * Class representing a <code>metadata</code> OAI-PMH element.
  * 
@@ -18,6 +20,7 @@ import org.w3c.dom.Element;
 @XmlType(name = Metadata.TYPE, propOrder = {"element"})
 public class Metadata {
 	static final String TYPE = "metadataType";
+	private static final NodeComparator NODE_COMPARATOR = new NodeComparator();
 
 	@XmlAnyElement
 	private final Element element;
@@ -49,11 +52,11 @@ public class Metadata {
 
 	@Override
 	public boolean equals(final Object object) {
-		return (object instanceof Metadata) && element.isEqualNode(((Metadata) object).element);
+		return (object instanceof Metadata) && NODE_COMPARATOR.equals(element, ((Metadata) object).element);
 	}
 
 	@Override
 	public int hashCode() {
-		return element.hashCode();
+		return NODE_COMPARATOR.hashCode(element);
 	}
 }
