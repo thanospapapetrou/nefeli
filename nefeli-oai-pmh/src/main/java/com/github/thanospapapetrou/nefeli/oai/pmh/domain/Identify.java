@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranularityXmlAdapter;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.InternetAddresXmlAdapter;
 
 /**
  * Class representing an <code>Identify</code> OAI-PMH element.
@@ -41,6 +42,7 @@ public class Identify {
 
 	@XmlElement(name = "adminEmail", required = true)
 	@XmlSchemaType(name = "emailType", namespace = OaiPmh.NAMESPACE)
+	@XmlJavaTypeAdapter(InternetAddresXmlAdapter.class)
 	private final List<InternetAddress> adminEmails;
 
 	@XmlElement(name = "earliestDatestamp", required = true)
