@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.testng.Assert;
+import org.testng.TestException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -25,21 +26,26 @@ public class OaiPmhTest {
 
 	@DataProvider(name = "marshalUnmarshal")
 	private static Iterator<Object[]> testMarshalUnmarshalData() throws URISyntaxException {
-		final Iterator<File> files = Arrays.asList(new File(OaiPmhTest.class.getResource(EXAMPLES).toURI()).listFiles()).iterator();
+		final Iterator<File> examples = Arrays.asList(new File(OaiPmhTest.class.getResource(EXAMPLES).toURI()).listFiles()).iterator();
 		return new Iterator<Object[]>() {
 			@Override
 			public boolean hasNext() {
-				return files.hasNext();
+				return examples.hasNext();
 			}
 
 			@Override
 			public Object[] next() {
-				return new Object[] {files.next()};
+				final File example = examples.next();
+				try (final InputStream inputStream = new FileInputStream(example)) {
+					return new Object[] {OaiPmh.unmarshal(inputStream, Granularity.DAY)};
+				} catch (final IOException e) {
+					throw new TestException(String.format("Error loading OAI-PMH response from file %1$s", example), e);
+				}
 			}
 
 			@Override
 			public void remove() {
-				files.remove();
+				examples.remove();
 			}
 		};
 	}
@@ -47,18 +53,15 @@ public class OaiPmhTest {
 	/**
 	 * Test for {@link OaiPmh#marshal(java.io.OutputStream, Granularity)} and {@link OaiPmh#unmarshal(InputStream, Granularity)}.
 	 * 
-	 * @param example
-	 *            the example to test with
+	 * @param oaiPmh
+	 *            the OAI-PMH response to test with
 	 * @throws IOException
 	 *             if any errors occur
 	 */
 	@Test(dataProvider = "marshalUnmarshal")
-	public void testMarshalUnmarshal(final File example) throws IOException {
-		try (final InputStream inputStream = new FileInputStream(example)) {
-			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream, Granularity.DAY);
-			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			oaiPmh.marshal(outputStream, Granularity.DAY);
-			Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), Granularity.DAY), oaiPmh);
-		}
+	public void testMarshalUnmarshal(final OaiPmh oaiPmh) throws IOException {
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		oaiPmh.marshal(outputStream, Granularity.DAY);
+		Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), Granularity.DAY), oaiPmh);
 	}
 }
