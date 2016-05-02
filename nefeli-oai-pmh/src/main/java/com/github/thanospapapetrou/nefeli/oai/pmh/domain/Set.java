@@ -22,7 +22,7 @@ public class Set {
 	static final String TYPE = "setType";
 
 	@XmlElement(name = "setSpec", required = true)
-	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final SetSpec setSpec;
 
 	@XmlElement(name = "setName", required = true)
@@ -30,7 +30,7 @@ public class Set {
 	private final String setName;
 
 	@XmlElement(name = "setDescription")
-	@XmlSchemaType(name = Description.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Description.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<Description> setDescriptions;
 
 	/**

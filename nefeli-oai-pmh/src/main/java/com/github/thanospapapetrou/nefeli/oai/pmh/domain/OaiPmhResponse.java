@@ -40,7 +40,7 @@ import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampSecon
 @XmlRootElement(name = "OAI-PMH")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OAI-PMHtype", propOrder = {"responseDate", "request", "errors", "identify", "listMetadataFormats", "listSets", "getRecord", "listIdentifiers", "listRecords"})
-public class OaiPmh {
+public class OaiPmhResponse {
 	static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
 	static final String IDENTIFIER_TYPE = "identifierType";
 	static final String UTC_DATETIME_TYPE = "UTCdatetimeType";
@@ -50,7 +50,7 @@ public class OaiPmh {
 
 	static {
 		try {
-			CONTEXT = JAXBContext.newInstance(OaiPmh.class);
+			CONTEXT = JAXBContext.newInstance(OaiPmhResponse.class);
 			SCHEMA = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema();
 		} catch (final JAXBException | SAXException e) {
 			throw new ExceptionInInitializerError(e);
@@ -63,35 +63,35 @@ public class OaiPmh {
 	private final Date responseDate;
 
 	@XmlElement(name = "request", required = true)
-	@XmlSchemaType(name = Request.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Request.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Request request;
 
 	@XmlElement(name = "error")
-	@XmlSchemaType(name = Error.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Error.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<Error> errors;
 
 	@XmlElement(name = "Identify")
-	@XmlSchemaType(name = Identify.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Identify.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Identify identify;
 
 	@XmlElement(name = "ListMetadataFormats")
-	@XmlSchemaType(name = ListMetadataFormats.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ListMetadataFormats.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ListMetadataFormats listMetadataFormats;
 
 	@XmlElement(name = "ListSets")
-	@XmlSchemaType(name = ListSets.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ListSets.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ListSets listSets;
 
 	@XmlElement(name = "GetRecord")
-	@XmlSchemaType(name = GetRecord.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = GetRecord.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final GetRecord getRecord;
 
 	@XmlElement(name = "ListIdentifiers")
-	@XmlSchemaType(name = ListIdentifiers.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ListIdentifiers.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ListIdentifiers listIdentifiers;
 
 	@XmlElement(name = "ListRecords")
-	@XmlSchemaType(name = ListRecords.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ListRecords.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ListRecords listRecords;
 
 	/**
@@ -105,7 +105,7 @@ public class OaiPmh {
 	 * @throws IOException
 	 *             if any errors occur
 	 */
-	public static OaiPmh unmarshal(final InputStream inputStream, final Granularity granularity) throws IOException {
+	public static OaiPmhResponse unmarshal(final InputStream inputStream, final Granularity granularity) throws IOException {
 		Objects.requireNonNull(inputStream, "Input stream must not be null");
 		Objects.requireNonNull(granularity, "Granularity must not be null");
 		try (final InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
@@ -113,7 +113,7 @@ public class OaiPmh {
 			unmarshaller.setSchema(SCHEMA);
 			// unmarshaller.setEventHandler(handler); // TODO
 			unmarshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
-			return (OaiPmh) unmarshaller.unmarshal(reader);
+			return (OaiPmhResponse) unmarshaller.unmarshal(reader);
 		} catch (final JAXBException e) {
 			throw new IOException("Error unmarshalling OAI-PMH", e);
 		}
@@ -129,7 +129,7 @@ public class OaiPmh {
 	 * @param errors
 	 *            the <code>error</code> elements
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final List<Error> errors) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final List<Error> errors) {
 		this(responseDate, request, Objects.requireNonNull(errors, "Errors must not be null"), null, null, null, null, null, null);
 		if (this.errors.isEmpty()) {
 			throw new IllegalArgumentException("Errors must contain at least one non null element");
@@ -146,7 +146,7 @@ public class OaiPmh {
 	 * @param identify
 	 *            the <code>Identify</code> element
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final Identify identify) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final Identify identify) {
 		this(responseDate, request, null, Objects.requireNonNull(identify, "Identify must not be null"), null, null, null, null, null);
 	}
 
@@ -160,7 +160,7 @@ public class OaiPmh {
 	 * @param listMetadataFormats
 	 *            the <code>ListMetadataFormats</code> element
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final ListMetadataFormats listMetadataFormats) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final ListMetadataFormats listMetadataFormats) {
 		this(responseDate, request, null, null, Objects.requireNonNull(listMetadataFormats, "List metadata formats must not be null"), null, null, null, null);
 	}
 
@@ -174,7 +174,7 @@ public class OaiPmh {
 	 * @param listSets
 	 *            the <code>ListSets</code> element
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final ListSets listSets) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final ListSets listSets) {
 		this(responseDate, request, null, null, null, Objects.requireNonNull(listSets, "List sets must not be null"), null, null, null);
 	}
 
@@ -188,7 +188,7 @@ public class OaiPmh {
 	 * @param getRecord
 	 *            the <code>GetRecord</code> element
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final GetRecord getRecord) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final GetRecord getRecord) {
 		this(responseDate, request, null, null, null, null, Objects.requireNonNull(getRecord, "Get record must not be null"), null, null);
 	}
 
@@ -202,7 +202,7 @@ public class OaiPmh {
 	 * @param listIdentifiers
 	 *            the <code>ListIdentifiers</code> element
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final ListIdentifiers listIdentifiers) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final ListIdentifiers listIdentifiers) {
 		this(responseDate, request, null, null, null, null, null, Objects.requireNonNull(listIdentifiers, "List identifiers must not be null"), null);
 	}
 
@@ -216,11 +216,11 @@ public class OaiPmh {
 	 * @param listRecords
 	 *            the <code>ListRecords</code> element
 	 */
-	public OaiPmh(final Date responseDate, final Request request, final ListRecords listRecords) {
+	public OaiPmhResponse(final Date responseDate, final Request request, final ListRecords listRecords) {
 		this(responseDate, request, null, null, null, null, null, null, Objects.requireNonNull(listRecords, "List records must not be null"));
 	}
 
-	private OaiPmh(final Date responseDate, final Request request, final List<Error> errors, final Identify identify, final ListMetadataFormats listMetadataFormats, final ListSets listSets, final GetRecord getRecord, final ListIdentifiers listIdentifiers, final ListRecords listRecords) {
+	private OaiPmhResponse(final Date responseDate, final Request request, final List<Error> errors, final Identify identify, final ListMetadataFormats listMetadataFormats, final ListSets listSets, final GetRecord getRecord, final ListIdentifiers listIdentifiers, final ListRecords listRecords) {
 		this.responseDate = Objects.requireNonNull(responseDate, "Response date must not be null");
 		this.request = Objects.requireNonNull(request, "Request must not be null");
 		this.errors = (errors == null) ? new ArrayList<Error>() : errors;
@@ -234,7 +234,7 @@ public class OaiPmh {
 	}
 
 	@SuppressWarnings("unused")
-	private OaiPmh() {
+	private OaiPmhResponse() {
 		responseDate = null;
 		request = null;
 		errors = new ArrayList<Error>();
@@ -344,7 +344,7 @@ public class OaiPmh {
 			final Marshaller marshaller = CONTEXT.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmh.class.getPackage().getAnnotation(XmlSchema.class).location()));
+			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmhResponse.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmhResponse.class.getPackage().getAnnotation(XmlSchema.class).location()));
 			marshaller.setSchema(SCHEMA);
 			// marshaller.setEventHandler(handler); // TODO
 			marshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
@@ -356,8 +356,8 @@ public class OaiPmh {
 
 	@Override
 	public boolean equals(final Object object) {
-		if (object instanceof OaiPmh) {
-			final OaiPmh oaiPmh = (OaiPmh) object;
+		if (object instanceof OaiPmhResponse) {
+			final OaiPmhResponse oaiPmh = (OaiPmhResponse) object;
 			return responseDate.equals(oaiPmh.responseDate) && request.equals(oaiPmh.request) && errors.equals(oaiPmh.errors) && Objects.equals(identify, oaiPmh.identify) && Objects.equals(listMetadataFormats, oaiPmh.listMetadataFormats) && Objects.equals(listSets, oaiPmh.listSets) && Objects.equals(getRecord, oaiPmh.getRecord) && Objects.equals(listIdentifiers, oaiPmh.listIdentifiers) && Objects.equals(listRecords, oaiPmh.listRecords);
 		}
 		return false;

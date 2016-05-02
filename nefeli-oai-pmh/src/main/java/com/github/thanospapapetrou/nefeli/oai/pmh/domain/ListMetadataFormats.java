@@ -22,7 +22,7 @@ public class ListMetadataFormats {
 	static final String TYPE = "ListMetadataFormatsType";
 
 	@XmlElement(name = "metadataFormat", required = true)
-	@XmlSchemaType(name = MetadataFormat.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = MetadataFormat.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<MetadataFormat> metadataFormats;
 
 	/**

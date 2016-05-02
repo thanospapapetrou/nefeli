@@ -22,11 +22,11 @@ public class ListSets {
 	static final String TYPE = "ListSetsType";
 
 	@XmlElement(name = "set", required = true)
-	@XmlSchemaType(name = Set.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Set.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<Set> sets;
 
 	@XmlElement(name = "resumptionToken")
-	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ResumptionToken resumptionToken;
 
 	/**

@@ -22,11 +22,11 @@ public class ListIdentifiers {
 	static final String TYPE = "ListIdentifiersType";
 
 	@XmlElement(name = "header", required = true)
-	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<Header> headers;
 
 	@XmlElement(name = "resumptionToken")
-	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ResumptionToken resumptionToken;
 
 	/**

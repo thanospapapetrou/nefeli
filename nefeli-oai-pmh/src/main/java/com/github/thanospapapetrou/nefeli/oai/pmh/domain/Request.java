@@ -26,29 +26,29 @@ public class Request {
 	static final String TYPE = "requestType";
 
 	@XmlAttribute(name = "verb")
-	@XmlSchemaType(name = Verb.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Verb.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Verb verb;
 
 	@XmlAttribute(name = "identifier")
-	@XmlSchemaType(name = OaiPmh.IDENTIFIER_TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmhResponse.IDENTIFIER_TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final URI identifier;
 
 	@XmlAttribute(name = "metadataPrefix")
-	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final MetadataPrefix metadataPrefix;
 
 	@XmlAttribute(name = "from")
-	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmhResponse.UTC_DATETIME_TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	@XmlJavaTypeAdapter(DatestampGranularityXmlAdapter.class)
 	private final Date from;
 
 	@XmlAttribute(name = "until")
-	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmhResponse.UTC_DATETIME_TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	@XmlJavaTypeAdapter(DatestampGranularityXmlAdapter.class)
 	private final Date until;
 
 	@XmlAttribute(name = "set")
-	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final SetSpec set;
 
 	@XmlAttribute(name = "resumptionToken")

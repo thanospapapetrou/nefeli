@@ -19,7 +19,7 @@ public class GetRecord {
 	static final String TYPE = "GetRecordType";
 
 	@XmlElement(name = "record", required = true)
-	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Record record;
 
 	/**

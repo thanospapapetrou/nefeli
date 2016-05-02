@@ -37,25 +37,25 @@ public class Identify {
 	private final URL baseUrl;
 
 	@XmlElement(name = "protocolVersion", required = true)
-	@XmlSchemaType(name = ProtocolVersion.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ProtocolVersion.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ProtocolVersion protocolVersion;
 
 	@XmlElement(name = "adminEmail", required = true)
-	@XmlSchemaType(name = "emailType", namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = "emailType", namespace = OaiPmhResponse.NAMESPACE)
 	@XmlJavaTypeAdapter(InternetAddresXmlAdapter.class)
 	private final List<InternetAddress> adminEmails;
 
 	@XmlElement(name = "earliestDatestamp", required = true)
-	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmhResponse.UTC_DATETIME_TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	@XmlJavaTypeAdapter(DatestampGranularityXmlAdapter.class)
 	private final Date earliestDatestamp;
 
 	@XmlElement(name = "deletedRecord", required = true)
-	@XmlSchemaType(name = DeletedRecord.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = DeletedRecord.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final DeletedRecord deletedRecord;
 
 	@XmlElement(name = "granularity", required = true)
-	@XmlSchemaType(name = Granularity.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Granularity.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Granularity granularity;
 
 	@XmlElement(name = "compression")
@@ -63,7 +63,7 @@ public class Identify {
 	private final List<Compression> compressions;
 
 	@XmlElement(name = "description")
-	@XmlSchemaType(name = Description.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Description.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<Description> descriptions;
 
 	/**

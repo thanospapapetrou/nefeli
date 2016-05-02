@@ -21,7 +21,7 @@ public class MetadataFormat {
 	static final String TYPE = "metadataFormatType";
 
 	@XmlElement(name = "metadataPrefix", required = true)
-	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = MetadataPrefix.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final MetadataPrefix metadataPrefix;
 
 	@XmlElement(name = "schema", required = true)

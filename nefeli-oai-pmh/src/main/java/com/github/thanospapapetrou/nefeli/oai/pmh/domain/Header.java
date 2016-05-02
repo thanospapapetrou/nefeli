@@ -28,20 +28,20 @@ public class Header {
 	static final String TYPE = "headerType";
 
 	@XmlAttribute(name = "status")
-	@XmlSchemaType(name = Status.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Status.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Status status;
 
 	@XmlElement(name = "identifier", required = true)
-	@XmlSchemaType(name = OaiPmh.IDENTIFIER_TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmhResponse.IDENTIFIER_TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final URI identifier;
 
 	@XmlElement(name = "datestamp", required = true)
-	@XmlSchemaType(name = OaiPmh.UTC_DATETIME_TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = OaiPmhResponse.UTC_DATETIME_TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	@XmlJavaTypeAdapter(DatestampGranularityXmlAdapter.class)
 	private final Date datestamp;
 
 	@XmlElement(name = "setSpec")
-	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = SetSpec.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<SetSpec> setSpecs;
 
 	/**

@@ -15,7 +15,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * Test for {@link OaiPmh}.
+ * Test for {@link OaiPmhResponse}.
  * 
  * @author thanos
  */
@@ -69,7 +69,7 @@ public class OaiPmhTest {
 	}
 
 	/**
-	 * Test for {@link OaiPmh#marshal(java.io.OutputStream, Granularity)} and {@link OaiPmh#unmarshal(InputStream, Granularity)}.
+	 * Test for {@link OaiPmhResponse#marshal(java.io.OutputStream, Granularity)} and {@link OaiPmhResponse#unmarshal(InputStream, Granularity)}.
 	 * 
 	 * @param example
 	 *            the example to test with
@@ -81,10 +81,10 @@ public class OaiPmhTest {
 	@Test(dataProvider = "marshalUnmarshal")
 	public void testMarshalUnmarshal(final URL example, final Granularity granularity) throws IOException {
 		try (final InputStream inputStream = example.openStream()) {
-			final OaiPmh oaiPmh = OaiPmh.unmarshal(inputStream, granularity);
+			final OaiPmhResponse oaiPmh = OaiPmhResponse.unmarshal(inputStream, granularity);
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			oaiPmh.marshal(outputStream, granularity);
-			Assert.assertEquals(OaiPmh.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), granularity), oaiPmh);
+			Assert.assertEquals(OaiPmhResponse.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), granularity), oaiPmh);
 		}
 	}
 }

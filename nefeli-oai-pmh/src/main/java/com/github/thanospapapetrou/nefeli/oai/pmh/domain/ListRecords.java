@@ -22,11 +22,11 @@ public class ListRecords {
 	static final String TYPE = "ListRecordsType";
 
 	@XmlElement(name = "record", required = true)
-	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Record.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<Record> records;
 
 	@XmlElement(name = "resumptionToken")
-	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = ResumptionToken.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ResumptionToken resumptionToken;
 
 	/**

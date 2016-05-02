@@ -22,15 +22,15 @@ public class Record {
 	static final String TYPE = "recordType";
 
 	@XmlElement(name = "header", required = true)
-	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Header.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Header header;
 
 	@XmlElement(name = "metadata")
-	@XmlSchemaType(name = Metadata.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Metadata.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Metadata metadata;
 
 	@XmlElement(name = "about")
-	@XmlSchemaType(name = About.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = About.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final List<About> abouts;
 
 	/**

@@ -35,6 +35,7 @@ import com.github.thanospapapetrou.nefeli.oai.pmh.domain.ListMetadataFormats;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.ListRecords;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.ListSets;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.MetadataPrefix;
+import com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmhResponse;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.SetSpec;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.Verb;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranularityXmlAdapter;
@@ -139,15 +140,15 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 		return response;
 	}
 
-	protected com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh parseOaiPmh(final InputStream inputStream) throws IOException, OaiPmhException {
-		return com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh.unmarshal(inputStream, identify.getGranularity());
+	protected OaiPmhResponse parseOaiPmh(final InputStream inputStream) throws IOException, OaiPmhException {
+		return OaiPmhResponse.unmarshal(inputStream, identify.getGranularity());
 	}
 
-	private com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh request(final Verb verb) throws HTTPException, InterruptedException, IOException, OaiPmhException {
+	private OaiPmhResponse request(final Verb verb) throws HTTPException, InterruptedException, IOException, OaiPmhException {
 		return request(Collections.singletonMap(VERB, verb.toString()));
 	}
 
-	private com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh request(final Verb verb, final String resumptionToken) throws HTTPException, InterruptedException, IOException, OaiPmhException {
+	private OaiPmhResponse request(final Verb verb, final String resumptionToken) throws HTTPException, InterruptedException, IOException, OaiPmhException {
 		return request(new HashMap<String, String>() {
 			private static final long serialVersionUID = 0L;
 
@@ -158,7 +159,7 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 		});
 	}
 
-	private com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh request(final Verb verb, final MetadataPrefix metadataPrefix, final Date from, final Date until, final SetSpec set) throws HTTPException, InterruptedException, IOException, OaiPmhException {
+	private OaiPmhResponse request(final Verb verb, final MetadataPrefix metadataPrefix, final Date from, final Date until, final SetSpec set) throws HTTPException, InterruptedException, IOException, OaiPmhException {
 		return request(new HashMap<String, String>() {
 			private static final long serialVersionUID = 0L;
 
@@ -181,7 +182,7 @@ public abstract class AbstractOaiPmhClient implements OaiPmh {
 		});
 	}
 
-	private com.github.thanospapapetrou.nefeli.oai.pmh.domain.OaiPmh request(final Map<String, String> parameters) throws HTTPException, InterruptedException, IOException, OaiPmhException {
+	private OaiPmhResponse request(final Map<String, String> parameters) throws HTTPException, InterruptedException, IOException, OaiPmhException {
 		try (final InputStream input = request(new HashMap<String, String>(), parameters).readEntity(InputStream.class)) {
 			return parseOaiPmh(input);
 		}

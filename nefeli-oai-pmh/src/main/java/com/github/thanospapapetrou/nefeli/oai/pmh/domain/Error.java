@@ -20,7 +20,7 @@ public class Error {
 	static final String TYPE = "OAI-PMHerrorType";
 
 	@XmlAttribute(name = "code", required = true)
-	@XmlSchemaType(name = Code.TYPE, namespace = OaiPmh.NAMESPACE)
+	@XmlSchemaType(name = Code.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final Code code;
 
 	@XmlValue
