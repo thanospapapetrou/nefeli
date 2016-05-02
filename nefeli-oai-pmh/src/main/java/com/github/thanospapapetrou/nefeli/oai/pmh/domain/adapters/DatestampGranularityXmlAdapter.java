@@ -1,7 +1,7 @@
 package com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters;
 
-import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,21 +30,34 @@ public class DatestampGranularityXmlAdapter extends XmlAdapter<String, Date> {
 		}
 	};
 
-	private final DateFormat dateFormat;
+	private final SimpleDateFormat dateFormat;
 
 	/**
 	 * Construct a new datestamp granularity XML adapter.
 	 * 
-	 * @param granularity the granularity to use when marshaling/unmarshaling datestamps
+	 * @param granularity
+	 *            the granularity to use when marshaling/unmarshaling datestamps
 	 */
 	public DatestampGranularityXmlAdapter(final Granularity granularity) {
 		dateFormat = new SimpleDateFormat(PATTERNS.get(Objects.requireNonNull(granularity, "Granularity must not be null")));
+		dateFormat.setLenient(false);
 	}
 
 	@Override
 	public Date unmarshal(final String string) throws ParseException {
+		if (string == null) {
+			return null;
+		}
 		dateFormat.setTimeZone(UTC);
-		return (string == null) ? null : dateFormat.parse(string);
+		final ParsePosition parsePosition = new ParsePosition(0);
+		final Date date = dateFormat.parse(string, parsePosition);
+		if (date == null) {
+			throw new ParseException(String.format("String must adhere to pattern %1$s", dateFormat.toPattern()), parsePosition.getErrorIndex());
+		}
+		if (parsePosition.getIndex() != string.length()) {
+			throw new ParseException(String.format("String must adhere to pattern %1$s", dateFormat.toPattern()), parsePosition.getIndex());
+		}
+		return date;
 	}
 
 	@Override
