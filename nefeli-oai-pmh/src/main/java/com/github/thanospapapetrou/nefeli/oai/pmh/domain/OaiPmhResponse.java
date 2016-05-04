@@ -1,8 +1,6 @@
 package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -93,31 +90,6 @@ public class OaiPmhResponse {
 	@XmlElement(name = "ListRecords")
 	@XmlSchemaType(name = ListRecords.TYPE, namespace = OaiPmhResponse.NAMESPACE)
 	private final ListRecords listRecords;
-
-	/**
-	 * Unmarshal an <code>OAI-PMH</code> element from an input stream.
-	 * 
-	 * @param inputStream
-	 *            the input stream to unmarshal from
-	 * @param granularity
-	 *            the granularity to use for unmarshaling datestamps
-	 * @return the <code>OAI-PMH</code> element unmarshaled
-	 * @throws IOException
-	 *             if any errors occur
-	 */
-	public static OaiPmhResponse unmarshal(final InputStream inputStream, final Granularity granularity) throws IOException {
-		Objects.requireNonNull(inputStream, "Input stream must not be null");
-		Objects.requireNonNull(granularity, "Granularity must not be null");
-		try (final InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-			final Unmarshaller unmarshaller = CONTEXT.createUnmarshaller();
-			unmarshaller.setSchema(SCHEMA);
-			// unmarshaller.setEventHandler(handler); // TODO
-			unmarshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
-			return (OaiPmhResponse) unmarshaller.unmarshal(reader);
-		} catch (final JAXBException e) {
-			throw new IOException("Error unmarshalling OAI-PMH", e);
-		}
-	}
 
 	/**
 	 * Construct a new <code>OAI-PMH</code> element corresponding to an OAI-PMH error.

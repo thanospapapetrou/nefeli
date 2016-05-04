@@ -4,18 +4,28 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.github.thanospapapetrou.nefeli.oai.pmh.impl.client.OaiPmhMessageBodyReader;
+
 /**
- * Test for {@link OaiPmhResponse}.
+ * Test for {@link OaiPmhMessageBodyReader}.
  * 
  * @author thanos
  */
@@ -69,7 +79,7 @@ public class OaiPmhTest {
 	}
 
 	/**
-	 * Test for {@link OaiPmhResponse#marshal(java.io.OutputStream, Granularity)} and {@link OaiPmhResponse#unmarshal(InputStream, Granularity)}.
+	 * Test for {@link OaiPmhResponse#marshal(OutputStream, Granularity)} and {@link OaiPmhMessageBodyReader#readFrom(Class, Type, Annotation[], MediaType, MultivaluedMap, InputStream)}.
 	 * 
 	 * @param example
 	 *            the example to test with
@@ -81,10 +91,11 @@ public class OaiPmhTest {
 	@Test(dataProvider = "marshalUnmarshal")
 	public void testMarshalUnmarshal(final URL example, final Granularity granularity) throws IOException {
 		try (final InputStream inputStream = example.openStream()) {
-			final OaiPmhResponse oaiPmh = OaiPmhResponse.unmarshal(inputStream, granularity);
+			final OaiPmhMessageBodyReader reader = new OaiPmhMessageBodyReader(granularity);
+			final OaiPmhResponse oaiPmh = reader.readFrom(OaiPmhResponse.class, OaiPmhResponse.class, new Annotation[0], MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()), new MultivaluedHashMap<String, String>(), inputStream);
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			oaiPmh.marshal(outputStream, granularity);
-			Assert.assertEquals(OaiPmhResponse.unmarshal(new ByteArrayInputStream(outputStream.toByteArray()), granularity), oaiPmh);
+			Assert.assertEquals(reader.readFrom(OaiPmhResponse.class, OaiPmhResponse.class, new Annotation[0], MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()), new MultivaluedHashMap<String, String>(), new ByteArrayInputStream(outputStream.toByteArray())), oaiPmh);
 		}
 	}
 }
