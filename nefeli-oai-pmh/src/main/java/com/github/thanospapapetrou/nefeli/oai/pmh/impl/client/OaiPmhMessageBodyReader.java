@@ -10,9 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.Provider;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -31,22 +33,14 @@ import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranu
  * 
  * @author thanos
  */
+@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+@Provider
 public class OaiPmhMessageBodyReader implements MessageBodyReader<OaiPmhResponse> {
 	private static final JAXBContext CONTEXT;
 	private static final Schema SCHEMA;
 	private static final Logger LOGGER = Logger.getLogger(OaiPmhMessageBodyReader.class.getName());
 
 	private final Granularity granularity;
-
-	/**
-	 * Construct a new OAI-PMH message body reader.
-	 * 
-	 * @param granularity
-	 *            the granularity to use for parsing
-	 */
-	public OaiPmhMessageBodyReader(final Granularity granularity) {
-		this.granularity = Objects.requireNonNull(granularity, "Granularity must not be null");
-	}
 
 	static {
 		try {
@@ -57,14 +51,24 @@ public class OaiPmhMessageBodyReader implements MessageBodyReader<OaiPmhResponse
 		}
 	}
 
+	/**
+	 * Construct a new OAI-PMH message body reader.
+	 * 
+	 * @param granularity
+	 *            the granularity to use for reading
+	 */
+	public OaiPmhMessageBodyReader(final Granularity granularity) {
+		this.granularity = Objects.requireNonNull(granularity, "Granularity must not be null");
+	}
+
 	@Override
 	public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations, final MediaType mediaType) {
-		return OaiPmhResponse.class.equals(clazz) && OaiPmhResponse.class.equals(type) && (MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType) || MediaType.TEXT_XML_TYPE.isCompatible(mediaType));
+		return clazz.equals(OaiPmhResponse.class) && type.equals(OaiPmhResponse.class) && (mediaType.isCompatible(MediaType.TEXT_XML_TYPE) || mediaType.isCompatible(MediaType.APPLICATION_XML_TYPE));
 	}
 
 	@Override
 	public OaiPmhResponse readFrom(final Class<OaiPmhResponse> clazz, final Type type, final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, String> headers, final InputStream input) throws IOException {
-		if (!MediaType.TEXT_XML_TYPE.isCompatible(mediaType)) {
+		if (!mediaType.isCompatible(MediaType.TEXT_XML_TYPE)) {
 			LOGGER.warning(String.format("Response media type %1$s is not compatible with %2$s", mediaType.toString(), MediaType.TEXT_XML_TYPE.toString()));
 		}
 		final Charset charset = mediaType.getParameters().containsKey(MediaType.CHARSET_PARAMETER) ? Charset.forName(mediaType.getParameters().get(MediaType.CHARSET_PARAMETER)) : StandardCharsets.ISO_8859_1;
