@@ -23,9 +23,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.github.thanospapapetrou.nefeli.oai.pmh.impl.client.OaiPmhMessageBodyReader;
+import com.github.thanospapapetrou.nefeli.oai.pmh.impl.server.OaiPmhMessageBodyWriter;
 
 /**
- * Test for {@link OaiPmhMessageBodyReader}.
+ * Test for {@link OaiPmhMessageBodyReader} and {@link OaiPmhMessageBodyWriter}.
  * 
  * @author thanos
  */
@@ -56,8 +57,8 @@ public class OaiPmhTest {
 	};
 	private static final String EXAMPLE = "/com/github/thanospapapetrou/nefeli/oai/pmh/examples/%1$s.xml";
 
-	@DataProvider(name = "marshalUnmarshal")
-	private static Iterator<Object[]> testMarshalUnmarshalData() throws URISyntaxException {
+	@DataProvider(name = "readWrite")
+	private static Iterator<Object[]> testReadWriteData() throws URISyntaxException {
 		final Iterator<Map.Entry<String, Granularity>> examples = EXAMPLES.entrySet().iterator();
 		return new Iterator<Object[]>() {
 			@Override
@@ -79,23 +80,30 @@ public class OaiPmhTest {
 	}
 
 	/**
-	 * Test for {@link OaiPmhResponse#marshal(OutputStream, Granularity)} and {@link OaiPmhMessageBodyReader#readFrom(Class, Type, Annotation[], MediaType, MultivaluedMap, InputStream)}.
+	 * Test for {@link OaiPmhMessageBodyReader#readFrom(Class, Type, Annotation[], MediaType, MultivaluedMap, InputStream)} and {@link OaiPmhMessageBodyWriter#writeTo(OaiPmhResponse, Class, Type, Annotation[], MediaType, MultivaluedMap, OutputStream)}.
 	 * 
 	 * @param example
 	 *            the example to test with
 	 * @param granularity
 	 *            the granularity to test with
 	 * @throws IOException
-	 *             if any errors occur
+	 *             if any I/O errors occur
 	 */
-	@Test(dataProvider = "marshalUnmarshal")
-	public void testMarshalUnmarshal(final URL example, final Granularity granularity) throws IOException {
-		try (final InputStream inputStream = example.openStream()) {
-			final OaiPmhMessageBodyReader reader = new OaiPmhMessageBodyReader(granularity);
-			final OaiPmhResponse oaiPmh = reader.readFrom(OaiPmhResponse.class, OaiPmhResponse.class, new Annotation[0], MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()), new MultivaluedHashMap<String, String>(), inputStream);
-			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			oaiPmh.marshal(outputStream, granularity);
-			Assert.assertEquals(reader.readFrom(OaiPmhResponse.class, OaiPmhResponse.class, new Annotation[0], MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()), new MultivaluedHashMap<String, String>(), new ByteArrayInputStream(outputStream.toByteArray())), oaiPmh);
+	@Test(dataProvider = "readWrite")
+	public void testReadWrite(final URL example, final Granularity granularity) throws IOException {
+		try (final InputStream input = example.openStream()) {
+			final OaiPmhResponse oaiPmh = read(input, granularity);
+			final ByteArrayOutputStream output = new ByteArrayOutputStream();
+			write(oaiPmh, output, granularity);
+			Assert.assertEquals(read(new ByteArrayInputStream(output.toByteArray()), granularity), oaiPmh);
 		}
+	}
+
+	private OaiPmhResponse read(final InputStream input, final Granularity granularity) throws IOException {
+		return new OaiPmhMessageBodyReader(granularity).readFrom(OaiPmhResponse.class, OaiPmhResponse.class, new Annotation[0], MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()), new MultivaluedHashMap<String, String>(), input);
+	}
+
+	private void write(final OaiPmhResponse oaiPmh, final OutputStream output, final Granularity granularity) throws IOException {
+		new OaiPmhMessageBodyWriter(granularity).writeTo(oaiPmh, OaiPmhResponse.class, OaiPmhResponse.class, new Annotation[0], MediaType.TEXT_XML_TYPE, new MultivaluedHashMap<String, Object>(), output);
 	}
 }

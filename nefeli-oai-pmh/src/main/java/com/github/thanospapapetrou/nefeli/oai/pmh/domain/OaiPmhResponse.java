@@ -1,32 +1,19 @@
 package com.github.thanospapapetrou.nefeli.oai.pmh.domain;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchema;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
-import org.xml.sax.SAXException;
-
-import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampGranularityXmlAdapter;
 import com.github.thanospapapetrou.nefeli.oai.pmh.domain.adapters.DatestampSecondsGranularityXmlAdapter;
 
 /**
@@ -41,18 +28,6 @@ public class OaiPmhResponse {
 	static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
 	static final String IDENTIFIER_TYPE = "identifierType";
 	static final String UTC_DATETIME_TYPE = "UTCdatetimeType";
-	private static final JAXBContext CONTEXT;
-	private static final Schema SCHEMA;
-	private static final String SCHEMA_LOCATION = "%1$s %2$s";
-
-	static {
-		try {
-			CONTEXT = JAXBContext.newInstance(OaiPmhResponse.class);
-			SCHEMA = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema();
-		} catch (final JAXBException | SAXException e) {
-			throw new ExceptionInInitializerError(e);
-		}
-	}
 
 	@XmlElement(name = "responseDate", required = true)
 	@XmlSchemaType(name = "dateTime")
@@ -297,33 +272,6 @@ public class OaiPmhResponse {
 	 */
 	public ListRecords getListRecords() {
 		return listRecords;
-	}
-
-	/**
-	 * Marshal this <code>OAI-PMH</code> element to an output stream.
-	 * 
-	 * @param outputStream
-	 *            the output stream to marshal to
-	 * @param granularity
-	 *            the granularity to use for marshaling datestamps
-	 * @throws IOException
-	 *             if any errors occur
-	 */
-	public void marshal(final OutputStream outputStream, final Granularity granularity) throws IOException {
-		Objects.requireNonNull(outputStream, "Output stream must not be null");
-		Objects.requireNonNull(granularity, "Granularity must not be null");
-		try {
-			final Marshaller marshaller = CONTEXT.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, String.format(SCHEMA_LOCATION, OaiPmhResponse.class.getPackage().getAnnotation(XmlSchema.class).namespace(), OaiPmhResponse.class.getPackage().getAnnotation(XmlSchema.class).location()));
-			marshaller.setSchema(SCHEMA);
-			// marshaller.setEventHandler(handler); // TODO
-			marshaller.setAdapter(DatestampGranularityXmlAdapter.class, new DatestampGranularityXmlAdapter(granularity));
-			marshaller.marshal(this, outputStream);
-		} catch (final JAXBException e) {
-			throw new IOException("Error marshalling OAI-PMH", e);
-		}
 	}
 
 	@Override
