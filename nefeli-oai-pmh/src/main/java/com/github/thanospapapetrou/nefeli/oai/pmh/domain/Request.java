@@ -299,6 +299,9 @@ public class Request {
 	}
 
 	private Request(final Verb verb, final URI identifier, final MetadataPrefix metadataPrefix, final Date from, final Date until, final SetSpec set, final String resumptionToken, final URL baseUrl) {
+		if ((from != null) && (until != null) && from.after(until)) {
+			throw new IllegalArgumentException("From must not be after before");
+		}
 		this.verb = verb;
 		this.identifier = identifier;
 		this.metadataPrefix = metadataPrefix;
