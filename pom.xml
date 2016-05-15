@@ -41,8 +41,8 @@
 	</dependencyManagement>
 	<modules>
 		<module>nefeli-commons</module>
-		<module>nefeli-core</module>
 		<module>nefeli-oai-pmh</module>
+		<module>nefeli-web</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
