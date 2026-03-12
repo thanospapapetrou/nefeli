@@ -3,8 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>nefeli-oai-pmh</artifactId>
-    <name>Nefeli OAI-PMH</name>
+    <artifactId>nefeli-web</artifactId>
+    <packaging>war</packaging>
+    <name>Nefeli Web</name>
     <parent>
         <groupId>io.github.thanospapapetrou</groupId>
         <artifactId>nefeli</artifactId>
@@ -12,13 +13,9 @@
     </parent>
     <dependencies>
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <scope>runtime</scope><!-- TODO remove -->
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
