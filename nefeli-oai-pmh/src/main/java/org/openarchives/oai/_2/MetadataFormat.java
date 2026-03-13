@@ -41,7 +41,7 @@ import jakarta.xml.bind.annotation.XmlType;
     "schema",
     "metadataNamespace"
 })
-public class MetadataFormatType {
+public class MetadataFormat {
 
     @XmlElement(required = true)
     protected String metadataPrefix;

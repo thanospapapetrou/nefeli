@@ -16,21 +16,18 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * A record has a header, a metadata part, and
- *         an optional about container
- * 
- * &lt;p&gt;Java class for recordType complex type&lt;/p&gt;.
+ * &lt;p&gt;Java class for setType complex type&lt;/p&gt;.
  * 
  * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.&lt;/p&gt;
  * 
  * &lt;pre&gt;{&#064;code
- * &lt;complexType name="recordType"&gt;
+ * &lt;complexType name="setType"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="header" type="{http://www.openarchives.org/OAI/2.0/}headerType"/&gt;
- *         &lt;element name="metadata" type="{http://www.openarchives.org/OAI/2.0/}metadataType" minOccurs="0"/&gt;
- *         &lt;element name="about" type="{http://www.openarchives.org/OAI/2.0/}aboutType" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="setSpec" type="{http://www.openarchives.org/OAI/2.0/}setSpecType"/&gt;
+ *         &lt;element name="setName" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="setDescription" type="{http://www.openarchives.org/OAI/2.0/}descriptionType" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -40,96 +37,97 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "recordType", propOrder = {
-    "header",
-    "metadata",
-    "about"
+@XmlType(name = "setType", propOrder = {
+    "setSpec",
+    "setName",
+    "setDescription"
 })
-public class RecordType {
+public class OaiPmhSet {
 
     @XmlElement(required = true)
-    protected HeaderType header;
-    protected MetadataType metadata;
-    protected List<AboutType> about;
+    protected String setSpec;
+    @XmlElement(required = true)
+    protected String setName;
+    protected List<Description> setDescription;
 
     /**
-     * Gets the value of the header property.
+     * Gets the value of the setSpec property.
      * 
      * @return
      *     possible object is
-     *     {@link HeaderType }
+     *     {@link String }
      *     
      */
-    public HeaderType getHeader() {
-        return header;
+    public String getSetSpec() {
+        return setSpec;
     }
 
     /**
-     * Sets the value of the header property.
+     * Sets the value of the setSpec property.
      * 
      * @param value
      *     allowed object is
-     *     {@link HeaderType }
+     *     {@link String }
      *     
      */
-    public void setHeader(HeaderType value) {
-        this.header = value;
+    public void setSetSpec(String value) {
+        this.setSpec = value;
     }
 
     /**
-     * Gets the value of the metadata property.
+     * Gets the value of the setName property.
      * 
      * @return
      *     possible object is
-     *     {@link MetadataType }
+     *     {@link String }
      *     
      */
-    public MetadataType getMetadata() {
-        return metadata;
+    public String getSetName() {
+        return setName;
     }
 
     /**
-     * Sets the value of the metadata property.
+     * Sets the value of the setName property.
      * 
      * @param value
      *     allowed object is
-     *     {@link MetadataType }
+     *     {@link String }
      *     
      */
-    public void setMetadata(MetadataType value) {
-        this.metadata = value;
+    public void setSetName(String value) {
+        this.setName = value;
     }
 
     /**
-     * Gets the value of the about property.
+     * Gets the value of the setDescription property.
      * 
      * <p>This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the about property.</p>
+     * This is why there is not a {@code set} method for the setDescription property.</p>
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * </p>
      * <pre>
-     * getAbout().add(newItem);
+     * getSetDescription().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link AboutType }
+     * {@link Description }
      * </p>
      * 
      * 
      * @return
-     *     The value of the about property.
+     *     The value of the setDescription property.
      */
-    public List<AboutType> getAbout() {
-        if (about == null) {
-            about = new ArrayList<>();
+    public List<Description> getSetDescription() {
+        if (setDescription == null) {
+            setDescription = new ArrayList<>();
         }
-        return this.about;
+        return this.setDescription;
     }
 
 }

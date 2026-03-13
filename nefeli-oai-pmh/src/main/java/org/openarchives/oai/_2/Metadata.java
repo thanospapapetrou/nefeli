@@ -14,17 +14,16 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * The descriptionType is used for the description
- *       element in Identify and for setDescription element in ListSets.
- *       Content must be compliant with an XML Schema defined by a 
- *       community.
+ * Metadata must be expressed in XML that complies
+ *        with another XML Schema (namespace=#other). Metadata must be 
+ *        explicitly qualified in the response.
  * 
- * &lt;p&gt;Java class for descriptionType complex type&lt;/p&gt;.
+ * &lt;p&gt;Java class for metadataType complex type&lt;/p&gt;.
  * 
  * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.&lt;/p&gt;
  * 
  * &lt;pre&gt;{&#064;code
- * &lt;complexType name="descriptionType"&gt;
+ * &lt;complexType name="metadataType"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
@@ -38,10 +37,10 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "descriptionType", propOrder = {
+@XmlType(name = "metadataType", propOrder = {
     "any"
 })
-public class DescriptionType {
+public class Metadata {
 
     @XmlAnyElement(lax = true)
     protected Object any;

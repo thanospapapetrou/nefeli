@@ -16,16 +16,16 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * &lt;p&gt;Java class for ListRecordsType complex type&lt;/p&gt;.
+ * &lt;p&gt;Java class for ListIdentifiersType complex type&lt;/p&gt;.
  * 
  * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.&lt;/p&gt;
  * 
  * &lt;pre&gt;{&#064;code
- * &lt;complexType name="ListRecordsType"&gt;
+ * &lt;complexType name="ListIdentifiersType"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="record" type="{http://www.openarchives.org/OAI/2.0/}recordType" maxOccurs="unbounded"/&gt;
+ *         &lt;element name="header" type="{http://www.openarchives.org/OAI/2.0/}headerType" maxOccurs="unbounded"/&gt;
  *         &lt;element name="resumptionToken" type="{http://www.openarchives.org/OAI/2.0/}resumptionTokenType" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
@@ -36,46 +36,46 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ListRecordsType", propOrder = {
-    "record",
+@XmlType(name = "ListIdentifiersType", propOrder = {
+    "header",
     "resumptionToken"
 })
-public class ListRecordsType {
+public class ListIdentifiers implements OaiPmhBody {
 
     @XmlElement(required = true)
-    protected List<RecordType> record;
-    protected ResumptionTokenType resumptionToken;
+    protected List<Header> header;
+    protected ResumptionToken resumptionToken;
 
     /**
-     * Gets the value of the record property.
+     * Gets the value of the header property.
      * 
      * <p>This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a {@code set} method for the record property.</p>
+     * This is why there is not a {@code set} method for the header property.</p>
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * </p>
      * <pre>
-     * getRecord().add(newItem);
+     * getHeader().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link RecordType }
+     * {@link Header }
      * </p>
      * 
      * 
      * @return
-     *     The value of the record property.
+     *     The value of the header property.
      */
-    public List<RecordType> getRecord() {
-        if (record == null) {
-            record = new ArrayList<>();
+    public List<Header> getHeader() {
+        if (header == null) {
+            header = new ArrayList<>();
         }
-        return this.record;
+        return this.header;
     }
 
     /**
@@ -83,10 +83,10 @@ public class ListRecordsType {
      * 
      * @return
      *     possible object is
-     *     {@link ResumptionTokenType }
+     *     {@link ResumptionToken }
      *     
      */
-    public ResumptionTokenType getResumptionToken() {
+    public ResumptionToken getResumptionToken() {
         return resumptionToken;
     }
 
@@ -95,10 +95,10 @@ public class ListRecordsType {
      * 
      * @param value
      *     allowed object is
-     *     {@link ResumptionTokenType }
+     *     {@link ResumptionToken }
      *     
      */
-    public void setResumptionToken(ResumptionTokenType value) {
+    public void setResumptionToken(ResumptionToken value) {
         this.resumptionToken = value;
     }
 

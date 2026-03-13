@@ -38,10 +38,10 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ListMetadataFormatsType", propOrder = {
     "metadataFormat"
 })
-public class ListMetadataFormatsType {
+public class ListMetadataFormats implements OaiPmhBody {
 
     @XmlElement(required = true)
-    protected List<MetadataFormatType> metadataFormat;
+    protected List<MetadataFormat> metadataFormat;
 
     /**
      * Gets the value of the metadataFormat property.
@@ -61,14 +61,14 @@ public class ListMetadataFormatsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MetadataFormatType }
+     * {@link MetadataFormat }
      * </p>
      * 
      * 
      * @return
      *     The value of the metadataFormat property.
      */
-    public List<MetadataFormatType> getMetadataFormat() {
+    public List<MetadataFormat> getMetadataFormat() {
         if (metadataFormat == null) {
             metadataFormat = new ArrayList<>();
         }

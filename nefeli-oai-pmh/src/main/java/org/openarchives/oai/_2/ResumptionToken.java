@@ -44,7 +44,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 @XmlType(name = "resumptionTokenType", propOrder = {
     "value"
 })
-public class ResumptionTokenType {
+public class ResumptionToken {
 
     @XmlValue
     protected String value;

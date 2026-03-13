@@ -9,24 +9,21 @@ package org.openarchives.oai._2;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAnyElement;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * Data "about" the record must be expressed in XML
- *       that is compliant with an XML Schema defined by a community.
- * 
- * &lt;p&gt;Java class for aboutType complex type&lt;/p&gt;.
+ * &lt;p&gt;Java class for GetRecordType complex type&lt;/p&gt;.
  * 
  * &lt;p&gt;The following schema fragment specifies the expected content contained within this class.&lt;/p&gt;
  * 
  * &lt;pre&gt;{&#064;code
- * &lt;complexType name="aboutType"&gt;
+ * &lt;complexType name="GetRecordType"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;any namespace='##other'/&gt;
+ *         &lt;element name="record" type="{http://www.openarchives.org/OAI/2.0/}recordType"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -36,36 +33,36 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "aboutType", propOrder = {
-    "any"
+@XmlType(name = "GetRecordType", propOrder = {
+    "record"
 })
-public class AboutType {
+public class GetRecord implements OaiPmhBody {
 
-    @XmlAnyElement(lax = true)
-    protected Object any;
+    @XmlElement(required = true)
+    protected Record record;
 
     /**
-     * Gets the value of the any property.
+     * Gets the value of the record property.
      * 
      * @return
      *     possible object is
-     *     {@link Object }
+     *     {@link Record }
      *     
      */
-    public Object getAny() {
-        return any;
+    public Record getRecord() {
+        return record;
     }
 
     /**
-     * Sets the value of the any property.
+     * Sets the value of the record property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Object }
+     *     {@link Record }
      *     
      */
-    public void setAny(Object value) {
-        this.any = value;
+    public void setRecord(Record value) {
+        this.record = value;
     }
 
 }

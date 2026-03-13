@@ -40,11 +40,11 @@ import jakarta.xml.bind.annotation.XmlType;
     "set",
     "resumptionToken"
 })
-public class ListSetsType {
+public class ListSets implements OaiPmhBody {
 
     @XmlElement(required = true)
-    protected List<SetType> set;
-    protected ResumptionTokenType resumptionToken;
+    protected List<OaiPmhSet> set;
+    protected ResumptionToken resumptionToken;
 
     /**
      * Gets the value of the set property.
@@ -64,14 +64,14 @@ public class ListSetsType {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SetType }
+     * {@link OaiPmhSet }
      * </p>
      * 
      * 
      * @return
      *     The value of the set property.
      */
-    public List<SetType> getSet() {
+    public List<OaiPmhSet> getSet() {
         if (set == null) {
             set = new ArrayList<>();
         }
@@ -83,10 +83,10 @@ public class ListSetsType {
      * 
      * @return
      *     possible object is
-     *     {@link ResumptionTokenType }
+     *     {@link ResumptionToken }
      *     
      */
-    public ResumptionTokenType getResumptionToken() {
+    public ResumptionToken getResumptionToken() {
         return resumptionToken;
     }
 
@@ -95,10 +95,10 @@ public class ListSetsType {
      * 
      * @param value
      *     allowed object is
-     *     {@link ResumptionTokenType }
+     *     {@link ResumptionToken }
      *     
      */
-    public void setResumptionToken(ResumptionTokenType value) {
+    public void setResumptionToken(ResumptionToken value) {
         this.resumptionToken = value;
     }
 

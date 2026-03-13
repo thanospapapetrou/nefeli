@@ -8,8 +8,9 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
-import org.openarchives.oai._2.OAIPMHtype;
-import org.openarchives.oai._2.VerbType;
+import org.openarchives.oai._2.Identify;
+import org.openarchives.oai._2.OaiPmhResponse;
+import org.openarchives.oai._2.Verb;
 
 public class OaiPmhClient implements AutoCloseable {
     private static final String PARAM_VERB = "verb";
@@ -30,9 +31,9 @@ public class OaiPmhClient implements AutoCloseable {
         this.target = target;
     }
 
-    public OAIPMHtype identify() {
-        final Response response = target.queryParam(PARAM_VERB, VerbType.IDENTIFY.value()).request().get();
-        return response.readEntity(OAIPMHtype.class);
+    public OaiPmhResponse<Identify> identify() {
+        final Response response = target.queryParam(PARAM_VERB, Verb.IDENTIFY).request().get();
+        return response.readEntity(OaiPmhResponse.class);
     }
 
     @Override
