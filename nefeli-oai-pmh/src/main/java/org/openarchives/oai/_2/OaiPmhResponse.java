@@ -1,6 +1,7 @@
 package org.openarchives.oai._2;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -47,7 +48,7 @@ import io.github.thanospapapetrou.nefeli.InstantAdapter;
 @XmlType(name = "OAI-PMHtype", propOrder = {
     "responseDate",
     "request",
-    "error",
+        "errors",
     "identify",
     "listMetadataFormats",
     "listSets",
@@ -67,7 +68,8 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     private final Instant responseDate;
     @XmlElement(required = true)
     private final Request request;
-    private final List<OaiPmhError> error;
+    @XmlElement(name = "error")
+    private final List<OaiPmhError> errors;
     @XmlElement(name = "Identify")
     private final Identify identify;
     @XmlElement(name = "ListMetadataFormats")
@@ -82,28 +84,28 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     private final ListRecords listRecords;
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final Identify identify) {
-        this(responseDate, request, List.of(), identify, null, null, null, null, null);
+        this(responseDate, request, new ArrayList<>(), identify, null, null, null, null, null);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request,
             final ListMetadataFormats listMetadataFormats) {
-        this(responseDate, request, List.of(), null, listMetadataFormats, null, null, null, null);
+        this(responseDate, request, new ArrayList<>(), null, listMetadataFormats, null, null, null, null);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final ListSets listSets) {
-        this(responseDate, request, List.of(), null, null, listSets, null, null, null);
+        this(responseDate, request, new ArrayList<>(), null, null, listSets, null, null, null);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final GetRecord getRecord) {
-        this(responseDate, request, List.of(), null, null, null, getRecord, null, null);
+        this(responseDate, request, new ArrayList<>(), null, null, null, getRecord, null, null);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final ListIdentifiers listIdentifiers) {
-        this(responseDate, request, List.of(), null, null, null, null, listIdentifiers, null);
+        this(responseDate, request, new ArrayList<>(), null, null, null, null, listIdentifiers, null);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final ListRecords listRecords) {
-        this(responseDate, request, List.of(), null, null, null, null, null, listRecords);
+        this(responseDate, request, new ArrayList<>(), null, null, null, null, null, listRecords);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final List<OaiPmhError> errors) {
@@ -111,7 +113,7 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     }
 
     private OaiPmhResponse() {
-        this(null, null, List.of(), null, null, null, null, null, null);
+        this(null, null, new ArrayList<>(), null, null, null, null, null, null);
     }
 
     private OaiPmhResponse(final Instant responseDate, final Request request,
@@ -120,7 +122,7 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
             final ListRecords listRecords) {
         this.responseDate = responseDate;
         this.request = request;
-        this.error = errors;
+        this.errors = errors;
         this.identify = identify;
         this.listMetadataFormats = listMetadataFormats;
         this.listSets = listSets;
@@ -138,7 +140,7 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     }
 
     public List<OaiPmhError> getErrors() {
-        return error;
+        return errors;
     }
 
     public T getBody() {

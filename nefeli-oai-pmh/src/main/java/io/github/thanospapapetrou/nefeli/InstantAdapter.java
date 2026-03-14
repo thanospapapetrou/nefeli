@@ -12,7 +12,7 @@ public class InstantAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
     private static final DatatypeFactory FACTORY = DatatypeFactory.newDefaultInstance();
 
     @Override
-    public XMLGregorianCalendar marshal(final Instant instant) throws Exception {
+    public XMLGregorianCalendar marshal(final Instant instant) {
         if (instant == null) {
             return null;
         }
@@ -22,7 +22,7 @@ public class InstantAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
     }
 
     @Override
-    public Instant unmarshal(final XMLGregorianCalendar xmlGregorianCalendar) throws Exception {
+    public Instant unmarshal(final XMLGregorianCalendar xmlGregorianCalendar) {
         return xmlGregorianCalendar.toGregorianCalendar().toInstant();
     }
 }

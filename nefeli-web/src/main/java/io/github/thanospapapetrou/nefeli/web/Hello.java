@@ -24,13 +24,25 @@ public class Hello {
                 URI.create("https://account.rips-irsp.com/index.php/up-j-irsp/oai").toURL())) {
             final OaiPmhResponse<Identify> response = client.identify();
             return "Response Date: " + response.getResponseDate() + "\n"
-                    + "Verb:  " + response.getRequest().getVerb() + "\n"
+                    + "Request: " + response.getRequest().getValue() + "\n"
+                    + "\tVerb: " + response.getRequest().getVerb() + "\n"
+                    + "\tIdentifier: " + response.getRequest().getIdentifier() + "\n"
+                    + "\tMetadata Prefix: " + response.getRequest().getMetadataPrefix() + "\n"
+                    + "\tFrom: " + response.getRequest().getFrom() + "\n"
+                    + "\tUntil: " + response.getRequest().getUntil() + "\n"
+                    + "\tSet: " + response.getRequest().getSet() + "\n"
+                    + "\tResumption Token: " + response.getRequest().getResumptionToken() + "\n"
                     + "Errors: " + response.getErrors() + "\n"
-                    + "Repository Name:" + response.getBody().getRepositoryName() + "\n"
-                    + "Protocol Version:" + response.getBody().getProtocolVersion() + "\n"
-                    + "Admin Emails:" + response.getBody().getAdminEmails() + "\n"
-                    + "Compressions:" + response.getBody().getCompressions() + "\n"
-                    + "Base URL: " + response.getBody().getBaseURL();
+                    + "\n"
+                    + "Repository Name: " + response.getBody().getRepositoryName() + "\n"
+                    + "Base URL: " + response.getBody().getBaseURL() + "\n"
+                    + "Protocol Version: " + response.getBody().getProtocolVersion() + "\n"
+                    + "Admin Emails: " + response.getBody().getAdminEmails() + "\n"
+                    + "Earliest Datestamp: " + response.getBody().getEarliestDatestamp() + "\n"
+                    + "DeletedRecord: " + response.getBody().getDeletedRecord() + "\n"
+                    + "Granularity: " + response.getBody().getGranularity() + "\n"
+                    + "Compressions: " + response.getBody().getCompressions() + "\n"
+                    + "Descriptions: " + response.getBody().getDescriptions();
         } catch (final MalformedURLException | URISyntaxException e) {
             return null;
         }

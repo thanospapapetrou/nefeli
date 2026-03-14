@@ -1,6 +1,7 @@
 package org.openarchives.oai._2;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -39,12 +40,15 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IdentifyType", propOrder = {
-    "repositoryName",
-    "baseURL",
-        "protocolVersion", "adminEmails",
-    "earliestDatestamp",
-    "deletedRecord",
-        "granularity", "compressions", "descriptions"
+        "repositoryName",
+        "baseURL",
+        "protocolVersion",
+        "adminEmails",
+        "earliestDatestamp",
+        "deletedRecord",
+        "granularity",
+        "compressions",
+        "descriptions"
 })
 public class Identify implements OaiPmhBody {
     @XmlElement(required = true)
@@ -54,7 +58,7 @@ public class Identify implements OaiPmhBody {
     private final URL baseURL;
     @XmlElement(required = true)
     private final String protocolVersion;
-    @XmlElement(required = true)
+    @XmlElement(name = "adminEmail", required = true)
     private final List<String> adminEmails; // TODO email
     @XmlElement(required = true)
     private final String earliestDatestamp; // TODO instant
@@ -64,7 +68,9 @@ public class Identify implements OaiPmhBody {
     @XmlElement(required = true)
     @XmlSchemaType(name = "string")
     private final Granularity granularity;
+    @XmlElement(name = "compression")
     private final List<String> compressions; // TODO gzip compress deflate identity
+    @XmlElement(name = "description")
     private final List<Description> descriptions;
 
     public Identify(final String repositoryName, final URL baseURL, final List<String> adminEmails,
@@ -82,7 +88,7 @@ public class Identify implements OaiPmhBody {
     }
 
     private Identify() {
-        this(null, null, List.of(), null, null, null, List.of(), List.of());
+        this(null, null, new ArrayList<>(), null, null, null, new ArrayList<>(), new ArrayList<>());
     }
 
     public String getRepositoryName() {

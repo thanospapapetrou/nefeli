@@ -10,7 +10,6 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 
-
 /**
  * Define requestType, indicating the protocol request that 
  *       led to the response. Element content is BASE-URL, attributes are arguments 
