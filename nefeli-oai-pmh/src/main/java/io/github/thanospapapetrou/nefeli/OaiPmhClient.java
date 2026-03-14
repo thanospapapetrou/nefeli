@@ -9,6 +9,9 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
 import org.openarchives.oai._2.Identify;
+import org.openarchives.oai._2.ListMetadataFormats;
+import org.openarchives.oai._2.ListSets;
+import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.Verb;
 
@@ -32,12 +35,24 @@ public class OaiPmhClient implements AutoCloseable {
     }
 
     public OaiPmhResponse<Identify> identify() {
-        final Response response = target.queryParam(PARAM_VERB, Verb.IDENTIFY).request().get();
-        return response.readEntity(OaiPmhResponse.class);
+        return request(Verb.IDENTIFY);
+    }
+
+    public OaiPmhResponse<ListMetadataFormats> listMetadataFormats() {
+        return request(Verb.LIST_METADATA_FORMATS);
+    }
+
+    public OaiPmhResponse<ListSets> listSets() {
+        return request(Verb.LIST_SETS);
     }
 
     @Override
     public void close() {
         client.close();
+    }
+
+    private <T extends OaiPmhBody> OaiPmhResponse<T> request(final Verb verb) {
+        final Response response = target.queryParam(PARAM_VERB, verb).request().get();
+        return response.readEntity(OaiPmhResponse.class);
     }
 }

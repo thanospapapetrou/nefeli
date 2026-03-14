@@ -5,10 +5,10 @@ import java.util.Set;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 
-@ApplicationPath("/hello")
-public class HelloApplication extends Application {
+@ApplicationPath("/")
+public class TestApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
-        return Set.of(Hello.class);
+        return Set.of(Test.class);
     }
 }

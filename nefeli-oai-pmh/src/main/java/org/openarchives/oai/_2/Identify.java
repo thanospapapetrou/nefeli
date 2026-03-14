@@ -51,6 +51,12 @@ import jakarta.xml.bind.annotation.XmlType;
         "descriptions"
 })
 public class Identify implements OaiPmhBody {
+    public static final String COMPRESSION_COMPRESS = "compress";
+    public static final String COMPRESSION_DEFLATE = "deflate";
+    public static final String COMPRESSION_GZIP = "gzip";
+    public static final String COMPRESSION_IDENTITY = "identity"; // TODO is this required?
+    public static final String VERSION = "2.0";
+
     @XmlElement(required = true)
     private final String repositoryName;
     @XmlElement(required = true)
@@ -69,7 +75,7 @@ public class Identify implements OaiPmhBody {
     @XmlSchemaType(name = "string")
     private final Granularity granularity;
     @XmlElement(name = "compression")
-    private final List<String> compressions; // TODO gzip compress deflate identity
+    private final List<String> compressions;
     @XmlElement(name = "description")
     private final List<Description> descriptions;
 
@@ -78,7 +84,7 @@ public class Identify implements OaiPmhBody {
             final List<String> compressions, final List<Description> descriptions) {
         this.repositoryName = repositoryName;
         this.baseURL = baseURL;
-        this.protocolVersion = OaiPmhResponse.VERSION;
+        this.protocolVersion = VERSION;
         this.adminEmails = adminEmails;
         this.earliestDatestamp = earliestDatestamp;
         this.deletedRecord = deletedRecord;
