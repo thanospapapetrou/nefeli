@@ -40,6 +40,10 @@ public class OaiPmhError {
         this.code = code;
     }
 
+    private OaiPmhError() {
+        this(null, null);
+    }
+
     public String getValue() {
         return value;
     }

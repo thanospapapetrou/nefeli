@@ -48,7 +48,7 @@ import io.github.thanospapapetrou.nefeli.InstantAdapter;
 @XmlType(name = "OAI-PMHtype", propOrder = {
     "responseDate",
     "request",
-        "errors",
+    "errors",
     "identify",
     "listMetadataFormats",
     "listSets",
@@ -143,7 +143,7 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     }
 
     public T getBody() {
-        return (T) switch (request.getVerb()) {
+        return (request.getVerb() == null) ? null : (T) switch (request.getVerb()) {
             case IDENTIFY -> identify;
             case LIST_METADATA_FORMATS -> listMetadataFormats;
             case LIST_SETS -> listSets;
