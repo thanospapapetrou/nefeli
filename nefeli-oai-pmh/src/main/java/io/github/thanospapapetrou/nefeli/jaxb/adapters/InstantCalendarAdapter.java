@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.jaxb.adapters;
 
 import java.time.Instant;
 import java.util.GregorianCalendar;
@@ -8,7 +8,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-public class InstantXmlGregorianCalendarAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
+public class InstantCalendarAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
     private static final DatatypeFactory FACTORY = DatatypeFactory.newDefaultInstance();
 
     @Override

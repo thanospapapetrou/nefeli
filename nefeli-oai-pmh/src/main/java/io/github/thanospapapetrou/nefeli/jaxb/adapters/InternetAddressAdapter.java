@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.jaxb.adapters;
 
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;

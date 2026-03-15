@@ -11,7 +11,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.InstantXmlGregorianCalendarAdapter;
+import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantCalendarAdapter;
 
 /**
  * A resumptionToken may have 3 optional attributes
@@ -42,7 +42,7 @@ public class ResumptionToken {
     @XmlValue
     private final String value;
     @XmlAttribute(name = "expirationDate")
-    @XmlJavaTypeAdapter(InstantXmlGregorianCalendarAdapter.class)
+    @XmlJavaTypeAdapter(InstantCalendarAdapter.class)
     @XmlSchemaType(name = "dateTime")
     private final Instant expirationDate;
     @XmlAttribute(name = "completeListSize")

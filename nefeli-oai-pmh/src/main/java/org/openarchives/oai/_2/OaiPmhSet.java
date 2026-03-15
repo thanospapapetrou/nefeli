@@ -9,7 +9,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.SetSpecAdapter;
+import io.github.thanospapapetrou.nefeli.jaxb.adapters.SetSpecAdapter;
 
 /**
  * &lt;p&gt;Java class for setType complex type&lt;/p&gt;.

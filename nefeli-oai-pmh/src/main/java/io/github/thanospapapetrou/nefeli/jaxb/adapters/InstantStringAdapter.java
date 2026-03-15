@@ -1,18 +1,11 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.jaxb.adapters;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
-
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.openarchives.oai._2.Granularity;
 

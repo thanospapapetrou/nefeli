@@ -12,7 +12,7 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.InstantXmlGregorianCalendarAdapter;
+import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantCalendarAdapter;
 
 /**
  * &lt;p&gt;Java class for OAI-PMHtype complex type&lt;/p&gt;.
@@ -63,7 +63,7 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
 
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(InstantXmlGregorianCalendarAdapter.class)
+    @XmlJavaTypeAdapter(InstantCalendarAdapter.class)
     private final Instant responseDate;
     @XmlElement(required = true)
     private final Request request;
