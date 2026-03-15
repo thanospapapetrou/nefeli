@@ -1,6 +1,7 @@
 package org.openarchives.oai._2;
 
 import java.math.BigInteger;
+import java.time.Instant;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -8,9 +9,9 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
+import io.github.thanospapapetrou.nefeli.InstantXmlGregorianCalendarAdapter;
 
 /**
  * A resumptionToken may have 3 optional attributes
@@ -41,8 +42,9 @@ public class ResumptionToken {
     @XmlValue
     private final String value;
     @XmlAttribute(name = "expirationDate")
+    @XmlJavaTypeAdapter(InstantXmlGregorianCalendarAdapter.class)
     @XmlSchemaType(name = "dateTime")
-    private final XMLGregorianCalendar expirationDate; // TODO instant
+    private final Instant expirationDate;
     @XmlAttribute(name = "completeListSize")
     @XmlSchemaType(name = "positiveInteger")
     private final BigInteger completeListSize;
@@ -50,7 +52,7 @@ public class ResumptionToken {
     @XmlSchemaType(name = "nonNegativeInteger")
     private final BigInteger cursor;
 
-    public ResumptionToken(final String value, final XMLGregorianCalendar expirationDate,
+    public ResumptionToken(final String value, final Instant expirationDate,
             final BigInteger completeListSize, final BigInteger cursor) {
         this.value = value;
         this.expirationDate = expirationDate;
@@ -66,7 +68,7 @@ public class ResumptionToken {
         return value;
     }
 
-    public XMLGregorianCalendar getExpirationDate() {
+    public Instant getExpirationDate() {
         return expirationDate;
     }
 

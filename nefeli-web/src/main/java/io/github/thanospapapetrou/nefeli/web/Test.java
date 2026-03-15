@@ -21,6 +21,7 @@ import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.Request;
 
 import io.github.thanospapapetrou.nefeli.OaiPmhClient;
+import io.github.thanospapapetrou.nefeli.OaiPmhException;
 
 @Path("/test")
 public class Test {
@@ -34,7 +35,7 @@ public class Test {
                 URI.create(BASE_URL).toURL())) {
             final OaiPmhResponse<Identify> response = client.identify();
             return formatResponse(response, this::formatIdentify);
-        } catch (final MalformedURLException | URISyntaxException e) {
+        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }
@@ -45,7 +46,7 @@ public class Test {
     public String listMetadataFormats() {
         try (final OaiPmhClient client = new OaiPmhClient(
                 URI.create(BASE_URL).toURL())) {
-            final OaiPmhResponse<ListMetadataFormats> response = client.listMetadataFormats();
+            final OaiPmhResponse<ListMetadataFormats> response = client.listMetadataFormats(null);
             return "Response Date: " + response.getResponseDate() + "\n"
                     + "Request: " + response.getRequest().getValue() + "\n"
                     + "\tVerb: " + response.getRequest().getVerb() + "\n"
@@ -63,7 +64,7 @@ public class Test {
                             + "\tSchema: " + format.getSchema() + "\n"
                             + "\tNamespace: " + format.getMetadataNamespace() + "\n")
                     .collect(Collectors.joining());
-        } catch (final MalformedURLException | URISyntaxException e) {
+        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }
@@ -97,7 +98,7 @@ public class Test {
                             + "\tComplete List Size: " + response.getBody().getResumptionToken().getCompleteListSize()
                             + "\n"
                             + "\tCursor: " + response.getBody().getResumptionToken().getCursor() + "\n"));
-        } catch (final MalformedURLException | URISyntaxException e) {
+        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }
@@ -126,7 +127,7 @@ public class Test {
                             "\tIdentifier: " + header.getIdentifier() + "\n"
                                     + "\tDatestamp: " + header.getDatestamp() + "\n"
                                     + "\tSet Spects: " + header.getSetSpecs() + "\n"
-                                    + "\tStatus: " + header.getStatus())
+                                    + "\tDeleted: " + header.isDeleted())
                     .collect(Collectors.joining()) + "\n"
                     + ((response.getBody().getResumptionToken() == null) ? "" :
                     ("Resumption Token: " + response.getBody().getResumptionToken().getValue() + "\n"
@@ -134,7 +135,7 @@ public class Test {
                             + "\tComplete List Size: " + response.getBody().getResumptionToken().getCompleteListSize()
                             + "\n"
                             + "\tCursor: " + response.getBody().getResumptionToken().getCursor() + "\n")));
-        } catch (final MalformedURLException | URISyntaxException e) {
+        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }

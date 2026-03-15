@@ -1,5 +1,8 @@
 package org.openarchives.oai._2;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
@@ -25,9 +28,19 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum Granularity {
     @XmlEnumValue("YYYY-MM-DD")
-    YYYY_MM_DD,
+    YYYY_MM_DD(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ROOT)),
     @XmlEnumValue("YYYY-MM-DDThh:mm:ssZ")
-    YYYY_MM_DD_THH_MM_SS_Z;
+    YYYY_MM_DD_THH_MM_SS_Z(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT));
+
+    private final DateTimeFormatter formatter;
+
+    Granularity(final DateTimeFormatter formatter) {
+        this.formatter = formatter;
+    }
+
+    public DateTimeFormatter getFormatter() {
+        return formatter;
+    }
 
     @Override
     public String toString() {

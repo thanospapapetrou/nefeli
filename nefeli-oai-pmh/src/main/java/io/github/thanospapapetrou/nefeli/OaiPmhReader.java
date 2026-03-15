@@ -10,9 +10,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.ext.MessageBodyReader;
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
+import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhResponse;
 
 public class OaiPmhReader implements MessageBodyReader<OaiPmhResponse> {
@@ -29,7 +30,12 @@ public class OaiPmhReader implements MessageBodyReader<OaiPmhResponse> {
             throws IOException, WebApplicationException {
 
         try {
-            return (OaiPmhResponse) JAXBContext.newInstance(OaiPmhResponse.class).createUnmarshaller().unmarshal(body);
+            final Unmarshaller unmarshaller = JAXBContext.newInstance(OaiPmhResponse.class).createUnmarshaller();
+            unmarshaller.setAdapter(InstantStringAdapter.class,
+                    new InstantStringAdapter(Granularity.YYYY_MM_DD_THH_MM_SS_Z)); // TODO
+            // switch granularity
+            // TODO set schema
+            return (OaiPmhResponse) unmarshaller.unmarshal(body);
         } catch (final JAXBException e) {
             throw new RuntimeException(e);
         }

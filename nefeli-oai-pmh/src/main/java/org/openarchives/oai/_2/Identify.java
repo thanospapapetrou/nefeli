@@ -1,15 +1,21 @@
 package org.openarchives.oai._2;
 
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.mail.internet.InternetAddress;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
 
+import io.github.thanospapapetrou.nefeli.InstantStringAdapter;
+import io.github.thanospapapetrou.nefeli.InternetAddressAdapter;
 
 /**
  * &lt;p&gt;Java class for IdentifyType complex type&lt;/p&gt;.
@@ -65,9 +71,11 @@ public class Identify implements OaiPmhBody {
     @XmlElement(required = true)
     private final String protocolVersion;
     @XmlElement(name = "adminEmail", required = true)
-    private final List<String> adminEmails; // TODO email
+    @XmlJavaTypeAdapter(InternetAddressAdapter.class)
+    private final List<InternetAddress> adminEmails;
     @XmlElement(required = true)
-    private final String earliestDatestamp; // TODO instant
+    @XmlJavaTypeAdapter(InstantStringAdapter.class)
+    private final Instant earliestDatestamp;
     @XmlElement(required = true)
     @XmlSchemaType(name = "string")
     private final DeletedRecord deletedRecord;
@@ -79,8 +87,8 @@ public class Identify implements OaiPmhBody {
     @XmlElement(name = "description")
     private final List<Description> descriptions;
 
-    public Identify(final String repositoryName, final URL baseURL, final List<String> adminEmails,
-            final String earliestDatestamp, final DeletedRecord deletedRecord, final Granularity granularity,
+    public Identify(final String repositoryName, final URL baseURL, final List<InternetAddress> adminEmails,
+            final Instant earliestDatestamp, final DeletedRecord deletedRecord, final Granularity granularity,
             final List<String> compressions, final List<Description> descriptions) {
         this.repositoryName = repositoryName;
         this.baseURL = baseURL;
@@ -109,11 +117,11 @@ public class Identify implements OaiPmhBody {
         return protocolVersion;
     }
 
-    public List<String> getAdminEmails() {
+    public List<InternetAddress> getAdminEmails() {
         return adminEmails;
     }
 
-    public String getEarliestDatestamp() {
+    public Instant getEarliestDatestamp() {
         return earliestDatestamp;
     }
 

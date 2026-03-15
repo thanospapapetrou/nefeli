@@ -2,6 +2,7 @@ package org.openarchives.oai._2;
 
 import java.net.URI;
 import java.net.URL;
+import java.time.Instant;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -9,6 +10,9 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import io.github.thanospapapetrou.nefeli.InstantStringAdapter;
 
 /**
  * Define requestType, indicating the protocol request that 
@@ -53,15 +57,18 @@ public class Request {
     @XmlAttribute(name = "metadataPrefix")
     private final String metadataPrefix;
     @XmlAttribute(name = "from")
-    private final String from; // TODO instant
+    @XmlJavaTypeAdapter(InstantStringAdapter.class)
+    private final Instant from;
     @XmlAttribute(name = "until")
-    private final String until; // TODO instant
+    @XmlJavaTypeAdapter(InstantStringAdapter.class)
+    private final Instant until;
     @XmlAttribute(name = "set")
     private final String set; // TODO set
     @XmlAttribute(name = "resumptionToken")
     private final String resumptionToken;
 
-    public Request(final URL value, final Verb verb, final URI identifier, final String metadataPrefix, final String from, final String until, final String set, final String resumptionToken) {
+    public Request(final URL value, final Verb verb, final URI identifier, final String metadataPrefix,
+            final Instant from, final Instant until, final String set, final String resumptionToken) {
         this.value = value;
         this.verb = verb;
         this.identifier = identifier;
@@ -92,11 +99,11 @@ public class Request {
         return metadataPrefix;
     }
 
-    public String getFrom() {
+    public Instant getFrom() {
         return from;
     }
 
-    public String getUntil() {
+    public Instant getUntil() {
         return until;
     }
 

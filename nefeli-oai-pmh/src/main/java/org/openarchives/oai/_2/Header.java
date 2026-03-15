@@ -1,6 +1,7 @@
 package org.openarchives.oai._2;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import io.github.thanospapapetrou.nefeli.InstantStringAdapter;
 
 /**
  * A header has a unique identifier, a datestamp,
@@ -47,28 +50,29 @@ public class Header {
     @XmlSchemaType(name = "anyURI")
     private final URI identifier;
     @XmlElement(required = true)
-    private final String datestamp; // TODO instant
+    @XmlJavaTypeAdapter(InstantStringAdapter.class)
+    private final Instant datestamp;
     @XmlElement(name = "setSpec")
     private final List<String> setSpecs;
     @XmlAttribute(name = "status")
     private final Status status;
 
-    public Header(final URI identifier, final String datestamp, final List<String> setSpecs, final Status status) {
+    public Header(final URI identifier, final Instant datestamp, final List<String> setSpecs, final boolean deleted) {
         this.identifier = identifier;
         this.datestamp = datestamp;
         this.setSpecs = setSpecs;
-        this.status = status;
+        this.status = deleted ? Status.DELETED : null;
     }
 
     private Header() {
-        this(null, null, new ArrayList<>(), null);
+        this(null, null, new ArrayList<>(), false);
     }
 
     public URI getIdentifier() {
         return identifier;
     }
 
-    public String getDatestamp() {
+    public Instant getDatestamp() {
         return datestamp;
     }
 
@@ -76,7 +80,7 @@ public class Header {
         return setSpecs;
     }
 
-    public Status getStatus() {
-        return status;
+    public boolean isDeleted() {
+        return status == Status.DELETED;
     }
 }

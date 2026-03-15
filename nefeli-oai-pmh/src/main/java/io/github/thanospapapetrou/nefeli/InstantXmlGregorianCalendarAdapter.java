@@ -8,7 +8,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-public class InstantAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
+public class InstantXmlGregorianCalendarAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
     private static final DatatypeFactory FACTORY = DatatypeFactory.newDefaultInstance();
 
     @Override
