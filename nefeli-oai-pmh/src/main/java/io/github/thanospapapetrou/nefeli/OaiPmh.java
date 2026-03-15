@@ -10,6 +10,7 @@ import org.openarchives.oai._2.ListMetadataFormats;
 import org.openarchives.oai._2.ListRecords;
 import org.openarchives.oai._2.ListSets;
 import org.openarchives.oai._2.OaiPmhResponse;
+import org.openarchives.oai._2.SetSpec;
 
 interface OaiPmh {
     String ARGUMENT_IDENTIFIER = "identifier";
@@ -29,12 +30,12 @@ interface OaiPmh {
     OaiPmhResponse<ListSets> listSets(final String resumptionToken) throws OaiPmhException;
 
     OaiPmhResponse<ListIdentifiers> listIdentifiers(final String metadataPrefix, final Instant from,
-            final Instant until, final String set) throws OaiPmhException;
+            final Instant until, final SetSpec set) throws OaiPmhException;
 
     OaiPmhResponse<ListIdentifiers> listIdentifiers(final String resumptionToken) throws OaiPmhException;
 
     OaiPmhResponse<ListRecords> listRecords(final String metadataPrefix, final Instant from, final Instant until,
-            final String set) throws OaiPmhException;
+            final SetSpec set) throws OaiPmhException;
 
     OaiPmhResponse<ListRecords> listRecords(final String resumptionToken) throws OaiPmhException;
 

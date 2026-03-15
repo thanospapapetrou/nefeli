@@ -13,6 +13,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import io.github.thanospapapetrou.nefeli.InstantStringAdapter;
+import io.github.thanospapapetrou.nefeli.SetSpecAdapter;
 
 /**
  * Define requestType, indicating the protocol request that 
@@ -63,12 +64,13 @@ public class Request {
     @XmlJavaTypeAdapter(InstantStringAdapter.class)
     private final Instant until;
     @XmlAttribute(name = "set")
-    private final String set; // TODO set
+    @XmlJavaTypeAdapter(SetSpecAdapter.class)
+    private final SetSpec set;
     @XmlAttribute(name = "resumptionToken")
     private final String resumptionToken;
 
     public Request(final URL value, final Verb verb, final URI identifier, final String metadataPrefix,
-            final Instant from, final Instant until, final String set, final String resumptionToken) {
+            final Instant from, final Instant until, final SetSpec set, final String resumptionToken) {
         this.value = value;
         this.verb = verb;
         this.identifier = identifier;
@@ -107,7 +109,7 @@ public class Request {
         return until;
     }
 
-    public String getSet() {
+    public SetSpec getSet() {
         return set;
     }
 

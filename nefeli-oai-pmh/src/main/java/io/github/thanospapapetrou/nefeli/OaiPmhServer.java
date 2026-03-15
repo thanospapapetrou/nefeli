@@ -1,18 +1,12 @@
 package io.github.thanospapapetrou.nefeli;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
 
 import org.openarchives.oai._2.GetRecord;
@@ -21,12 +15,10 @@ import org.openarchives.oai._2.ListIdentifiers;
 import org.openarchives.oai._2.ListMetadataFormats;
 import org.openarchives.oai._2.ListRecords;
 import org.openarchives.oai._2.ListSets;
-import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhError;
 import org.openarchives.oai._2.OaiPmhErrorCode;
 import org.openarchives.oai._2.OaiPmhResponse;
-import org.openarchives.oai._2.Request;
-import org.openarchives.oai._2.Verb;
+import org.openarchives.oai._2.SetSpec;
 
 @Path("/")
 public class OaiPmhServer implements OaiPmh {
@@ -102,7 +94,7 @@ public class OaiPmhServer implements OaiPmh {
 
     @Override
     public OaiPmhResponse<ListIdentifiers> listIdentifiers(final String metadataPrefix, final Instant from,
-            final Instant until, final String set) throws OaiPmhException {
+            final Instant until, final SetSpec set) throws OaiPmhException {
         return null;
     }
 
@@ -113,7 +105,7 @@ public class OaiPmhServer implements OaiPmh {
 
     @Override
     public OaiPmhResponse<ListRecords> listRecords(final String metadataPrefix, final Instant from, final Instant until,
-            final String set) throws OaiPmhException {
+            final SetSpec set) throws OaiPmhException {
         return null;
     }
 

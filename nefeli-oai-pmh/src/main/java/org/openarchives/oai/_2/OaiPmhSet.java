@@ -7,7 +7,9 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import io.github.thanospapapetrou.nefeli.SetSpecAdapter;
 
 /**
  * &lt;p&gt;Java class for setType complex type&lt;/p&gt;.
@@ -34,13 +36,14 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "setType", propOrder = {"setSpec", "setName", "setDescriptions"})
 public class OaiPmhSet {
     @XmlElement(required = true)
-    private final String setSpec; // TODO set spec
+    @XmlJavaTypeAdapter(SetSpecAdapter.class)
+    private final SetSpec setSpec;
     @XmlElement(required = true)
     private final String setName;
     @XmlElement(name = "setDescription")
     private final List<Description> setDescriptions;
 
-    public OaiPmhSet(final String setSpec, final String setName, final List<Description> setDescriptions) {
+    public OaiPmhSet(final SetSpec setSpec, final String setName, final List<Description> setDescriptions) {
         this.setSpec = setSpec;
         this.setName = setName;
         this.setDescriptions = setDescriptions;
@@ -50,7 +53,7 @@ public class OaiPmhSet {
         this(null, null, new ArrayList<>());
     }
 
-    public String getSetSpec() {
+    public SetSpec getSetSpec() {
         return setSpec;
     }
 
