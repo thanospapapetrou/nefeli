@@ -3,10 +3,13 @@ package io.github.thanospapapetrou.nefeli;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+@ApplicationScoped
 public class NefeliErrorHandler implements ErrorHandler {
     private static final Logger LOGGER = Logger.getLogger(NefeliErrorHandler.class.getName());
     private static final String PARSING_ERROR = "Error parsing %s %s at line %d, column %d: %s";
