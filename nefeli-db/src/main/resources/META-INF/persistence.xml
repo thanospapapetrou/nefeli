@@ -5,12 +5,14 @@
     <persistence-unit name="nefeli" transaction-type="RESOURCE_LOCAL">
         <class>io.github.thanospapapetrou.nefeli.db.Repository</class>
         <properties>
-            <property name="javax.persistence.provider" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://host.docker.internal:5432/nefeli"/>
-            <property name="javax.persistence.jdbc.user" value="nefeli"/>
-            <property name="javax.persistence.jdbc.password" value="n3f3l1"/>
-<!--            <property name="javax.persistence.schema-generation.database.action"  value="drop-and-create"/>-->
+            <property name="jakarta.persistence.provider" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://host.docker.internal:5432/nefeli"/>
+            <property name="jakarta.persistence.jdbc.user" value="nefeli"/>
+            <property name="jakarta.persistence.jdbc.password" value="n3f3l1"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
+            <property name="jakarta.persistence.sql-load-script-source" value="./nefeli.sql"/>
         </properties>
     </persistence-unit>
 </persistence>

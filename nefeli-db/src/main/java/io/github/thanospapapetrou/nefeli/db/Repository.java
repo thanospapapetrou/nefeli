@@ -8,13 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "REPOSITORY")
+@Table(name = "\"REPOSITORY\"")
 public class Repository implements Comparable<Repository> {
-    @Column(name = "URL")
+    @Column(name = "\"URL\"")
     @Id
     private final URL url;
 
-    @Column(name = "NAME")
+    @Column(name = "\"NAME\"")
     private final String name;
 
     public Repository(final URL url, final String name) {
