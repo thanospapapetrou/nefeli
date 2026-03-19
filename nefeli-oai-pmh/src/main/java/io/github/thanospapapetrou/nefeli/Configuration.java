@@ -2,6 +2,9 @@ package io.github.thanospapapetrou.nefeli;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -10,9 +13,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.openarchives.oai._2.Granularity;
+import org.openarchives.oai._2.OaiPmhResponse;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+
+import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantStringAdapter;
 
 @ApplicationScoped
 public class Configuration {
@@ -56,5 +63,19 @@ public class Configuration {
         builder.setEntityResolver(resolver);
         builder.setErrorHandler(handler);
         return builder;
+    }
+
+    @ApplicationScoped
+    @Produces
+    public JAXBContext getContext() throws JAXBException {
+        return JAXBContext.newInstance(OaiPmhResponse.class);
+    }
+
+    @Produces
+    public Unmarshaller getUnmarshaller(final JAXBContext context) throws JAXBException {
+        final Unmarshaller unmarshaller = context.createUnmarshaller();
+        unmarshaller.setAdapter(InstantStringAdapter.class,
+                new InstantStringAdapter(Granularity.YYYY_MM_DD_THH_MM_SS_Z)); // TODO switch granularity
+        return unmarshaller;
     }
 }

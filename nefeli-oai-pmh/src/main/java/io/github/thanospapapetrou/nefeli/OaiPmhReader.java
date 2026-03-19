@@ -10,25 +10,22 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.ext.MessageBodyReader;
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhResponse;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantStringAdapter;
 
 public class OaiPmhReader implements MessageBodyReader<OaiPmhResponse> {
     private final DocumentBuilder builder;
+    private final Unmarshaller unmarshaller;
 
     @Inject
-    public OaiPmhReader(final DocumentBuilder builder) {
+    public OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller) {
         this.builder = builder;
+        this.unmarshaller = unmarshaller;
     }
 
     @Override
@@ -43,11 +40,7 @@ public class OaiPmhReader implements MessageBodyReader<OaiPmhResponse> {
             throws IOException, WebApplicationException {
 
         try {
-            final Document document = builder.parse(body);
-            final Unmarshaller unmarshaller = JAXBContext.newInstance(OaiPmhResponse.class).createUnmarshaller();
-            unmarshaller.setAdapter(InstantStringAdapter.class,
-                    new InstantStringAdapter(Granularity.YYYY_MM_DD_THH_MM_SS_Z)); // TODO switch granularity
-            return unmarshaller.unmarshal(document.getDocumentElement(), OaiPmhResponse.class).getValue();
+            return unmarshaller.unmarshal(builder.parse(body).getDocumentElement(), OaiPmhResponse.class).getValue();
         } catch (final JAXBException | SAXException e) {
             throw new RuntimeException(e);
         }
