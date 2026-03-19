@@ -1,6 +1,7 @@
 package io.github.thanospapapetrou.nefeli.db;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Disposes;
 import jakarta.enterprise.inject.Produces;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,9 +17,16 @@ public class Configuration {
         return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
     }
 
+    public void close(@Disposes final EntityManagerFactory factory) {
+        factory.close();
+    }
+
     @Produces
     public EntityManager getManager(final EntityManagerFactory factory) {
         return factory.createEntityManager();
     }
 
+    public void close(@Disposes final EntityManager manager) {
+        manager.close();
+    }
 }

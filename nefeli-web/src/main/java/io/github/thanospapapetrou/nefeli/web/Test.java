@@ -6,9 +6,8 @@ import java.net.URISyntaxException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -36,8 +35,7 @@ public class Test {
     @Path("/data")
     @Produces(MediaType.TEXT_PLAIN)
     public String data() {
-//        final RepositoryDao dao = CDI.current().select(RepositoryDao.class, Any.Literal.INSTANCE).get();
-        final RepositoryDao dao = new RepositoryDao(Persistence.createEntityManagerFactory("nefeli").createEntityManager());
+        final RepositoryDao dao = CDI.current().select(RepositoryDao.class).get();
         return dao.getRepositories().toString();
     }
 
