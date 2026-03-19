@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
@@ -15,10 +16,11 @@ import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.xml.sax.SAXException;
 
-public class OaiPmhReader implements MessageBodyReader<OaiPmhResponse> {
+public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private final DocumentBuilder builder;
     private final Unmarshaller unmarshaller;
 
@@ -31,11 +33,15 @@ public class OaiPmhReader implements MessageBodyReader<OaiPmhResponse> {
     @Override
     public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations,
             final MediaType mediaType) {
-        return true;
+        return MediaType.TEXT_XML_TYPE.isCompatible(mediaType)
+                && mediaType.getParameters().containsKey(MediaType.CHARSET_PARAMETER)
+                && mediaType.getParameters().get(MediaType.CHARSET_PARAMETER)
+                .equalsIgnoreCase(StandardCharsets.UTF_8.name());
     }
 
     @Override
-    public OaiPmhResponse readFrom(final Class<OaiPmhResponse> clazz, final Type type, final Annotation[] annotations,
+    public OaiPmhResponse<T> readFrom(final Class<OaiPmhResponse<T>> clazz, final Type type,
+            final Annotation[] annotations,
             final MediaType mediaType, final MultivaluedMap<String, String> headers, final InputStream body)
             throws IOException, WebApplicationException {
 

@@ -15,3 +15,10 @@ docker stop nefeli-web
 docker rmi nefeli-web:1.0.0-SNAPSHOT
 
 docker stop nefeli-web; docker rmi nefeli-web:1.0.0-SNAPSHOT; mvn clean verify; docker build -t nefeli-web:1.0.0-SNAPSHOT -f ./nefeli-web/src/main/docker/Dockerfile ./; docker run --publish 8080:8080 --detach --rm --name nefeli-web nefeli-web:1.0.0-SNAPSHOT; docker exec -it nefeli-web bash
+
+docker build -t nefeli-db:1.0.0-SNAPSHOT -f ./nefeli-db/src/main/docker/Dockerfile ./
+docker run --publish 5432:5432 --detach --rm --name nefeli-db nefeli-db:1.0.0-SNAPSHOT
+
+docker exec -it nefeli-db bash
+docker stop nefeli-db
+docker rmi nefeli-db:1.0.0-SNAPSHOT

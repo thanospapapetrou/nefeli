@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <name>Nefeli</name>
     <modules>
+        <module>nefeli-db</module>
         <module>nefeli-oai-pmh</module>
         <module>nefeli-web</module>
     </modules>
@@ -28,6 +29,11 @@
                 <groupId>jakarta.mail</groupId>
                 <artifactId>jakarta.mail-api</artifactId>
                 <version>2.1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>3.2.0</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.servlet</groupId>
@@ -52,14 +58,29 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>7.3.0.Final</version>
+            </dependency>
+            <dependency>
                 <groupId>org.jboss.weld.servlet</groupId>
                 <artifactId>weld-servlet-core</artifactId>
                 <version>6.0.4.Final</version>
             </dependency>
             <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.7.10</version>
+            </dependency>
+            <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>4.0.6</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli</groupId>
+                <artifactId>nefeli-db</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.thanospapapetrou.nefeli</groupId>

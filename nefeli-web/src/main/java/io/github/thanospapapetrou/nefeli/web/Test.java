@@ -6,11 +6,15 @@ import java.net.URISyntaxException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import jakarta.enterprise.inject.Any;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.persistence.Persistence;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import org.openarchives.oai._2.Description;
 import org.openarchives.oai._2.Identify;
 import org.openarchives.oai._2.ListIdentifiers;
 import org.openarchives.oai._2.ListMetadataFormats;
@@ -22,10 +26,20 @@ import org.openarchives.oai._2.Request;
 
 import io.github.thanospapapetrou.nefeli.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.OaiPmhException;
+import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 
 @Path("/test")
 public class Test {
     private static final String BASE_URL = "https://www.ijrah.com/index.php/ijrah/oai";
+
+    @GET
+    @Path("/data")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String data() {
+//        final RepositoryDao dao = CDI.current().select(RepositoryDao.class, Any.Literal.INSTANCE).get();
+        final RepositoryDao dao = new RepositoryDao(Persistence.createEntityManagerFactory("nefeli").createEntityManager());
+        return dao.getRepositories().toString();
+    }
 
     @GET
     @Path("/identify")
@@ -181,6 +195,9 @@ public class Test {
                         """,
                 identify.getRepositoryName(), identify.getBaseURL(), identify.getProtocolVersion(),
                 identify.getAdminEmails(), identify.getEarliestDatestamp(), identify.getDeletedRecord(),
-                identify.getGranularity(), identify.getCompressions(), identify.getDescriptions());
+                identify.getGranularity(), identify.getCompressions(), identify.getDescriptions().stream()
+                        .map(Description::getDescription)
+                        .map(element -> element.getNamespaceURI() + " " + element.getTagName())
+                        .toList());
     }
 }

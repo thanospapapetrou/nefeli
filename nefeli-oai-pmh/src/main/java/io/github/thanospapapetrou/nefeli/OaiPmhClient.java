@@ -62,7 +62,7 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
 
     @Override
     public OaiPmhResponse<ListIdentifiers> listIdentifiers(final String metadataPrefix, final Instant from,
-            final Instant until, final SetSpec set) throws OaiPmhException { // TODO set spec
+            final Instant until, final SetSpec set) throws OaiPmhException {
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(ARGUMENT_METADATA_PREFIX, metadataPrefix);
         arguments.put(ARGUMENT_FROM, from);

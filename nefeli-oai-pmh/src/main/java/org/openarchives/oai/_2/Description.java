@@ -5,6 +5,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import org.w3c.dom.Element;
 
 /**
  * The descriptionType is used for the description
@@ -34,9 +35,9 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "descriptionType", propOrder = {"description"})
 public class Description {
     @XmlAnyElement(lax = true)
-    private final Object description;
+    private final Element description;
 
-    public Description(final Object description) {
+    public Description(final Element description) {
         this.description = description;
     }
 
@@ -44,7 +45,7 @@ public class Description {
         this(null);
     }
 
-    public Object getDescription() {
+    public Element getDescription() {
         return description;
     }
 }
