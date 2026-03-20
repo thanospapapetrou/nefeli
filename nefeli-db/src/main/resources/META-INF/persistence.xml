@@ -11,8 +11,9 @@
             <property name="jakarta.persistence.jdbc.user" value="nefeli"/>
             <property name="jakarta.persistence.jdbc.password" value="n3f3l1"/>
             <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
-            <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
-            <property name="jakarta.persistence.sql-load-script-source" value="./nefeli.sql"/>
+            <property name="jakarta.persistence.schema-generation.create-source" value="script"/>
+            <property name="jakarta.persistence.schema-generation.create-script-source" value="./sql/schema.sql"/>
+            <property name="jakarta.persistence.sql-load-script-source" value="./sql/data.sql"/>
         </properties>
     </persistence-unit>
 </persistence>

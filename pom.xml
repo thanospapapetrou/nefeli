@@ -10,6 +10,7 @@
     <name>Nefeli</name>
     <modules>
         <module>nefeli-db</module>
+        <module>nefeli-harvester</module>
         <module>nefeli-oai-pmh</module>
         <module>nefeli-web</module>
     </modules>
@@ -80,6 +81,11 @@
             <dependency>
                 <groupId>io.github.thanospapapetrou.nefeli</groupId>
                 <artifactId>nefeli-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli</groupId>
+                <artifactId>nefeli-harvester</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
