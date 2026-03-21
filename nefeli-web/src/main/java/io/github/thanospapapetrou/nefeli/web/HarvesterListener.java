@@ -9,13 +9,23 @@ import io.github.thanospapapetrou.nefeli.harvester.Harvester;
 
 @WebListener
 public class HarvesterListener implements ServletContextListener {
+    private final Harvester harvester;
+
+    public HarvesterListener() {
+        this(CDI.current().select(Harvester.class).get());
+    }
+
+    private HarvesterListener(final Harvester harvester) {
+        this.harvester = harvester;
+    }
+
     @Override
     public void contextInitialized(final ServletContextEvent event) {
-        CDI.current().select(Harvester.class).get().run();
+        harvester.run();
     }
 
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
-        CDI.current().select(Harvester.class).get().close();
+        harvester.close(); // TODO properly close this
     }
 }
