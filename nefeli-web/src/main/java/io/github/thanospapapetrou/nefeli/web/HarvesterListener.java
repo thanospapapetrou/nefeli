@@ -23,9 +23,4 @@ public class HarvesterListener implements ServletContextListener {
     public void contextInitialized(final ServletContextEvent event) {
         harvester.run();
     }
-
-    @Override
-    public void contextDestroyed(final ServletContextEvent event) {
-        harvester.close(); // TODO properly close this
-    }
 }
