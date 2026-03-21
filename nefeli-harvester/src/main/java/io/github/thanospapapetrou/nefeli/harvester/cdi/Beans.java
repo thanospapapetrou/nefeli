@@ -1,6 +1,5 @@
 package io.github.thanospapapetrou.nefeli.harvester.cdi;
 
-import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 
+import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.harvester.DaemonThreadFactory;
 
 @ApplicationScoped
@@ -28,14 +28,9 @@ public class Beans {
     @ApplicationScoped
     @Named("workersExecutor")
     @Produces
-    public ExecutorService getWorkersExecutor(@Named("workersThreadFactory") final ThreadFactory factory) {
-        final int threads = 10; // TODO
+    public ExecutorService getWorkersExecutor(@Configuration.Property("harvester.threads") final int threads,
+            @Named("workersThreadFactory") final ThreadFactory factory) {
         return Executors.newFixedThreadPool(threads, factory);
-    }
-
-    @Produces
-    public Duration getDuration() {
-        return Duration.parse("PT5S"); // TODO
     }
 
     @ApplicationScoped

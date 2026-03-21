@@ -11,6 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.db.Repository;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 
@@ -28,7 +29,8 @@ public class Harvester implements AutoCloseable, Runnable {
     @Inject
     public Harvester(final RepositoryDao repositoryDao,
             @Named("schedulerExecutor") final ScheduledExecutorService scheduler,
-            @Named("workersExecutor") final ExecutorService workers, final Duration period) {
+            @Named("workersExecutor") final ExecutorService workers,
+            @Configuration.Property("harvester.period") final Duration period) {
         this.repositoryDao = repositoryDao;
         this.scheduler = scheduler;
         this.workers = workers;

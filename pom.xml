@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <name>Nefeli</name>
     <modules>
+        <module>nefeli-common</module>
         <module>nefeli-db</module>
         <module>nefeli-harvester</module>
         <module>nefeli-oai-pmh</module>
@@ -77,6 +78,11 @@
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>4.0.6</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli</groupId>
+                <artifactId>nefeli-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.thanospapapetrou.nefeli</groupId>
