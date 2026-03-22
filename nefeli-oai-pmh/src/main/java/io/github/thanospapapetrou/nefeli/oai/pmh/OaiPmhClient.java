@@ -8,11 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 
 import org.openarchives.oai._2.GetRecord;
+import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.Identify;
 import org.openarchives.oai._2.ListIdentifiers;
 import org.openarchives.oai._2.ListMetadataFormats;
@@ -30,11 +32,17 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
     private final WebTarget target;
 
     public OaiPmhClient(final URL url) throws URISyntaxException {
-        this(ClientBuilder.newClient().register(OaiPmhReader.class), url);
+        this(CDI.current().select(Client.class).get(), url);
     }
 
     private OaiPmhClient(final Client client, final URL url) throws URISyntaxException {
         this(client, client.target(url.toURI()));
+        this.target.register(new OaiPmhReader<Identify>(null), 1);
+        this.target.register(new OaiPmhReader<ListSets>(null), 1);
+        this.target.register(new OaiPmhReader<ListMetadataFormats>(null), 1);
+        this.target.register(new OaiPmhReader<ListIdentifiers>(null), 1);
+        this.target.register(new OaiPmhReader<ListRecords>(null), 1);
+        this.target.register(new OaiPmhReader<GetRecord>(null), 1);
     }
 
     private OaiPmhClient(final Client client, final WebTarget target) {
@@ -44,7 +52,14 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
 
     @Override
     public OaiPmhResponse<Identify> identify() throws OaiPmhException {
-        return request(Verb.IDENTIFY, Map.of());
+        final OaiPmhResponse<Identify> identify = request(Verb.IDENTIFY, Map.of());
+        this.target.register(new OaiPmhReader<Identify>(identify.getBody().getGranularity()), 0);
+        this.target.register(new OaiPmhReader<ListSets>(identify.getBody().getGranularity()), 0);
+        this.target.register(new OaiPmhReader<ListMetadataFormats>(identify.getBody().getGranularity()), 0);
+        this.target.register(new OaiPmhReader<ListIdentifiers>(identify.getBody().getGranularity()), 0);
+        this.target.register(new OaiPmhReader<ListRecords>(identify.getBody().getGranularity()), 0);
+        this.target.register(new OaiPmhReader<GetRecord>(identify.getBody().getGranularity()), 0);
+        return identify;
     }
 
     @Override

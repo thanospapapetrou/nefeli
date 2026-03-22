@@ -2,6 +2,8 @@ package io.github.thanospapapetrou.nefeli.oai.pmh.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -13,31 +15,27 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-
-import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
 @ApplicationScoped
 public class Beans {
     private static final String SCHEMA_PROTOCOLS = "http,https";
 
     @Produces
-    public SchemaFactory getSchemaFactory(final ErrorHandler handler) throws SAXException {
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, SCHEMA_PROTOCOLS);
-        factory.setErrorHandler(handler);
-        return factory;
+    public Client getClient() {
+        return ClientBuilder.newClient();
     }
 
-    @ApplicationScoped
     @Produces
-    public Schema getSchema(final SchemaFactory factory) throws SAXException {
-        return factory.newSchema();
+    public DocumentBuilder getDocumentBuilder(final DocumentBuilderFactory factory, final EntityResolver resolver,
+            final ErrorHandler handler) throws ParserConfigurationException {
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        builder.setEntityResolver(resolver);
+        builder.setErrorHandler(handler);
+        return builder;
     }
 
     @Produces
@@ -56,26 +54,29 @@ public class Beans {
         return factory;
     }
 
+    @ApplicationScoped
     @Produces
-    public DocumentBuilder getDocumentBuilder(final DocumentBuilderFactory factory, final EntityResolver resolver,
-            final ErrorHandler handler) throws ParserConfigurationException {
-        final DocumentBuilder builder = factory.newDocumentBuilder();
-        builder.setEntityResolver(resolver);
-        builder.setErrorHandler(handler);
-        return builder;
+    public Schema getSchema(final SchemaFactory factory) throws SAXException {
+        return factory.newSchema();
+    }
+
+    @Produces
+    public SchemaFactory getSchemaFactory(final ErrorHandler handler) throws SAXException {
+        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, SCHEMA_PROTOCOLS);
+        factory.setErrorHandler(handler);
+        return factory;
+    }
+
+    @Produces
+    public Unmarshaller getUnmarshaller(final JAXBContext context) throws JAXBException {
+        return context.createUnmarshaller();
     }
 
     @ApplicationScoped
     @Produces
     public JAXBContext getContext() throws JAXBException {
         return JAXBContext.newInstance(OaiPmhResponse.class);
-    }
-
-    @Produces
-    public Unmarshaller getUnmarshaller(final JAXBContext context) throws JAXBException {
-        final Unmarshaller unmarshaller = context.createUnmarshaller();
-        unmarshaller.setAdapter(InstantStringAdapter.class,
-                new InstantStringAdapter(Granularity.YYYY_MM_DD_THH_MM_SS_Z)); // TODO switch granularity
-        return unmarshaller;
     }
 }

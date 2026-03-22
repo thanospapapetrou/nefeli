@@ -2,6 +2,7 @@ package io.github.thanospapapetrou.nefeli.harvester;
 
 import java.net.URISyntaxException;
 import java.time.Duration;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,21 +16,25 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.openarchives.oai._2.Identify;
+import org.openarchives.oai._2.ListSets;
 import org.openarchives.oai._2.OaiPmhResponse;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
 
 @ApplicationScoped
 public class Harvester implements AutoCloseable, Runnable {
     private static final String ERROR_IDENTIFYING = "Error identifying repository %1$s";
+    private static final String ERROR_LISTING_SETS = "Error listing sets of repository %1$s";
     private static final String ERROR_RETRIEVING = "Error retrieving repositories";
     private static final String ERROR_UPDATING = "Error updating repository %1$s";
     private static final Logger LOGGER = Logger.getLogger(Harvester.class.getName());
     private static final String MESSAGE_HARVESTER_STARTED = "Harvester started";
     private static final String MESSAGE_HARVESTER_STOPPED = "Harvester stopped";
+    private static final String MESSAGE_IDENTIFIED = "Identified repository %1$s";
+    private static final String MESSAGE_UPDATED_REPOSITORY = "Updated repository %1$s";
 
     private final RepositoryDao repositoryDao;
     private final ScheduledExecutorService scheduler;
@@ -68,7 +73,15 @@ public class Harvester implements AutoCloseable, Runnable {
     public void harvest(final Repository repository) {
         try {
             final OaiPmhClient client = new OaiPmhClient(repository.getUrl());
-            identify(client).thenComposeAsync(this::updateRepository, workers);
+            identify(client)
+                    .thenComposeAsync(this::updateRepository, workers)
+                    .thenComposeAsync(v -> this.listSets(client), workers)
+                    .thenComposeAsync(listSets -> {
+                        listSets.getBody().getSets().stream().forEach(set ->
+                                LOGGER.info(String.format("Processing set: %1$s %2$s", set.getSetSpec(),
+                                        set.getSetName())));
+                        return CompletableFuture.completedFuture(null);
+                    });
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -85,39 +98,39 @@ public class Harvester implements AutoCloseable, Runnable {
     }
 
     private CompletableFuture<OaiPmhResponse<Identify>> identify(final OaiPmhClient client) {
-        final CompletableFuture<OaiPmhResponse<Identify>> identify = new CompletableFuture<>();
-        workers.submit(() -> {
-            try {
-                identify.complete(client.identify());
-                LOGGER.fine(String.format("Identified repository %1$s", client)); // TODO
-            } catch (final Exception e) {
-                LOGGER.log(Level.WARNING, String.format(ERROR_IDENTIFYING, client), e);
-                identify.completeExceptionally(e);
-            }
-        });
-        return identify;
+        return step(client::identify, String.format(ERROR_IDENTIFYING, client));
     }
 
     private CompletableFuture<Void> updateRepository(final OaiPmhResponse<Identify> identify) {
-        final CompletableFuture<Void> update = new CompletableFuture<>();
+        return step(() -> {
+                    repositoryDao.updateRepository(new Repository(
+                            identify.getBody().getBaseURL(),
+                            identify.getResponseDate(),
+                            identify.getBody().getRepositoryName(),
+                            identify.getBody().getAdminEmails(),
+                            identify.getBody().getEarliestDatestamp(),
+                            identify.getBody().getDeletedRecord(),
+                            identify.getBody().getGranularity(),
+                            identify.getBody().getCompressions()));
+                    return null;
+                },
+                String.format(ERROR_UPDATING, identify.getBody().getBaseURL()));
+    }
+
+    private CompletableFuture<OaiPmhResponse<ListSets>> listSets(final OaiPmhClient client) {
+        return step(client::listSets, String.format(ERROR_LISTING_SETS, client));
+    }
+
+    private <T> CompletableFuture<T> step(final Callable<T> step, final String error) {
+        final CompletableFuture<T> future = new CompletableFuture<>();
         workers.submit(() -> {
             try {
-                repositoryDao.updateRepository(new Repository(
-                        identify.getBody().getBaseURL(),
-                        identify.getResponseDate(),
-                        identify.getBody().getRepositoryName(),
-                        identify.getBody().getAdminEmails(),
-                        identify.getBody().getEarliestDatestamp(),
-                        identify.getBody().getDeletedRecord(),
-                        identify.getBody().getGranularity(),
-                        identify.getBody().getCompressions()));
-                update.complete(null);
-                LOGGER.fine(String.format("Updated repository %1$s", identify.getBody().getBaseURL())); // TODO
+                future.complete(step.call());
             } catch (final Exception e) {
-                LOGGER.log(Level.WARNING, String.format(ERROR_UPDATING, identify.getBody().getBaseURL()), e);
-                update.completeExceptionally(e);
+                LOGGER.log(Level.WARNING, error, e);
+                future.completeExceptionally(e);
             }
         });
-        return update;
+        return future;
     }
 }

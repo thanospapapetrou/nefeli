@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
-import jakarta.inject.Inject;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
@@ -19,11 +19,14 @@ import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.xml.sax.SAXException;
 
-@Consumes
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
+
+@Consumes({MediaType.TEXT_XML, MediaType.WILDCARD})
 @Provider
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private static final Logger LOGGER = Logger.getLogger(OaiPmhReader.class.getName());
@@ -34,8 +37,18 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     private final DocumentBuilder builder;
     private final Unmarshaller unmarshaller;
 
-    @Inject
-    public OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller) {
+    public OaiPmhReader(final Granularity granularity) {
+        this(CDI.current().select(DocumentBuilder.class).get(), CDI.current().select(Unmarshaller.class).get(),
+                granularity);
+    }
+
+    private OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller,
+            final Granularity granularity) {
+        this(builder, unmarshaller);
+        this.unmarshaller.setAdapter(InstantStringAdapter.class, new InstantStringAdapter(granularity));
+    }
+
+    private OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller) {
         this.builder = builder;
         this.unmarshaller = unmarshaller;
     }
