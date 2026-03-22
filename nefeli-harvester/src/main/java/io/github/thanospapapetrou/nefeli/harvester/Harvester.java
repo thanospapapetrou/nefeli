@@ -109,7 +109,8 @@ public class Harvester implements AutoCloseable, Runnable {
                         identify.getBody().getAdminEmails(),
                         identify.getBody().getEarliestDatestamp(),
                         identify.getBody().getDeletedRecord(),
-                        identify.getBody().getGranularity()));
+                        identify.getBody().getGranularity(),
+                        identify.getBody().getCompressions()));
                 update.complete(null);
                 LOGGER.fine(String.format("Updated repository %1$s", identify.getBody().getBaseURL())); // TODO
             } catch (final Exception e) {

@@ -44,11 +44,15 @@ public class Repository implements Comparable<Repository> {
     @Column(name = "\"GRANULARITY\"")
     @Enumerated(EnumType.ORDINAL)
     private final Granularity granularity;
-    // TODO compressions
+    @CollectionTable(name = "\"REPOSITORY_COMPRESSIONS\"", joinColumns = @JoinColumn(name = "\"URL\""))
+    @Column(name = "\"COMPRESSION\"")
+    @ElementCollection
+    private final List<String> compressions;
     // TODO descriptions
 
     public Repository(final URL url, final Instant updated, final String name, final List<InternetAddress> admins,
-            final Instant earliest, final DeletedRecord deleted, final Granularity granularity) {
+            final Instant earliest, final DeletedRecord deleted, final Granularity granularity,
+            final List<String> compressions) {
         this.url = url;
         this.updated = updated;
         this.name = name;
@@ -56,10 +60,11 @@ public class Repository implements Comparable<Repository> {
         this.earliest = earliest;
         this.deleted = deleted;
         this.granularity = granularity;
+        this.compressions = compressions;
     }
 
     private Repository() {
-        this(null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null);
     }
 
     public URL getUrl() {
@@ -88,6 +93,10 @@ public class Repository implements Comparable<Repository> {
 
     public Granularity getGranularity() {
         return granularity;
+    }
+
+    public List<String> getCompressions() {
+        return compressions;
     }
 
     @Override
