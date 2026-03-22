@@ -20,13 +20,4 @@ public class Beans {
     public void close(@Disposes final EntityManagerFactory factory) {
         factory.close();
     }
-
-    @Produces
-    public EntityManager getManager(final EntityManagerFactory factory) {
-        return factory.createEntityManager();
-    }
-
-    public void close(@Disposes final EntityManager manager) {
-        manager.close();
-    }
 }
