@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.oai.pmh;
 
 import java.net.URI;
 import java.time.Instant;

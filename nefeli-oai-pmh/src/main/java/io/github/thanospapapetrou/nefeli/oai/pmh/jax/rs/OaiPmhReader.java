@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs;
 
 import java.io.IOException;
 import java.io.InputStream;

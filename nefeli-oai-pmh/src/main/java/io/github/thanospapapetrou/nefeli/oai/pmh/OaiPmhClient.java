@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.oai.pmh;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,6 +22,8 @@ import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.SetSpec;
 import org.openarchives.oai._2.Verb;
+
+import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhReader;
 
 public class OaiPmhClient implements OaiPmh, AutoCloseable {
     private final Client client;

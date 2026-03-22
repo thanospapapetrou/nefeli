@@ -13,8 +13,8 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantStringAdapter;
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.InternetAddressAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InternetAddressAdapter;
 
 /**
  * &lt;p&gt;Java class for IdentifyType complex type&lt;/p&gt;.

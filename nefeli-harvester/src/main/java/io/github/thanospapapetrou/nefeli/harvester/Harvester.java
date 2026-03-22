@@ -17,7 +17,7 @@ import jakarta.inject.Named;
 import org.openarchives.oai._2.Identify;
 import org.openarchives.oai._2.OaiPmhResponse;
 
-import io.github.thanospapapetrou.nefeli.OaiPmhClient;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
@@ -40,7 +40,7 @@ public class Harvester implements AutoCloseable, Runnable {
     public Harvester(final RepositoryDao repositoryDao,
             @Named("schedulerExecutor") final ScheduledExecutorService scheduler,
             @Named("workersExecutor") final ExecutorService workers,
-            @Configuration.Property("harvester.period") final Duration period) {
+            @Configuration.Property("nefeli.harvester.period") final Duration period) {
         this.repositoryDao = repositoryDao;
         this.scheduler = scheduler;
         this.workers = workers;

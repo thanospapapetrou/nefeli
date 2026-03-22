@@ -12,8 +12,8 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantStringAdapter;
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.SetSpecAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.SetSpecAdapter;
 
 /**
  * Define requestType, indicating the protocol request that 

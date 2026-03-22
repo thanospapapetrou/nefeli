@@ -22,8 +22,8 @@ import org.openarchives.oai._2.OaiPmhError;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.Request;
 
-import io.github.thanospapapetrou.nefeli.OaiPmhClient;
-import io.github.thanospapapetrou.nefeli.OaiPmhException;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhException;
 import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 

@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.jaxb.adapters;
+package io.github.thanospapapetrou.nefeli.oai.pmh.jaxb;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 

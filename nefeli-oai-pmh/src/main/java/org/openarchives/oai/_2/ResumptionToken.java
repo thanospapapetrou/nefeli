@@ -11,7 +11,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantCalendarAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantCalendarAdapter;
 
 /**
  * A resumptionToken may have 3 optional attributes

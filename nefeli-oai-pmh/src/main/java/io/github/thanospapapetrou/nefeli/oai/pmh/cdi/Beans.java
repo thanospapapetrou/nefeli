@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli;
+package io.github.thanospapapetrou.nefeli.oai.pmh.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
@@ -19,10 +19,10 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-import io.github.thanospapapetrou.nefeli.jaxb.adapters.InstantStringAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
 @ApplicationScoped
-public class Configuration {
+public class Beans {
     private static final String SCHEMA_PROTOCOLS = "http,https";
 
     @Produces

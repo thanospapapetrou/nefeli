@@ -28,7 +28,7 @@ public class Beans {
     @ApplicationScoped
     @Named("workersExecutor")
     @Produces
-    public ExecutorService getWorkersExecutor(@Configuration.Property("harvester.threads") final int threads,
+    public ExecutorService getWorkersExecutor(@Configuration.Property("nefeli.harvester.threads") final int threads,
             @Named("workersThreadFactory") final ThreadFactory factory) {
         return Executors.newFixedThreadPool(threads, factory);
     }
