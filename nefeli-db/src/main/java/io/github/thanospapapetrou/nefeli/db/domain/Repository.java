@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +18,8 @@ import jakarta.persistence.Table;
 
 import org.openarchives.oai._2.DeletedRecord;
 import org.openarchives.oai._2.Granularity;
+
+import io.github.thanospapapetrou.nefeli.db.jpa.InternetAddressConverter;
 
 @Entity
 @Table(name = "\"REPOSITORY\"")
@@ -30,6 +33,7 @@ public class Repository implements Comparable<Repository> {
     private final String name;
     @CollectionTable(name = "\"REPOSITORY_ADMINS\"", joinColumns = @JoinColumn(name = "\"URL\""))
     @Column(name = "\"ADMIN\"")
+    @Convert(converter = InternetAddressConverter.class)
     @ElementCollection
     private final List<InternetAddress> admins;
     @Column(name = "\"EARLIEST\"")

@@ -98,15 +98,19 @@ public class Harvester implements AutoCloseable, Runnable {
         return identify;
     }
 
-    private CompletableFuture<Boolean> updateRepository(final OaiPmhResponse<Identify> identify) {
-        final CompletableFuture<Boolean> update = new CompletableFuture<>();
+    private CompletableFuture<Void> updateRepository(final OaiPmhResponse<Identify> identify) {
+        final CompletableFuture<Void> update = new CompletableFuture<>();
         workers.submit(() -> {
             try {
-                update.complete(repositoryDao.updateRepository(
-                        new Repository(identify.getBody().getBaseURL(), identify.getResponseDate(),
-                                identify.getBody().getRepositoryName(), identify.getBody().getAdminEmails(),
-                                identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
-                                identify.getBody().getGranularity())));
+                repositoryDao.updateRepository(new Repository(
+                        identify.getBody().getBaseURL(),
+                        identify.getResponseDate(),
+                        identify.getBody().getRepositoryName(),
+                        identify.getBody().getAdminEmails(),
+                        identify.getBody().getEarliestDatestamp(),
+                        identify.getBody().getDeletedRecord(),
+                        identify.getBody().getGranularity()));
+                update.complete(null);
                 LOGGER.fine(String.format("Updated repository %1$s", identify.getBody().getBaseURL())); // TODO
             } catch (final Exception e) {
                 LOGGER.log(Level.WARNING, String.format(ERROR_UPDATING, identify.getBody().getBaseURL()), e);

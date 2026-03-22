@@ -61,21 +61,13 @@ public class RepositoryDaoImpl implements RepositoryDao {
     }
 
     @Override
-    public boolean updateRepository(final Repository repository) throws DaoException {
+    public void updateRepository(final Repository repository) throws DaoException {
         try (final EntityManager manager = factory.createEntityManager()) {
             final EntityTransaction transaction = manager.getTransaction();
             transaction.begin();
             try {
-                final boolean update = manager.createQuery(QUERY_UPDATE_REPOSITORY)
-                        .setParameter(PARAMETER_URL, repository.getUrl())
-                        .setParameter(PARAMETER_UPDATED, repository.getUpdated())
-                        .setParameter(PARAMETER_NAME, repository.getName())
-                        .setParameter(PARAMETER_EARLIEST, repository.getEarliest())
-                        .setParameter(PARAMETER_DELETED, repository.getDeleted())
-                        .setParameter(PARAMETER_GRANULARITY, repository.getGranularity())
-                        .executeUpdate() == 1;
+                manager.merge(repository);
                 transaction.commit();
-                return update;
             } catch (final Exception e) {
                 transaction.rollback();
                 throw e;
