@@ -19,5 +19,9 @@
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.thanospapapetrou.nefeli</groupId>
+            <artifactId>nefeli-oai-pmh</artifactId>
+        </dependency>
     </dependencies>
 </project>

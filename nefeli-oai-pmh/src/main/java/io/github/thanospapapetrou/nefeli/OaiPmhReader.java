@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
@@ -21,6 +22,11 @@ import org.openarchives.oai._2.OaiPmhResponse;
 import org.xml.sax.SAXException;
 
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
+    private static final Logger LOGGER = Logger.getLogger(OaiPmhReader.class.getName());
+    private static final String WARNING_INVALID_MEDIA_TYPE = "OAI-PMH response has invalid media type %1$s";
+    private static final String WARNING_NO_CHARACTER_SET = "OAI-PMH response doesn't specify any character set";
+    private static final String WARNING_INVALID_CHARACTER_SET = "OAI-PMH response has invalid character set %1$s";
+
     private final DocumentBuilder builder;
     private final Unmarshaller unmarshaller;
 
@@ -33,10 +39,19 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     @Override
     public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations,
             final MediaType mediaType) {
-        return MediaType.TEXT_XML_TYPE.isCompatible(mediaType)
-                && mediaType.getParameters().containsKey(MediaType.CHARSET_PARAMETER)
-                && mediaType.getParameters().get(MediaType.CHARSET_PARAMETER)
-                .equalsIgnoreCase(StandardCharsets.UTF_8.name());
+        if ((!mediaType.getType().equals(MediaType.TEXT_XML_TYPE.getType()))
+                || (!mediaType.getSubtype().equals(MediaType.TEXT_XML_TYPE.getSubtype()))) {
+            LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, mediaType));
+        }
+        if (!mediaType.getParameters().containsKey(MediaType.CHARSET_PARAMETER)) {
+            LOGGER.warning(WARNING_NO_CHARACTER_SET);
+        }
+        if (!mediaType.getParameters().get(MediaType.CHARSET_PARAMETER)
+                .equalsIgnoreCase(StandardCharsets.UTF_8.name())) {
+            LOGGER.warning(String.format(WARNING_INVALID_CHARACTER_SET,
+                    mediaType.getParameters().get(MediaType.CHARSET_PARAMETER)));
+        }
+        return true;
     }
 
     @Override

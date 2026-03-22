@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.db;
+package io.github.thanospapapetrou.nefeli.db.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Disposes;
@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 @ApplicationScoped
-public class Configuration {
+public class Beans {
     private static final String PERSISTENCE_UNIT = "nefeli";
 
     @ApplicationScoped

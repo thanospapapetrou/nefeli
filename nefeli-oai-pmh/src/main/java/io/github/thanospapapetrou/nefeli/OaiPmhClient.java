@@ -117,4 +117,9 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
         }
         return response;
     }
+
+    @Override
+    public String toString() {
+        return target.getUri().toString();
+    }
 }

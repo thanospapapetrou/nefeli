@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -25,6 +24,7 @@ import org.openarchives.oai._2.Request;
 
 import io.github.thanospapapetrou.nefeli.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.OaiPmhException;
+import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 
 @Path("/test")
@@ -36,7 +36,11 @@ public class Test {
     @Produces(MediaType.TEXT_PLAIN)
     public String data() {
         final RepositoryDao dao = CDI.current().select(RepositoryDao.class).get();
-        return dao.getRepositories().toString();
+        try {
+            return dao.getRepositories().toString();
+        } catch (final DaoException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GET

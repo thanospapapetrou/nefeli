@@ -1,9 +1,12 @@
 package io.github.thanospapapetrou.nefeli.harvester;
 
+import java.net.URISyntaxException;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jakarta.annotation.PreDestroy;
@@ -11,12 +14,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.openarchives.oai._2.Identify;
+import org.openarchives.oai._2.OaiPmhResponse;
+
+import io.github.thanospapapetrou.nefeli.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.common.Configuration;
-import io.github.thanospapapetrou.nefeli.db.Repository;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
+import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 
 @ApplicationScoped
 public class Harvester implements AutoCloseable, Runnable {
+    private static final String ERROR_IDENTIFYING = "Error identifying repository %1$s";
+    private static final String ERROR_RETRIEVING = "Error retrieving repositories";
+    private static final String ERROR_UPDATING = "Error updating repository %1$s";
     private static final Logger LOGGER = Logger.getLogger(Harvester.class.getName());
     private static final String MESSAGE_HARVESTER_STARTED = "Harvester started";
     private static final String MESSAGE_HARVESTER_STOPPED = "Harvester stopped";
@@ -44,14 +54,24 @@ public class Harvester implements AutoCloseable, Runnable {
     public void run() {
         final long nanos = TimeUnit.SECONDS.toNanos(period.getSeconds()) + period.getNano();
         if (nanos > 0) {
-            scheduler.scheduleAtFixedRate(() -> repositoryDao.getRepositories().forEach(this::harvest), 0L,
-                    nanos, TimeUnit.NANOSECONDS);
+            scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    repositoryDao.getRepositories().forEach(this::harvest);
+                } catch (final Exception e) {
+                    LOGGER.log(Level.WARNING, ERROR_RETRIEVING, e);
+                }
+            }, 0L, nanos, TimeUnit.NANOSECONDS);
             LOGGER.info(MESSAGE_HARVESTER_STARTED);
         }
     }
 
     public void harvest(final Repository repository) {
-        LOGGER.info("Harvesting " + repository.getUrl()); // TODO
+        try {
+            final OaiPmhClient client = new OaiPmhClient(repository.getUrl());
+            identify(client).thenComposeAsync(this::updateRepository, workers);
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -62,5 +82,37 @@ public class Harvester implements AutoCloseable, Runnable {
         scheduler.close();
         workers.close();
         LOGGER.info(MESSAGE_HARVESTER_STOPPED);
+    }
+
+    private CompletableFuture<OaiPmhResponse<Identify>> identify(final OaiPmhClient client) {
+        final CompletableFuture<OaiPmhResponse<Identify>> identify = new CompletableFuture<>();
+        workers.submit(() -> {
+            try {
+                identify.complete(client.identify());
+                LOGGER.fine(String.format("Identified repository %1$s", client)); // TODO
+            } catch (final Exception e) {
+                LOGGER.log(Level.WARNING, String.format(ERROR_IDENTIFYING, client), e);
+                identify.completeExceptionally(e);
+            }
+        });
+        return identify;
+    }
+
+    private CompletableFuture<Boolean> updateRepository(final OaiPmhResponse<Identify> identify) {
+        final CompletableFuture<Boolean> update = new CompletableFuture<>();
+        workers.submit(() -> {
+            try {
+                update.complete(repositoryDao.updateRepository(
+                        new Repository(identify.getBody().getBaseURL(), identify.getResponseDate(),
+                                identify.getBody().getRepositoryName(), identify.getBody().getAdminEmails(),
+                                identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
+                                identify.getBody().getGranularity())));
+                LOGGER.fine(String.format("Updated repository %1$s", identify.getBody().getBaseURL())); // TODO
+            } catch (final Exception e) {
+                LOGGER.log(Level.WARNING, String.format(ERROR_UPDATING, identify.getBody().getBaseURL()), e);
+                update.completeExceptionally(e);
+            }
+        });
+        return update;
     }
 }
