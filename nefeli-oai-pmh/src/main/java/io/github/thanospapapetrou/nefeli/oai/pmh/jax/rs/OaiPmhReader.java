@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
-@Consumes({MediaType.TEXT_XML, MediaType.WILDCARD})
+@Consumes(MediaType.TEXT_XML)
 @Provider
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private static final Logger LOGGER = Logger.getLogger(OaiPmhReader.class.getName());

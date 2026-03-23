@@ -15,10 +15,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.openarchives.oai._2.Identify;
-import org.openarchives.oai._2.ListSets;
-import org.openarchives.oai._2.OaiPmhResponse;
-
 import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
@@ -73,15 +69,9 @@ public class Harvester implements AutoCloseable, Runnable {
     public void harvest(final Repository repository) {
         try {
             final OaiPmhClient client = new OaiPmhClient(repository.getUrl());
-            identify(client)
-                    .thenComposeAsync(this::updateRepository, workers)
-                    .thenComposeAsync(v -> this.listSets(client), workers)
-                    .thenComposeAsync(listSets -> {
-                        listSets.getBody().getSets().stream().forEach(set ->
-                                LOGGER.info(String.format("Processing set: %1$s %2$s", set.getSetSpec(),
-                                        set.getSetName())));
-                        return CompletableFuture.completedFuture(null);
-                    });
+            CompletableFuture.completedFuture(client)
+                    .thenComposeAsync(this::identify, workers)
+                    .thenComposeAsync(nil -> this.listSets(client, null), workers);
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -97,28 +87,48 @@ public class Harvester implements AutoCloseable, Runnable {
         LOGGER.info(MESSAGE_HARVESTER_STOPPED);
     }
 
-    private CompletableFuture<OaiPmhResponse<Identify>> identify(final OaiPmhClient client) {
-        return step(client::identify, String.format(ERROR_IDENTIFYING, client));
+    private CompletableFuture<Void> identify(final OaiPmhClient client) {
+        return step(client::identify, String.format(ERROR_IDENTIFYING, client))
+                .thenComposeAsync(identify -> step(() -> {
+                            repositoryDao.updateRepository(new Repository(
+                                    identify.getBody().getBaseURL(),
+                                    identify.getResponseDate(),
+                                    identify.getBody().getRepositoryName(),
+                                    identify.getBody().getAdminEmails(),
+                                    identify.getBody().getEarliestDatestamp(),
+                                    identify.getBody().getDeletedRecord(),
+                                    identify.getBody().getGranularity(),
+                                    identify.getBody().getCompressions()));
+                            return null;
+                        },
+                        String.format(ERROR_UPDATING, identify.getBody().getBaseURL())), workers);
     }
 
-    private CompletableFuture<Void> updateRepository(final OaiPmhResponse<Identify> identify) {
-        return step(() -> {
-                    repositoryDao.updateRepository(new Repository(
-                            identify.getBody().getBaseURL(),
-                            identify.getResponseDate(),
-                            identify.getBody().getRepositoryName(),
-                            identify.getBody().getAdminEmails(),
-                            identify.getBody().getEarliestDatestamp(),
-                            identify.getBody().getDeletedRecord(),
-                            identify.getBody().getGranularity(),
-                            identify.getBody().getCompressions()));
+    private CompletableFuture<String> listSets(final OaiPmhClient client, final String token) {
+        return step(() -> (token == null) ? client.listSets() : client.listSets(token),
+                String.format(ERROR_LISTING_SETS, client))
+                .thenComposeAsync(listSets -> {
+                    final CompletableFuture<String> batch = step(() -> {
+                        listSets.getBody().getSets().forEach(set ->
+                                LOGGER.info(String.format("Processing set: %1$s %2$s", set.getSetSpec(),
+                                        set.getSetName()))); // TODO
+                        return (listSets.getBody().getResumptionToken() == null) ? null
+                                : listSets.getBody().getResumptionToken().getValue();
+                    }, "Error updating sets");
+                    return (listSets.getBody().getResumptionToken() == null) ? batch :
+                            batch.thenComposeAsync(nextToken -> listSets(client, nextToken), workers);
+                }, workers);
+    }
+
+    private CompletableFuture<Void> listMetadataFormats(final OaiPmhClient client) {
+        return step(() -> client.listMetadataFormats(null), "Error listing metadata formats") // TODO
+                .thenComposeAsync(listMetadataFormats -> step(() -> {
+                    listMetadataFormats.getBody().getMetadataFormats().forEach(metadataFormat -> {
+                        LOGGER.info(String.format("Processing metadata format: %1$s %2$s %3$s", // TODO
+                                metadataFormat.getMetadataPrefix(), metadataFormat.getSchema(), metadataFormat.getMetadataNamespace()));
+                    });
                     return null;
-                },
-                String.format(ERROR_UPDATING, identify.getBody().getBaseURL()));
-    }
-
-    private CompletableFuture<OaiPmhResponse<ListSets>> listSets(final OaiPmhClient client) {
-        return step(client::listSets, String.format(ERROR_LISTING_SETS, client));
+                }, "Error updating metadata formats"), workers); // TODO
     }
 
     private <T> CompletableFuture<T> step(final Callable<T> step, final String error) {
