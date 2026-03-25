@@ -29,6 +29,8 @@ public class Repository implements Comparable<Repository> {
     private final URL url;
     @Column(name = "\"UPDATED\"")
     private final Instant updated;
+    @Column(name = "\"ERROR\"")
+    private final String error;
     @Column(name = "\"NAME\"")
     private final String name;
     @CollectionTable(name = "\"REPOSITORY_ADMINS\"", joinColumns = @JoinColumn(name = "\"URL\""))
@@ -50,11 +52,13 @@ public class Repository implements Comparable<Repository> {
     private final List<String> compressions;
     // TODO descriptions
 
-    public Repository(final URL url, final Instant updated, final String name, final List<InternetAddress> admins,
+    public Repository(final URL url, final Instant updated, final String error, final String name,
+            final List<InternetAddress> admins,
             final Instant earliest, final DeletedRecord deleted, final Granularity granularity,
             final List<String> compressions) {
         this.url = url;
         this.updated = updated;
+        this.error = error;
         this.name = name;
         this.admins = admins;
         this.earliest = earliest;
@@ -64,7 +68,7 @@ public class Repository implements Comparable<Repository> {
     }
 
     private Repository() {
-        this(null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null);
     }
 
     public URL getUrl() {
@@ -73,6 +77,10 @@ public class Repository implements Comparable<Repository> {
 
     public Instant getUpdated() {
         return updated;
+    }
+
+    public String getError() {
+        return error;
     }
 
     public String getName() {

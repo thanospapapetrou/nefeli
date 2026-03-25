@@ -1,7 +1,10 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh;
 
+import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
+
+import jakarta.ws.rs.WebApplicationException;
 
 import org.openarchives.oai._2.GetRecord;
 import org.openarchives.oai._2.Identify;
@@ -21,23 +24,28 @@ interface OaiPmh {
     String ARGUMENT_UNTIL = "until";
     String ARGUMENT_VERB = "verb";
 
-    OaiPmhResponse<Identify> identify() throws OaiPmhException;
+    OaiPmhResponse<Identify> identify() throws IOException, OaiPmhException, WebApplicationException;
 
-    OaiPmhResponse<ListMetadataFormats> listMetadataFormats(final URI identifier) throws OaiPmhException;
+    OaiPmhResponse<ListMetadataFormats> listMetadataFormats(final URI identifier)
+            throws IOException, OaiPmhException, WebApplicationException;
 
-    OaiPmhResponse<ListSets> listSets() throws OaiPmhException;
+    OaiPmhResponse<ListSets> listSets() throws IOException, OaiPmhException, WebApplicationException;
 
-    OaiPmhResponse<ListSets> listSets(final String resumptionToken) throws OaiPmhException;
+    OaiPmhResponse<ListSets> listSets(final String resumptionToken)
+            throws IOException, OaiPmhException, WebApplicationException;
 
     OaiPmhResponse<ListIdentifiers> listIdentifiers(final String metadataPrefix, final Instant from,
-            final Instant until, final SetSpec set) throws OaiPmhException;
+            final Instant until, final SetSpec set) throws IOException, OaiPmhException, WebApplicationException;
 
-    OaiPmhResponse<ListIdentifiers> listIdentifiers(final String resumptionToken) throws OaiPmhException;
+    OaiPmhResponse<ListIdentifiers> listIdentifiers(final String resumptionToken)
+            throws IOException, OaiPmhException, WebApplicationException;
 
     OaiPmhResponse<ListRecords> listRecords(final String metadataPrefix, final Instant from, final Instant until,
-            final SetSpec set) throws OaiPmhException;
+            final SetSpec set) throws IOException, OaiPmhException, WebApplicationException;
 
-    OaiPmhResponse<ListRecords> listRecords(final String resumptionToken) throws OaiPmhException;
+    OaiPmhResponse<ListRecords> listRecords(final String resumptionToken)
+            throws IOException, OaiPmhException, WebApplicationException;
 
-    OaiPmhResponse<GetRecord> getRecord(final String metadataPrefix, final URI identifier) throws OaiPmhException;
+    OaiPmhResponse<GetRecord> getRecord(final String metadataPrefix, final URI identifier)
+            throws IOException, OaiPmhException, WebApplicationException;
 }

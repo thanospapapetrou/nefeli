@@ -1,6 +1,14 @@
 package io.github.thanospapapetrou.nefeli.harvester;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.ConnectException;
+import java.net.SocketException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.time.Clock;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -14,42 +22,48 @@ import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.WebApplicationException;
 
 import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
 
 @ApplicationScoped
 public class Harvester implements AutoCloseable, Runnable {
+    private static final String ERROR_HTTP = "HTTP %1$d";
     private static final String ERROR_IDENTIFYING = "Error identifying repository %1$s";
     private static final String ERROR_LISTING_SETS = "Error listing sets of repository %1$s";
     private static final String ERROR_RETRIEVING = "Error retrieving repositories";
     private static final String ERROR_UPDATING = "Error updating repository %1$s";
+    private static final String FORMAT_ERROR_NON_TRIVIAL = "%1$s%n%2$s";
+    private static final String FORMAT_ERROR_TRIVIAL = "%1$s: %2$s";
     private static final Logger LOGGER = Logger.getLogger(Harvester.class.getName());
     private static final String MESSAGE_HARVESTER_STARTED = "Harvester started";
     private static final String MESSAGE_HARVESTER_STOPPED = "Harvester stopped";
-    private static final String MESSAGE_IDENTIFIED = "Identified repository %1$s";
-    private static final String MESSAGE_UPDATED_REPOSITORY = "Updated repository %1$s";
 
     private final RepositoryDao repositoryDao;
     private final ScheduledExecutorService scheduler;
     private final ExecutorService workers;
+    private final Clock clock;
     private final Duration period;
 
     @Inject
     public Harvester(final RepositoryDao repositoryDao,
             @Named("schedulerExecutor") final ScheduledExecutorService scheduler,
-            @Named("workersExecutor") final ExecutorService workers,
+            @Named("workersExecutor") final ExecutorService workers, final Clock clock,
             @Configuration.Property("nefeli.harvester.period") final Duration period) {
         this.repositoryDao = repositoryDao;
         this.scheduler = scheduler;
         this.workers = workers;
+        this.clock = clock;
         this.period = period;
     }
 
     Harvester() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
     public void run() {
@@ -88,25 +102,20 @@ public class Harvester implements AutoCloseable, Runnable {
     }
 
     private CompletableFuture<Void> identify(final OaiPmhClient client) {
-        return step(client::identify, String.format(ERROR_IDENTIFYING, client))
+        return step(client::identify, client, String.format(ERROR_IDENTIFYING, client.getUrl()))
                 .thenComposeAsync(identify -> step(() -> {
-                            repositoryDao.updateRepository(new Repository(
-                                    identify.getBody().getBaseURL(),
-                                    identify.getResponseDate(),
-                                    identify.getBody().getRepositoryName(),
-                                    identify.getBody().getAdminEmails(),
-                                    identify.getBody().getEarliestDatestamp(),
-                                    identify.getBody().getDeletedRecord(),
-                                    identify.getBody().getGranularity(),
-                                    identify.getBody().getCompressions()));
-                            return null;
-                        },
-                        String.format(ERROR_UPDATING, identify.getBody().getBaseURL())), workers);
+                    repositoryDao.updateRepository(
+                            new Repository(identify.getBody().getBaseURL(), identify.getResponseDate(), null,
+                                    identify.getBody().getRepositoryName(), identify.getBody().getAdminEmails(),
+                                    identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
+                                    identify.getBody().getGranularity(), identify.getBody().getCompressions()));
+                    return null;
+                }, client, String.format(ERROR_UPDATING, identify.getBody().getBaseURL())), workers);
     }
 
     private CompletableFuture<String> listSets(final OaiPmhClient client, final String token) {
-        return step(() -> (token == null) ? client.listSets() : client.listSets(token),
-                String.format(ERROR_LISTING_SETS, client))
+        return step(() -> (token == null) ? client.listSets() : client.listSets(token), client,
+                String.format(ERROR_LISTING_SETS, client.getUrl()))
                 .thenComposeAsync(listSets -> {
                     final CompletableFuture<String> batch = step(() -> {
                         listSets.getBody().getSets().forEach(set ->
@@ -114,33 +123,66 @@ public class Harvester implements AutoCloseable, Runnable {
                                         set.getSetName()))); // TODO
                         return (listSets.getBody().getResumptionToken() == null) ? null
                                 : listSets.getBody().getResumptionToken().getValue();
-                    }, "Error updating sets");
+                    }, client, "Error updating sets");
                     return (listSets.getBody().getResumptionToken() == null) ? batch :
                             batch.thenComposeAsync(nextToken -> listSets(client, nextToken), workers);
                 }, workers);
     }
 
     private CompletableFuture<Void> listMetadataFormats(final OaiPmhClient client) {
-        return step(() -> client.listMetadataFormats(null), "Error listing metadata formats") // TODO
+        return step(() -> client.listMetadataFormats(null), client, "Error listing metadata formats") // TODO
                 .thenComposeAsync(listMetadataFormats -> step(() -> {
                     listMetadataFormats.getBody().getMetadataFormats().forEach(metadataFormat -> {
                         LOGGER.info(String.format("Processing metadata format: %1$s %2$s %3$s", // TODO
                                 metadataFormat.getMetadataPrefix(), metadataFormat.getSchema(), metadataFormat.getMetadataNamespace()));
                     });
                     return null;
-                }, "Error updating metadata formats"), workers); // TODO
+                }, client, "Error updating metadata formats"), workers); // TODO
     }
 
-    private <T> CompletableFuture<T> step(final Callable<T> step, final String error) {
+    private <T> CompletableFuture<T> step(final Callable<T> step, final OaiPmhClient client, final String error) {
         final CompletableFuture<T> future = new CompletableFuture<>();
         workers.submit(() -> {
             try {
                 future.complete(step.call());
             } catch (final Exception e) {
-                LOGGER.log(Level.WARNING, error, e);
+                final String trivial = getTrivialError(e);
+                if (trivial != null) {
+                    LOGGER.log(Level.WARNING, String.format(FORMAT_ERROR_TRIVIAL, error, trivial));
+                    setRepositoryError(client.getUrl(), trivial);
+                } else {
+                    LOGGER.log(Level.WARNING, error, e);
+                    final StringWriter stackTrace = new StringWriter();
+                    e.printStackTrace(new PrintWriter(stackTrace, true));
+                    setRepositoryError(client.getUrl(),
+                            String.format(FORMAT_ERROR_NON_TRIVIAL, e.getMessage(), stackTrace));
+                }
                 future.completeExceptionally(e);
             }
         });
         return future;
+    }
+
+    public String getTrivialError(final Exception e) {
+        if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
+                && ((e.getCause().getCause() instanceof UnknownHostException)
+                || (e.getCause().getCause() instanceof ConnectException)
+                || (e.getCause().getCause() instanceof SocketException))) {
+            return e.getCause().getCause().getClass().getSimpleName();
+        } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException) && (e.getCause()
+                .getCause() instanceof ConnectException)) {
+            return ConnectException.class.getSimpleName();
+        } else if (e instanceof WebApplicationException) {
+            return String.format(ERROR_HTTP, ((WebApplicationException) e).getResponse().getStatus());
+        }
+        return null;
+    }
+
+    private void setRepositoryError(final URL url, final String error) {
+        try {
+            repositoryDao.updateRepository(
+                    new Repository(url, clock.instant(), error, null, null, null, null, null, null));
+        } catch (final DaoException e) {
+        }
     }
 }

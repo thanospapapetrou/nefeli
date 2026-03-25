@@ -1,5 +1,6 @@
 package io.github.thanospapapetrou.nefeli.web;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,7 +52,7 @@ public class Test {
                 URI.create(BASE_URL).toURL())) {
             final OaiPmhResponse<Identify> response = client.identify();
             return formatResponse(response, this::formatIdentify);
-        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
+        } catch (final IOException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }
@@ -80,7 +81,7 @@ public class Test {
                             + "\tSchema: " + format.getSchema() + "\n"
                             + "\tNamespace: " + format.getMetadataNamespace() + "\n")
                     .collect(Collectors.joining());
-        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
+        } catch (final IOException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }
@@ -114,7 +115,7 @@ public class Test {
                             + "\tComplete List Size: " + response.getBody().getResumptionToken().getCompleteListSize()
                             + "\n"
                             + "\tCursor: " + response.getBody().getResumptionToken().getCursor() + "\n"));
-        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
+        } catch (final IOException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }
@@ -151,7 +152,7 @@ public class Test {
                             + "\tComplete List Size: " + response.getBody().getResumptionToken().getCompleteListSize()
                             + "\n"
                             + "\tCursor: " + response.getBody().getResumptionToken().getCursor() + "\n")));
-        } catch (final MalformedURLException | URISyntaxException | OaiPmhException e) {
+        } catch (final IOException | URISyntaxException | OaiPmhException e) {
             return null;
         }
     }

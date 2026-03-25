@@ -1,5 +1,6 @@
 package io.github.thanospapapetrou.nefeli.harvester.cdi;
 
+import java.time.Clock;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,6 +32,12 @@ public class Beans {
     public ExecutorService getWorkersExecutor(@Configuration.Property("nefeli.harvester.threads") final int threads,
             @Named("workersThreadFactory") final ThreadFactory factory) {
         return Executors.newFixedThreadPool(threads, factory);
+    }
+
+    @ApplicationScoped
+    @Produces
+    public Clock getClock() {
+        return Clock.systemUTC();
     }
 
     @ApplicationScoped

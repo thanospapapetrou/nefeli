@@ -29,6 +29,7 @@ import jakarta.xml.bind.annotation.XmlValue;
     "value"
 })
 public class OaiPmhError {
+    private static final String FORMAT = "%1$s (%2$s)";
 
     @XmlValue
     private final String value;
@@ -50,5 +51,10 @@ public class OaiPmhError {
 
     public OaiPmhErrorCode getCode() {
         return code;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(value, code);
     }
 }
