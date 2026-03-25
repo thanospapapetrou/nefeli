@@ -10,3 +10,8 @@ mvn dependency:get com.sun.xml.bind:jaxb-xjc:4.0.6
 
 TODO
 cleanup db
+handle HTTP
+202 Accepted
+503 Service Unavailable
+400 Bad Request
+
