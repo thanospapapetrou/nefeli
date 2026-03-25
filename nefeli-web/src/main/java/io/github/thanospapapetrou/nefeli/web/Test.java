@@ -1,7 +1,6 @@
 package io.github.thanospapapetrou.nefeli.web;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.function.Function;
@@ -11,6 +10,7 @@ import jakarta.enterprise.inject.spi.CDI;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import org.openarchives.oai._2.Description;
@@ -23,10 +23,10 @@ import org.openarchives.oai._2.OaiPmhError;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.Request;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
-import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhException;
 import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhException;
 
 @Path("/test")
 public class Test {
@@ -35,10 +35,25 @@ public class Test {
     @GET
     @Path("/data")
     @Produces(MediaType.TEXT_PLAIN)
-    public String data() {
+    public String data(@QueryParam("offset") final int offset, @QueryParam("limit") final int limit) {
         final RepositoryDao dao = CDI.current().select(RepositoryDao.class).get();
         try {
-            return dao.getRepositories().toString();
+            return dao.getRepositories(offset, limit).stream()
+                    .map(repository ->
+                            (repository.getError() == null)
+                            ? ("INSERT INTO \"REPOSITORY\"(\"URL\") SELECT '"
+                                + repository.getUrl()
+                                + "' WHERE NOT EXISTS (SELECT 1 FROM \"REPOSITORY\" WHERE \"URL\" = '"
+                                + repository.getUrl()
+                                + "');\n")
+                            : ("INSERT INTO \"REPOSITORY\"(\"URL\", \"ERROR\") SELECT '"
+                                + repository.getUrl()
+                                + "', '"
+                                + repository.getError()
+                                + "' WHERE NOT EXISTS (SELECT 1 FROM \"REPOSITORY\" WHERE \"URL\" = '"
+                                + repository.getUrl()
+                                + "');\n"))
+                    .collect(Collectors.joining());
         } catch (final DaoException e) {
             throw new RuntimeException(e);
         }

@@ -18,15 +18,14 @@ public class NefeliErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(final SAXParseException exception) {
-        LOGGER.log(Level.WARNING, String.format(PARSING_WARNING, exception.getPublicId(), exception.getSystemId(),
-                exception.getLineNumber(), exception.getColumnNumber(), exception.getMessage()), exception);
+        LOGGER.warning(String.format(PARSING_WARNING, exception.getPublicId(), exception.getSystemId(),
+                exception.getLineNumber(), exception.getColumnNumber(), exception.getMessage()));
     }
 
     @Override
     public void error(final SAXParseException exception) throws SAXException {
-        LOGGER.log(Level.WARNING, String.format(PARSING_ERROR, exception.getPublicId(), exception.getSystemId(),
-                exception.getLineNumber(), exception.getColumnNumber(), exception.getMessage()), exception);
-        throw exception;
+        LOGGER.warning(String.format(PARSING_ERROR, exception.getPublicId(), exception.getSystemId(),
+                exception.getLineNumber(), exception.getColumnNumber(), exception.getMessage()));
     }
 
     @Override

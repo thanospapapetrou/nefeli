@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.time.Clock;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -25,6 +26,8 @@ import jakarta.inject.Named;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
+import javax.net.ssl.SSLHandshakeException;
+
 import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
@@ -38,8 +41,7 @@ public class Harvester implements AutoCloseable, Runnable {
     private static final String ERROR_LISTING_SETS = "Error listing sets of repository %1$s";
     private static final String ERROR_RETRIEVING = "Error retrieving repositories";
     private static final String ERROR_UPDATING = "Error updating repository %1$s";
-    private static final String FORMAT_ERROR_NON_TRIVIAL = "%1$s%n%2$s";
-    private static final String FORMAT_ERROR_TRIVIAL = "%1$s: %2$s";
+    private static final String FORMAT_ERROR_UNRECOVERABLE = "%1$s (%2$s)";
     private static final Logger LOGGER = Logger.getLogger(Harvester.class.getName());
     private static final String MESSAGE_HARVESTER_STARTED = "Harvester started";
     private static final String MESSAGE_HARVESTER_STOPPED = "Harvester stopped";
@@ -49,21 +51,24 @@ public class Harvester implements AutoCloseable, Runnable {
     private final ExecutorService workers;
     private final Clock clock;
     private final Duration period;
+    private final int batch;
 
     @Inject
     public Harvester(final RepositoryDao repositoryDao,
             @Named("schedulerExecutor") final ScheduledExecutorService scheduler,
             @Named("workersExecutor") final ExecutorService workers, final Clock clock,
-            @Configuration.Property("nefeli.harvester.period") final Duration period) {
+            @Configuration.Property("nefeli.harvester.period") final Duration period,
+            @Configuration.Property("nefeli.harvester.batch") final int batch) {
         this.repositoryDao = repositoryDao;
         this.scheduler = scheduler;
         this.workers = workers;
         this.clock = clock;
         this.period = period;
+        this.batch = batch;
     }
 
     Harvester() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, 0);
     }
 
     public void run() {
@@ -71,7 +76,13 @@ public class Harvester implements AutoCloseable, Runnable {
         if (nanos > 0) {
             scheduler.scheduleAtFixedRate(() -> {
                 try {
-                    repositoryDao.getRepositories().forEach(this::harvest);
+                    int offset = 0;
+                    List<Repository> repositories;
+                    do {
+                        repositories = repositoryDao.getHarvestRepositories(offset, batch);
+                        repositories.forEach(this::harvest);
+                        offset += batch;
+                    } while (repositories.size() == batch);
                 } catch (final Exception e) {
                     LOGGER.log(Level.WARNING, ERROR_RETRIEVING, e);
                 }
@@ -85,7 +96,8 @@ public class Harvester implements AutoCloseable, Runnable {
             final OaiPmhClient client = new OaiPmhClient(repository.getUrl());
             CompletableFuture.completedFuture(client)
                     .thenComposeAsync(this::identify, workers)
-                    .thenComposeAsync(nil -> this.listSets(client, null), workers);
+            // TODO .thenComposeAsync(nil -> this.listSets(client, null), workers)
+            ;
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -104,7 +116,7 @@ public class Harvester implements AutoCloseable, Runnable {
     private CompletableFuture<Void> identify(final OaiPmhClient client) {
         return step(client::identify, client, String.format(ERROR_IDENTIFYING, client.getUrl()))
                 .thenComposeAsync(identify -> step(() -> {
-                    repositoryDao.updateRepository(
+                    repositoryDao.update(
                             new Repository(identify.getBody().getBaseURL(), identify.getResponseDate(), null,
                                     identify.getBody().getRepositoryName(), identify.getBody().getAdminEmails(),
                                     identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
@@ -146,16 +158,14 @@ public class Harvester implements AutoCloseable, Runnable {
             try {
                 future.complete(step.call());
             } catch (final Exception e) {
-                final String trivial = getTrivialError(e);
-                if (trivial != null) {
-                    LOGGER.log(Level.WARNING, String.format(FORMAT_ERROR_TRIVIAL, error, trivial));
-                    setRepositoryError(client.getUrl(), trivial);
+                final String unrecoverable = getUnrecoverableError(e);
+                if (unrecoverable != null) {
+                    LOGGER.log(Level.WARNING, String.format(FORMAT_ERROR_UNRECOVERABLE, error, unrecoverable));
+                    setRepositoryError(client.getUrl(), unrecoverable);
                 } else {
                     LOGGER.log(Level.WARNING, error, e);
                     final StringWriter stackTrace = new StringWriter();
                     e.printStackTrace(new PrintWriter(stackTrace, true));
-                    setRepositoryError(client.getUrl(),
-                            String.format(FORMAT_ERROR_NON_TRIVIAL, e.getMessage(), stackTrace));
                 }
                 future.completeExceptionally(e);
             }
@@ -163,11 +173,12 @@ public class Harvester implements AutoCloseable, Runnable {
         return future;
     }
 
-    public String getTrivialError(final Exception e) {
+    public String getUnrecoverableError(final Exception e) {
         if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
                 && ((e.getCause().getCause() instanceof UnknownHostException)
                 || (e.getCause().getCause() instanceof ConnectException)
-                || (e.getCause().getCause() instanceof SocketException))) {
+                || (e.getCause().getCause() instanceof SocketException)
+                || (e.getCause().getCause() instanceof SSLHandshakeException))) {
             return e.getCause().getCause().getClass().getSimpleName();
         } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException) && (e.getCause()
                 .getCause() instanceof ConnectException)) {
@@ -180,7 +191,7 @@ public class Harvester implements AutoCloseable, Runnable {
 
     private void setRepositoryError(final URL url, final String error) {
         try {
-            repositoryDao.updateRepository(
+            repositoryDao.update(
                     new Repository(url, clock.instant(), error, null, null, null, null, null, null));
         } catch (final DaoException e) {
         }
