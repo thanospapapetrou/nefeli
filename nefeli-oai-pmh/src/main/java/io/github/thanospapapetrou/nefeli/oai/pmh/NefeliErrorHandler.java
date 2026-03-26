@@ -18,6 +18,7 @@ public class NefeliErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(final SAXParseException exception) {
+        // TODO somehow include URL in these messages
         LOGGER.warning(String.format(PARSING_WARNING, exception.getLineNumber(), exception.getColumnNumber(),
                 exception.getMessage()));
     }

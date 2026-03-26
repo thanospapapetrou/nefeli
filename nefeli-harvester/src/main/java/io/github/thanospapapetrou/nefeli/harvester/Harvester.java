@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ConnectException;
+import java.net.HttpRetryException;
 import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -18,8 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,18 +30,26 @@ import jakarta.ws.rs.WebApplicationException;
 
 import javax.net.ssl.SSLHandshakeException;
 
+import org.openarchives.oai._2.OaiPmhError;
+import org.openarchives.oai._2.OaiPmhErrorCode;
+
 import io.github.thanospapapetrou.nefeli.common.Configuration;
 import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
+import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhException;
+import io.github.thanospapapetrou.nefeli.oai.pmh.UnsupportedMediaTypeException;
 
 @ApplicationScoped
 public class Harvester implements AutoCloseable, Runnable {
+    private static final String DELIMITER = "\n";
     private static final String ERROR_HTTP = "HTTP %1$d";
     private static final String ERROR_IDENTIFYING = "Error identifying repository %1$s";
     private static final String ERROR_LISTING_SETS = "Error listing sets of repository %1$s";
+    private static final String ERROR_REDIRECT = "HTTP %1$d %2$s";
     private static final String ERROR_RETRIEVING = "Error retrieving repositories";
+    private static final String ERROR_SETTING_ERROR = "Error setting error for repository %1$s";
     private static final String ERROR_UPDATING = "Error updating repository %1$s";
     private static final String FORMAT_ERROR_UNRECOVERABLE = "%1$s (%2$s)";
     private static final Logger LOGGER = Logger.getLogger(Harvester.class.getName());
@@ -176,29 +184,32 @@ public class Harvester implements AutoCloseable, Runnable {
     }
 
     public String getUnrecoverableError(final Exception e) {
-        final Pattern pattern = Pattern.compile("^MessageBodyReader not found for media type=(.+), type=class org\\.openarchives\\.oai\\._2\\.OaiPmhResponse, genericType=org\\.openarchives\\.oai\\._2\\.OaiPmhResponse<T>\\.$"); // TODO
-        if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
+        if (e instanceof OaiPmhException o) {
+            return o.getErrors().stream()
+                    .map(OaiPmhError::getCode)
+                    .map(OaiPmhErrorCode::toString)
+                    .collect(Collectors.joining(DELIMITER));
+        } else if (e instanceof WebApplicationException w) {
+            return String.format(ERROR_HTTP, w.getResponse().getStatus());
+        } else if (e instanceof UnsupportedMediaTypeException u) {
+            return u.getMediaType().toString();
+        } else if (e instanceof HttpRetryException r) {
+            return String.format(ERROR_REDIRECT, r.responseCode(), r.getLocation());
+        } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
                 && ((e.getCause().getCause() instanceof UnknownHostException)
                 || (e.getCause().getCause() instanceof ConnectException)
                 || (e.getCause().getCause() instanceof SocketException)
                 || (e.getCause().getCause() instanceof SSLHandshakeException))) {
             return e.getCause().getCause().getClass().getSimpleName();
-        } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)) {
-            final Matcher matcher = pattern.matcher(e.getCause().getMessage());
-//            if (matcher.matches()) { TODO
-//                return matcher.group(1);
-//            }
-        } else if (e instanceof WebApplicationException) {
-            return String.format(ERROR_HTTP, ((WebApplicationException) e).getResponse().getStatus());
         }
         return null;
     }
 
     private void setRepositoryError(final URL url, final String error) {
         try {
-            repositoryDao.update(
-                    new Repository(url, clock.instant(), error, null, null, null, null, null, null));
+            repositoryDao.update(new Repository(url, clock.instant(), error, null, null, null, null, null, null));
         } catch (final DaoException e) {
+            LOGGER.warning(String.format(ERROR_SETTING_ERROR, url));
         }
     }
 }

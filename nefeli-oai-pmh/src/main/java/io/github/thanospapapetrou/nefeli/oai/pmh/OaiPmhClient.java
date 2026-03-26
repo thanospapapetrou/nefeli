@@ -1,6 +1,7 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh;
 
 import java.io.IOException;
+import java.net.HttpRetryException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -162,11 +163,16 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
                         new OaiPmhClient(new URI(httpResponse.getLocation().toString()).toURL())) {
                     return client.request(verb, arguments);
                 } catch (final MalformedURLException | URISyntaxException e) {
-                    throw new IOException(String.format(ERROR_REDIRECTING, httpResponse.getLocation()), e);
+                    throw new HttpRetryException(ERROR_REDIRECTING, httpResponse.getStatus(),
+                            httpResponse.getLocation().toString());
                 }
             }
             if (httpResponse.getStatus() != Response.Status.OK.getStatusCode()) {
                 throw new WebApplicationException(httpResponse.getStatus());
+            }
+            if ((!httpResponse.getMediaType().isCompatible(MediaType.TEXT_XML_TYPE))
+                    && (!httpResponse.getMediaType().isCompatible(MediaType.APPLICATION_XML_TYPE))) {
+                throw new UnsupportedMediaTypeException(httpResponse.getMediaType());
             }
             final OaiPmhResponse<T> oaiPmhResponse = httpResponse.readEntity(new GenericType<>() {
             });
