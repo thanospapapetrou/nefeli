@@ -15,6 +15,9 @@ import org.openarchives.oai._2.ListSets;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.SetSpec;
 
+/**
+ * <a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH 2.0</a>
+ */
 interface OaiPmh {
     String ARGUMENT_IDENTIFIER = "identifier";
     String ARGUMENT_FROM = "from";

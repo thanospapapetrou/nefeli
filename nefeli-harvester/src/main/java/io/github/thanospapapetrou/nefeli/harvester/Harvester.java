@@ -18,6 +18,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -174,15 +176,18 @@ public class Harvester implements AutoCloseable, Runnable {
     }
 
     public String getUnrecoverableError(final Exception e) {
+        final Pattern pattern = Pattern.compile("^MessageBodyReader not found for media type=(.+), type=class org\\.openarchives\\.oai\\._2\\.OaiPmhResponse, genericType=org\\.openarchives\\.oai\\._2\\.OaiPmhResponse<T>\\.$"); // TODO
         if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
                 && ((e.getCause().getCause() instanceof UnknownHostException)
                 || (e.getCause().getCause() instanceof ConnectException)
                 || (e.getCause().getCause() instanceof SocketException)
                 || (e.getCause().getCause() instanceof SSLHandshakeException))) {
             return e.getCause().getCause().getClass().getSimpleName();
-        } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException) && (e.getCause()
-                .getCause() instanceof ConnectException)) {
-            return ConnectException.class.getSimpleName();
+        } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)) {
+            final Matcher matcher = pattern.matcher(e.getCause().getMessage());
+//            if (matcher.matches()) { TODO
+//                return matcher.group(1);
+//            }
         } else if (e instanceof WebApplicationException) {
             return String.format(ERROR_HTTP, ((WebApplicationException) e).getResponse().getStatus());
         }

@@ -15,7 +15,6 @@ import jakarta.enterprise.inject.spi.CDI;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ResponseProcessingException;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -36,8 +35,7 @@ import org.openarchives.oai._2.Verb;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhReader;
 
 public class OaiPmhClient implements OaiPmh, AutoCloseable {
-    private static final String ERROR_SENDING_REQUEST = "Error sending HTTP request";
-    private static final String ERROR_PARSING_RESPONSE = "Error parsing HTTP response";
+    private static final String ERROR_SENDING_REQUEST = "Error sending OAI-PMH request";
     private static final String ERROR_REDIRECTING = "Error redirecting to %1$s";
     private static final String HEADER_FROM = "From";
 
@@ -176,8 +174,6 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
                 throw new OaiPmhException(oaiPmhResponse.getErrors());
             }
             return oaiPmhResponse;
-        } catch (final ResponseProcessingException e) {
-            throw new IOException(ERROR_PARSING_RESPONSE, e);
         } catch (final ProcessingException e) {
             throw new IOException(ERROR_SENDING_REQUEST, e);
         }
