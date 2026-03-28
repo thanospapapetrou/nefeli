@@ -1,5 +1,8 @@
 package org.openarchives.oai._2;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -38,8 +41,12 @@ public enum Granularity {
         this.formatter = formatter;
     }
 
-    public DateTimeFormatter getFormatter() {
-        return formatter;
+    public String format(final Instant instant) {
+        return (instant == null) ? null : formatter.format(instant);
+    }
+
+    public Instant parse(final String string) {
+        return (string == null) ? null : LocalDateTime.parse(string, formatter).toInstant(ZoneOffset.UTC);
     }
 
     @Override

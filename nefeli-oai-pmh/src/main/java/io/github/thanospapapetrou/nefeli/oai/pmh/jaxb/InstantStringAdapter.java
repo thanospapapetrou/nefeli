@@ -1,8 +1,6 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh.jaxb;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
@@ -16,9 +14,13 @@ public class InstantStringAdapter extends XmlAdapter<String, Instant> {
         this.granularity = granularity;
     }
 
+    InstantStringAdapter() {
+        this(null);
+    }
+
     @Override
     public String marshal(final Instant instant) {
-        return granularity.getFormatter().format(instant);
+        return (instant == null) ? null : granularity.format(instant);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class InstantStringAdapter extends XmlAdapter<String, Instant> {
     }
 
     private Instant unmarshal(final String string, final Granularity granularity) throws DateTimeParseException {
-        return (string == null) ? null : LocalDateTime.parse(string, granularity.getFormatter()).toInstant(ZoneOffset.UTC);
+        return (string == null) ? null : granularity.parse(string);
     }
 
 }

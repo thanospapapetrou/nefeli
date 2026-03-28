@@ -38,7 +38,7 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
 
     public OaiPmhReader(final Granularity granularity) {
         this(CDI.current().select(DocumentBuilder.class).get(), CDI.current().select(Unmarshaller.class).get(),
-                granularity);
+                granularity); // TODO fix injection
     }
 
     private OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller,

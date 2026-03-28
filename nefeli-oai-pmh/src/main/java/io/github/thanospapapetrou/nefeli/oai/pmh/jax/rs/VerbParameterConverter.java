@@ -2,10 +2,12 @@ package io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs;
 
 import java.util.Arrays;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.ext.ParamConverter;
 
 import org.openarchives.oai._2.Verb;
 
+@ApplicationScoped
 public class VerbParameterConverter implements ParamConverter<Verb> {
     @Override
     public Verb fromString(final String string) {

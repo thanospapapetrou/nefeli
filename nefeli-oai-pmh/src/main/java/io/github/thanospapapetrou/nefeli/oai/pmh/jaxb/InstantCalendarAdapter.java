@@ -3,13 +3,15 @@ package io.github.thanospapapetrou.nefeli.oai.pmh.jaxb;
 import java.time.Instant;
 import java.util.GregorianCalendar;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+@ApplicationScoped
 public class InstantCalendarAdapter extends XmlAdapter<XMLGregorianCalendar, Instant> {
-    private static final DatatypeFactory FACTORY = DatatypeFactory.newDefaultInstance();
+    private static final DatatypeFactory FACTORY = DatatypeFactory.newDefaultInstance(); // TODO inject
 
     @Override
     public XMLGregorianCalendar marshal(final Instant instant) {

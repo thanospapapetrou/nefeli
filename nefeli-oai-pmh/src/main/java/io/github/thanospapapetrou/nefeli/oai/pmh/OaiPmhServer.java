@@ -61,7 +61,7 @@ public class OaiPmhServer implements OaiPmh {
     }
 
     @GET
-    @Path("/oai-pmh")
+    @Path("/")
     @Produces("text/xml; charset=UTF-8")
     public OaiPmhResponse<? extends OaiPmhBody> respond(
             @QueryParam(ARGUMENT_VERB) final Verb verb,
@@ -72,12 +72,8 @@ public class OaiPmhServer implements OaiPmh {
             @QueryParam(ARGUMENT_SET) final SetSpec set,
             @QueryParam(ARGUMENT_RESUMPTION_TOKEN) final String resumptionToken
     ) throws MalformedURLException {
-        final Instant time = clock.instant();
-        final Request request =
-                new Request(info.getBaseUri().toURL(), verb, identifier, metadataPrefix, from, until, set,
-                        resumptionToken);
         try {
-            return new OaiPmhResponse<>(time, request, (Identify) (switch (verb) {
+            return switch (verb) {
                 case IDENTIFY -> identify();
                 case LIST_METADATA_FORMATS -> listMetadataFormats(identifier);
                 case LIST_SETS -> (resumptionToken == null) ? listSets() : listSets(resumptionToken);
@@ -86,16 +82,19 @@ public class OaiPmhServer implements OaiPmh {
                 case LIST_RECORDS -> (resumptionToken == null) ? listRecords(metadataPrefix, from, until, set)
                         : listRecords(resumptionToken);
                 case GET_RECORD -> getRecord(metadataPrefix, identifier);
-            }).getBody());
+            };
         } catch (final OaiPmhException e) {
-            return new OaiPmhResponse<>(time, request, e.getErrors());
+            return new OaiPmhResponse<>(clock.instant(),
+                    new Request(info.getBaseUri().toURL(), verb, identifier, metadataPrefix, from, until, set,
+                            resumptionToken), e.getErrors());
         }
     }
 
     @Override
     public OaiPmhResponse<Identify> identify() throws OaiPmhException {
         try {
-            return new OaiPmhResponse<>(null, null,
+            return new OaiPmhResponse<>(clock.instant(), new Request(info.getBaseUri().toURL(), Verb.IDENTIFY, null,
+                    null, null, null, null, null),
                     new Identify(repositoryName, info.getBaseUri().toURL(), adminEmails, Instant.EPOCH, deletedRecord,
                             granularity, compressions, List.of())); // TODO earliest and description
         } catch (final MalformedURLException e) {

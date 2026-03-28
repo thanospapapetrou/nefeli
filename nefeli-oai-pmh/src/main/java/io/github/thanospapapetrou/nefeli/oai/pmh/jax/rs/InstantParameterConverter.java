@@ -2,24 +2,35 @@ package io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs;
 
 import java.time.Instant;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.ext.ParamConverter;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
+import org.openarchives.oai._2.Granularity;
 
+import io.github.thanospapapetrou.nefeli.common.Configuration;
+
+@ApplicationScoped
 public class InstantParameterConverter implements ParamConverter<Instant> {
-    private final InstantStringAdapter adapter;
+    private final Granularity granularity;
 
-    public InstantParameterConverter(final InstantStringAdapter adapter) {
-        this.adapter = adapter; // TODO decide who delegates to whom
+    @Inject
+    public InstantParameterConverter(
+            @Configuration.Property("nefeli.oai-pmh.server.granularity") final Granularity granularity) {
+        this.granularity = granularity;
+    }
+
+    InstantParameterConverter() {
+        this(null);
     }
 
     @Override
     public Instant fromString(final String string) {
-        return adapter.unmarshal(string);
+        return (string == null) ? null : granularity.parse(string);
     }
 
     @Override
     public String toString(final Instant instant) {
-        return adapter.marshal(instant);
+        return (instant == null) ? null : granularity.format(instant);
     }
 }

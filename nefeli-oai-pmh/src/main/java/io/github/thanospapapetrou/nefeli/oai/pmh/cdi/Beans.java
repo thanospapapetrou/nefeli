@@ -8,6 +8,7 @@ import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.XMLConstants;
@@ -25,6 +26,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
 import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
 @ApplicationScoped
 public class Beans {
@@ -73,6 +75,15 @@ public class Beans {
         factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, SCHEMA_PROTOCOLS);
         factory.setErrorHandler(handler);
         return factory;
+    }
+
+    @Produces
+    public Marshaller getMarshaller(final JAXBContext context,
+            @Configuration.Property("nefeli.oai-pmh.server.granularity") final Granularity granularity)
+            throws JAXBException {
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setAdapter(InstantStringAdapter.class, new InstantStringAdapter(granularity)); // TODO inject?
+        return marshaller;
     }
 
     @Produces

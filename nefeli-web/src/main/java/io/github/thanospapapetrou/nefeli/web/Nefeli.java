@@ -10,9 +10,9 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhParameterConverter
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhWriter;
 
 @ApplicationPath("/")
-public class TestApplication extends Application {
+public class Nefeli extends Application {
     @Override
     public Set<Class<?>> getClasses() {
-        return Set.of(OaiPmhParameterConverterProvider.class, OaiPmhServer.class, OaiPmhWriter.class, Test.class);
+        return Set.of(OaiPmhParameterConverterProvider.class, OaiPmhServer.class, OaiPmhWriter.class);
     }
 }
