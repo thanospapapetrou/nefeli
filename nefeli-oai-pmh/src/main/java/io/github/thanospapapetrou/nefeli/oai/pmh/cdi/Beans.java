@@ -2,6 +2,8 @@ package io.github.thanospapapetrou.nefeli.oai.pmh.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.xml.bind.JAXBContext;
@@ -15,10 +17,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.openarchives.oai._2.DeletedRecord;
+import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhResponse;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+
+import io.github.thanospapapetrou.nefeli.common.Configuration;
 
 @ApplicationScoped
 public class Beans {
@@ -78,5 +84,17 @@ public class Beans {
     @Produces
     public JAXBContext getContext() throws JAXBException {
         return JAXBContext.newInstance(OaiPmhResponse.class);
+    }
+
+    @Configuration.Property
+    @Produces
+    public DeletedRecord getDeletedRecord(final InjectionPoint point) {
+        return CDI.current().select(Configuration.class).get().getEnumeration(point);
+    }
+
+    @Configuration.Property
+    @Produces
+    public Granularity getGranularity(final InjectionPoint point) {
+        return CDI.current().select(Configuration.class).get().getEnumeration(point);
     }
 }

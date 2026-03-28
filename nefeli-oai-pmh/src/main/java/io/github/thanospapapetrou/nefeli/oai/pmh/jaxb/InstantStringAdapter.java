@@ -34,7 +34,7 @@ public class InstantStringAdapter extends XmlAdapter<String, Instant> {
     }
 
     private Instant unmarshal(final String string, final Granularity granularity) throws DateTimeParseException {
-        return LocalDateTime.parse(string, granularity.getFormatter()).toInstant(ZoneOffset.UTC);
+        return (string == null) ? null : LocalDateTime.parse(string, granularity.getFormatter()).toInstant(ZoneOffset.UTC);
     }
 
 }
