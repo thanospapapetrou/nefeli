@@ -20,23 +20,18 @@ public class InstantStringAdapter extends XmlAdapter<String, Instant> {
 
     @Override
     public String marshal(final Instant instant) {
-        return (instant == null) ? null : granularity.format(instant);
+        return granularity.format(instant);
     }
 
     @Override
     public Instant unmarshal(final String string) {
         if (granularity == null) {
             try {
-                return unmarshal(string, Granularity.YYYY_MM_DD_THH_MM_SS_Z);
+                return Granularity.SECONDS.parse(string);
             } catch (final DateTimeParseException e) {
-                return unmarshal(string, Granularity.YYYY_MM_DD);
+                return Granularity.DAY.parse(string);
             }
         }
-        return unmarshal(string, granularity);
+        return granularity.parse(string);
     }
-
-    private Instant unmarshal(final String string, final Granularity granularity) throws DateTimeParseException {
-        return (string == null) ? null : granularity.parse(string);
-    }
-
 }

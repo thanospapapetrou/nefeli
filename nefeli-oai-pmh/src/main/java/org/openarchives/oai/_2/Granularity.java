@@ -1,10 +1,12 @@
 package org.openarchives.oai._2;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.function.BiFunction;
 
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
@@ -31,22 +33,31 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum Granularity {
     @XmlEnumValue("YYYY-MM-DD")
-    YYYY_MM_DD(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ROOT)),
+    DAY(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ROOT),
+            (instant, formatter) -> formatter.format(instant.atZone(ZoneOffset.UTC).toLocalDate()),
+            (string, formatter) -> LocalDate.parse(string, formatter).atStartOfDay().toInstant(ZoneOffset.UTC)),
     @XmlEnumValue("YYYY-MM-DDThh:mm:ssZ")
-    YYYY_MM_DD_THH_MM_SS_Z(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT));
+    SECONDS(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT),
+            (instant, formatter) -> formatter.format(instant.atZone(ZoneOffset.UTC).toLocalDateTime()),
+            (string, formatter) -> LocalDateTime.parse(string, formatter).toInstant(ZoneOffset.UTC));
 
-    private final DateTimeFormatter formatter;
+    private final DateTimeFormatter format;
+    private final BiFunction<Instant, DateTimeFormatter, String> formatter;
+    private final BiFunction<String, DateTimeFormatter, Instant> parser;
 
-    Granularity(final DateTimeFormatter formatter) {
+    Granularity(final DateTimeFormatter format, final BiFunction<Instant, DateTimeFormatter, String> formatter,
+            final BiFunction<String, DateTimeFormatter, Instant> parser) {
+        this.format = format;
         this.formatter = formatter;
+        this.parser = parser;
     }
 
     public String format(final Instant instant) {
-        return (instant == null) ? null : formatter.format(instant);
+        return (instant == null) ? null : formatter.apply(instant, format);
     }
 
     public Instant parse(final String string) {
-        return (string == null) ? null : LocalDateTime.parse(string, formatter).toInstant(ZoneOffset.UTC);
+        return (string == null) ? null : parser.apply(string, format);
     }
 
     @Override

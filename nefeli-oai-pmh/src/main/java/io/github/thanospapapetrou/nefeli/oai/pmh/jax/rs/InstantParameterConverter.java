@@ -26,11 +26,11 @@ public class InstantParameterConverter implements ParamConverter<Instant> {
 
     @Override
     public Instant fromString(final String string) {
-        return (string == null) ? null : granularity.parse(string);
+        return granularity.parse(string);
     }
 
     @Override
     public String toString(final Instant instant) {
-        return (instant == null) ? null : granularity.format(instant);
+        return granularity.format(instant);
     }
 }
