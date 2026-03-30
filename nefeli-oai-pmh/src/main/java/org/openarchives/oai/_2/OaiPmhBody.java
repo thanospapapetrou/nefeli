@@ -1,4 +1,5 @@
 package org.openarchives.oai._2;
 
-public interface OaiPmhBody {
+public sealed interface OaiPmhBody
+        permits Identify, ListMetadataFormats, ListSets, GetRecord, ListIdentifiers, ListRecords {
 }

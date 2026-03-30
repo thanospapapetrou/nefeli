@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetRecordType", propOrder = {"record"})
-public class GetRecord implements OaiPmhBody {
+public final class GetRecord implements OaiPmhBody {
 
     @XmlElement(required = true)
     private final Record record;

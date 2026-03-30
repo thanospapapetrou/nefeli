@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ListMetadataFormatsType", propOrder = {"metadataFormats"})
-public class ListMetadataFormats implements OaiPmhBody {
+public final class ListMetadataFormats implements OaiPmhBody {
 
     @XmlElement(name = "metadataFormat", required = true)
     private final List<MetadataFormat> metadataFormats;

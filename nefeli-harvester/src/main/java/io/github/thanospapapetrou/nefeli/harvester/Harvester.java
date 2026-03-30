@@ -127,12 +127,12 @@ public class Harvester implements AutoCloseable, Runnable {
         return step(client::identify, client, String.format(ERROR_IDENTIFYING, client.getUrl()))
                 .thenComposeAsync(identify -> step(() -> {
                     repositoryDao.update(
-                            new Repository(identify.getBody().getBaseURL(), identify.getResponseDate(), null,
+                            new Repository(identify.getBody().getBaseUrl(), identify.getResponseDate(), null,
                                     identify.getBody().getRepositoryName(), identify.getBody().getAdminEmails(),
                                     identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
                                     identify.getBody().getGranularity(), identify.getBody().getCompressions()));
                     return null;
-                }, client, String.format(ERROR_UPDATING, identify.getBody().getBaseURL())), workers);
+                }, client, String.format(ERROR_UPDATING, identify.getBody().getBaseUrl())), workers);
     }
 
     private CompletableFuture<String> listSets(final OaiPmhClient client, final String token) {

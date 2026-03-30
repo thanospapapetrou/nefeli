@@ -11,6 +11,7 @@
     <modules>
         <module>nefeli-common</module>
         <module>nefeli-db</module>
+        <module>nefeli-friends</module>
         <module>nefeli-harvester</module>
         <module>nefeli-oai-pmh</module>
         <module>nefeli-web</module>

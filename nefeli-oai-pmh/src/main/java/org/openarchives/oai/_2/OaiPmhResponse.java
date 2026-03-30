@@ -82,29 +82,14 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     @XmlElement(name = "ListRecords")
     private final ListRecords listRecords;
 
-    public OaiPmhResponse(final Instant responseDate, final Request request, final Identify identify) {
-        this(responseDate, request, new ArrayList<>(), identify, null, null, null, null, null);
-    }
-
-    public OaiPmhResponse(final Instant responseDate, final Request request,
-            final ListMetadataFormats listMetadataFormats) {
-        this(responseDate, request, new ArrayList<>(), null, listMetadataFormats, null, null, null, null);
-    }
-
-    public OaiPmhResponse(final Instant responseDate, final Request request, final ListSets listSets) {
-        this(responseDate, request, new ArrayList<>(), null, null, listSets, null, null, null);
-    }
-
-    public OaiPmhResponse(final Instant responseDate, final Request request, final GetRecord getRecord) {
-        this(responseDate, request, new ArrayList<>(), null, null, null, getRecord, null, null);
-    }
-
-    public OaiPmhResponse(final Instant responseDate, final Request request, final ListIdentifiers listIdentifiers) {
-        this(responseDate, request, new ArrayList<>(), null, null, null, null, listIdentifiers, null);
-    }
-
-    public OaiPmhResponse(final Instant responseDate, final Request request, final ListRecords listRecords) {
-        this(responseDate, request, new ArrayList<>(), null, null, null, null, null, listRecords);
+    public OaiPmhResponse(final Instant responseDate, final Request request, final OaiPmhBody body) {
+        this(responseDate, request, new ArrayList<>(),
+                (body instanceof Identify) ? (Identify) body : null,
+                (body instanceof ListMetadataFormats) ? (ListMetadataFormats) body : null,
+                (body instanceof ListSets) ? (ListSets) body : null,
+                (body instanceof GetRecord) ? (GetRecord) body : null,
+                (body instanceof ListIdentifiers) ? (ListIdentifiers) body : null,
+                (body instanceof ListRecords) ? (ListRecords) body : null);
     }
 
     public OaiPmhResponse(final Instant responseDate, final Request request, final List<OaiPmhError> errors) {

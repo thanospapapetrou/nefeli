@@ -33,7 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ListSetsType", propOrder = {"sets",
     "resumptionToken"
 })
-public class ListSets implements OaiPmhBody {
+public final class ListSets implements OaiPmhBody {
     @XmlElement(name = "set", required = true)
     private final List<OaiPmhSet> sets;
     private final ResumptionToken resumptionToken;

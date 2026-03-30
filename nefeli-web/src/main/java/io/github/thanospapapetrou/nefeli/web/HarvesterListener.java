@@ -21,6 +21,6 @@ public class HarvesterListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(final ServletContextEvent event) {
-        harvester.run();
+//        harvester.run();
     }
 }

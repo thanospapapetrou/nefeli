@@ -46,7 +46,7 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InternetAddressAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IdentifyType", propOrder = {
         "repositoryName",
-        "baseURL",
+        "baseUrl",
         "protocolVersion",
         "adminEmails",
         "earliestDatestamp",
@@ -55,7 +55,7 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InternetAddressAdapter;
         "compressions",
         "descriptions"
 })
-public class Identify implements OaiPmhBody {
+public final class Identify implements OaiPmhBody {
     public static final String COMPRESSION_COMPRESS = "compress";
     public static final String COMPRESSION_DEFLATE = "deflate";
     public static final String COMPRESSION_GZIP = "gzip";
@@ -64,9 +64,9 @@ public class Identify implements OaiPmhBody {
 
     @XmlElement(required = true)
     private final String repositoryName;
-    @XmlElement(required = true)
+    @XmlElement(name = "baseURL", required = true)
     @XmlSchemaType(name = "anyURI")
-    private final URL baseURL;
+    private final URL baseUrl;
     @XmlElement(required = true)
     private final String protocolVersion;
     @XmlElement(name = "adminEmail", required = true)
@@ -86,11 +86,11 @@ public class Identify implements OaiPmhBody {
     @XmlElement(name = "description")
     private final List<Description> descriptions;
 
-    public Identify(final String repositoryName, final URL baseURL, final List<InternetAddress> adminEmails,
+    public Identify(final String repositoryName, final URL baseUrl, final List<InternetAddress> adminEmails,
             final Instant earliestDatestamp, final DeletedRecord deletedRecord, final Granularity granularity,
             final List<String> compressions, final List<Description> descriptions) {
         this.repositoryName = repositoryName;
-        this.baseURL = baseURL;
+        this.baseUrl = baseUrl;
         this.protocolVersion = VERSION;
         this.adminEmails = adminEmails;
         this.earliestDatestamp = earliestDatestamp;
@@ -108,8 +108,8 @@ public class Identify implements OaiPmhBody {
         return repositoryName;
     }
 
-    public URL getBaseURL() {
-        return baseURL;
+    public URL getBaseUrl() {
+        return baseUrl;
     }
 
     public String getProtocolVersion() {

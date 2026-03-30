@@ -34,7 +34,7 @@ import jakarta.xml.bind.annotation.XmlType;
         "headers",
     "resumptionToken"
 })
-public class ListIdentifiers implements OaiPmhBody {
+public final class ListIdentifiers implements OaiPmhBody {
     @XmlElement(name = "header", required = true)
     private final List<Header> headers;
     private final ResumptionToken resumptionToken;

@@ -31,7 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ListRecordsType", propOrder = {"records", "resumptionToken"})
-public class ListRecords implements OaiPmhBody {
+public final class ListRecords implements OaiPmhBody {
     @XmlElement(name = "record", required = true)
     private final List<Record> records;
     private final ResumptionToken resumptionToken;
