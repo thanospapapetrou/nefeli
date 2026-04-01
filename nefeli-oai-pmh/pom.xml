@@ -37,4 +37,24 @@
             <artifactId>nefeli-common</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Specification-Title>The Open Archives Initiative Protocol for Metadata Harvesting</Specification-Title>
+                            <Specification-Version>2.0</Specification-Version>
+                            <Specification-Vendor>Open Archives Initiative</Specification-Vendor>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
