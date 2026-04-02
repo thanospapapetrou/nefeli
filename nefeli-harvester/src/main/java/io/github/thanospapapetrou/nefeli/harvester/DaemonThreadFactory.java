@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import jakarta.annotation.Nonnull;
 
-public class DaemonThreadFactory implements ThreadFactory {
+public class DaemonThreadFactory implements ThreadFactory { // TODO move to private package
     private final Supplier<String> name;
 
     public DaemonThreadFactory(final Supplier<String> name) {

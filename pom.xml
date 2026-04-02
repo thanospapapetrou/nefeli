@@ -13,6 +13,7 @@
         <module>nefeli-db</module>
         <module>nefeli-friends</module>
         <module>nefeli-harvester</module>
+        <module>nefeli-oai-identifier</module>
         <module>nefeli-oai-pmh</module>
         <module>nefeli-web</module>
     </modules>

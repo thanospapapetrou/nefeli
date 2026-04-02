@@ -10,7 +10,7 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhParameterConverter
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhWriter;
 
 @ApplicationPath("/")
-public class Nefeli extends Application {
+public class Nefeli extends Application { // TODO move to nefeli-oai-pmh
     @Override
     public Set<Class<?>> getClasses() {
         return Set.of(OaiPmhParameterConverterProvider.class, OaiPmhServer.class, OaiPmhWriter.class);

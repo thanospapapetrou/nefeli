@@ -14,7 +14,7 @@ import jakarta.persistence.PersistenceException;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 
 @ApplicationScoped
-public class RepositoryDaoImpl implements RepositoryDao {
+public class RepositoryDaoImpl implements RepositoryDao { // TODO move to private package
     private static final String ERROR_RETRIEVING = "Error retrieving repositories";
     private static final String ERROR_RETRIEVING_HARVEST = "Error retrieving repositories to harvest";
     private static final String ERROR_SETTING_ERROR = "Error setting repository error";

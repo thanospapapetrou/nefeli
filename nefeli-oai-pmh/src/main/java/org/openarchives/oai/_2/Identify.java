@@ -59,7 +59,6 @@ public final class Identify implements OaiPmhBody {
     public static final String COMPRESSION_COMPRESS = "compress";
     public static final String COMPRESSION_DEFLATE = "deflate";
     public static final String COMPRESSION_GZIP = "gzip";
-    public static final String COMPRESSION_IDENTITY = "identity"; // TODO is this required?
     public static final String VERSION = "2.0";
 
     @XmlElement(required = true)

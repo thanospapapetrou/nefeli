@@ -10,6 +10,8 @@ mvn dependency:get com.sun.xml.bind:jaxb-xjc:4.0.6
 
 TODO
 cleanup db
+move impl classes to packages not exported by modules
+container -> content
 handle HTTP
 202 Accepted
 503 Service Unavailable

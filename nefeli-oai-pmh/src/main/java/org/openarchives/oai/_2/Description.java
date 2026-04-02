@@ -4,8 +4,9 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.w3c.dom.Element;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.ContainerAdapter;
 
 /**
  * The descriptionType is used for the description
@@ -35,9 +36,10 @@ import org.w3c.dom.Element;
 @XmlType(name = "descriptionType", propOrder = {"description"})
 public class Description {
     @XmlAnyElement(lax = true)
-    private final Element description;
+    @XmlJavaTypeAdapter(ContainerAdapter.class)
+    private final DescriptionContainer description;
 
-    public Description(final Element description) {
+    public Description(final DescriptionContainer description) {
         this.description = description;
     }
 
@@ -45,7 +47,7 @@ public class Description {
         this(null);
     }
 
-    public Element getDescription() {
+    public DescriptionContainer getDescription() {
         return description;
     }
 }

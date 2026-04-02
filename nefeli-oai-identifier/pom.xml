@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>nefeli-friends</artifactId>
-    <name>Nefeli Friends</name>
+    <artifactId>nefeli-oai-identifier</artifactId>
+    <name>Nefeli OAI Identifier</name>
     <parent>
         <groupId>io.github.thanospapapetrou.nefeli</groupId>
         <artifactId>nefeli</artifactId>
@@ -29,7 +29,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Specification-Title>XML Schema for repositories to list confederate repositories</Specification-Title>
+                            <Specification-Title>Specification and XML Schema for the OAI Identifier Format</Specification-Title>
                             <Specification-Version>2.0</Specification-Version>
                             <Specification-Vendor>Open Archives Initiative</Specification-Vendor>
                             <Implementation-Title>${project.name}</Implementation-Title>
