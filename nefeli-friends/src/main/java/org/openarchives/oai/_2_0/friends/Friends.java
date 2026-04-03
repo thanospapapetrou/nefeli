@@ -10,7 +10,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.openarchives.oai._2.DescriptionContainer;
+import org.openarchives.oai._2.DescriptionContent;
 
 // TODO https://www.openarchives.org/OAI/2.0/guidelines-friends.htm
 
@@ -36,7 +36,7 @@ import org.openarchives.oai._2.DescriptionContainer;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "friends", namespace = Friends.NAMESPACE)
 @XmlType(name = "friendsType", propOrder = {"baseUrls"})
-public class Friends implements DescriptionContainer {
+public class Friends implements DescriptionContent {
     public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/friends/";
     public static final String PREFIX = "friends";
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/friends.xsd";

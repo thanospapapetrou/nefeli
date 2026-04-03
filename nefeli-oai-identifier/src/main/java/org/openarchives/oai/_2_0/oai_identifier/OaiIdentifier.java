@@ -6,7 +6,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.openarchives.oai._2.DescriptionContainer;
+import org.openarchives.oai._2.DescriptionContent;
 
 /**
  * &lt;p&gt;Java class for oai-identifierType complex type&lt;/p&gt;.
@@ -38,7 +38,7 @@ import org.openarchives.oai._2.DescriptionContainer;
     "delimiter",
     "sampleIdentifier"
 })
-public class OaiIdentifier implements DescriptionContainer {
+public class OaiIdentifier implements DescriptionContent {
     public static final String DELIMITER = ":";
     public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/oai-identifier/";
     public static final String PREFIX = "oai-identifier";
