@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.inject.Named;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.xml.bind.JAXBContext;
@@ -77,8 +78,9 @@ public class Beans {
         return factory;
     }
 
+    @Named("oaiPmhMarshaller")
     @Produces
-    public Marshaller getMarshaller(final JAXBContext context,
+    public Marshaller getMarshaller(@Named("oaiPmhContext") final JAXBContext context,
             @Configuration.Property("nefeli.oai-pmh.server.granularity") final Granularity granularity)
             throws JAXBException {
         final Marshaller marshaller = context.createMarshaller();
@@ -86,12 +88,14 @@ public class Beans {
         return marshaller;
     }
 
+    @Named("oaiPmhUnmarshaller")
     @Produces
-    public Unmarshaller getUnmarshaller(final JAXBContext context) throws JAXBException {
+    public Unmarshaller getUnmarshaller(@Named("oaiPmhContext") final JAXBContext context) throws JAXBException {
         return context.createUnmarshaller();
     }
 
     @ApplicationScoped
+    @Named("oaiPmhContext")
     @Produces
     public JAXBContext getContext() throws JAXBException {
         return JAXBContext.newInstance(OaiPmhResponse.class);

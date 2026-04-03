@@ -1,5 +1,7 @@
 package org.openarchives.oai._2_0.oai_identifier;
 
+import java.net.URI;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -43,6 +45,7 @@ public class OaiIdentifier implements DescriptionContent {
     public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/oai-identifier/";
     public static final String PREFIX = "oai-identifier";
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/oai-identifier.xsd";
+    public static final String SCHEME = "oai";
 
 // TODO https://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
 
@@ -53,12 +56,17 @@ public class OaiIdentifier implements DescriptionContent {
     @XmlElement(required = true)
     private final String delimiter;
     @XmlElement(required = true)
-    private final String sampleIdentifier;
+    private final URI sampleIdentifier;
 
-    public OaiIdentifier(final String scheme, final String repositoryIdentifier, final String sampleIdentifier) {
+    public OaiIdentifier(final String repositoryIdentifier, final URI sampleIdentifier) {
+        this(SCHEME, repositoryIdentifier, DELIMITER, sampleIdentifier);
+    }
+
+    private OaiIdentifier(final String scheme, final String repositoryIdentifier, final String delimiter,
+            final URI sampleIdentifier) {
         this.scheme = scheme;
         this.repositoryIdentifier = repositoryIdentifier;
-        this.delimiter = DELIMITER;
+        this.delimiter = delimiter;
         this.sampleIdentifier = sampleIdentifier;
     }
 
@@ -74,7 +82,7 @@ public class OaiIdentifier implements DescriptionContent {
         return delimiter;
     }
 
-    public String getSampleIdentifier() {
+    public URI getSampleIdentifier() {
         return sampleIdentifier;
     }
 }

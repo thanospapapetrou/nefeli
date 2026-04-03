@@ -52,5 +52,4 @@ public class Friends implements DescriptionContent {
     public List<URL> getBaseUrls() {
         return baseUrls;
     }
-
 }

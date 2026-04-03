@@ -88,19 +88,27 @@ public final class Identify implements OaiPmhBody {
     public Identify(final String repositoryName, final URL baseUrl, final List<InternetAddress> adminEmails,
             final Instant earliestDatestamp, final DeletedRecord deletedRecord, final Granularity granularity,
             final List<String> compressions, final List<Description> descriptions) {
+        this(repositoryName, baseUrl, VERSION, adminEmails, earliestDatestamp, deletedRecord, granularity, compressions,
+                descriptions);
+    }
+
+    private Identify() {
+        this(null, null, new ArrayList<>(), null, null, null, new ArrayList<>(), new ArrayList<>());
+    }
+
+    private Identify(final String repositoryName, final URL baseUrl, final String version,
+            final List<InternetAddress> adminEmails,
+            final Instant earliestDatestamp, final DeletedRecord deletedRecord, final Granularity granularity,
+            final List<String> compressions, final List<Description> descriptions) {
         this.repositoryName = repositoryName;
         this.baseUrl = baseUrl;
-        this.protocolVersion = VERSION;
+        this.protocolVersion = version;
         this.adminEmails = adminEmails;
         this.earliestDatestamp = earliestDatestamp;
         this.deletedRecord = deletedRecord;
         this.granularity = granularity;
         this.compressions = compressions;
         this.descriptions = descriptions;
-    }
-
-    private Identify() {
-        this(null, null, new ArrayList<>(), null, null, null, new ArrayList<>(), new ArrayList<>());
     }
 
     public String getRepositoryName() {
