@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +71,9 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
 
     @Override
     public OaiPmhResponse<Identify> identify() throws IOException, OaiPmhException, WebApplicationException {
-        final OaiPmhResponse<Identify> identify = request(Verb.IDENTIFY, Map.of());
+        final OaiPmhResponse<Identify> identify = request(Map.of(
+                ARGUMENT_VERB, Verb.IDENTIFY
+        ));
         this.target.register(new OaiPmhReader<Identify>(identify.getBody().getGranularity()), 0);
         this.target.register(new OaiPmhReader<ListSets>(identify.getBody().getGranularity()), 0);
         this.target.register(new OaiPmhReader<ListMetadataFormats>(identify.getBody().getGranularity()), 0);
@@ -85,58 +86,76 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
     @Override
     public OaiPmhResponse<ListMetadataFormats> listMetadataFormats(final URI identifier)
             throws IOException, OaiPmhException, WebApplicationException {
-        return request(Verb.LIST_METADATA_FORMATS, Collections.singletonMap(ARGUMENT_IDENTIFIER, identifier));
+        return request(Map.of(
+                ARGUMENT_VERB, Verb.LIST_METADATA_FORMATS,
+                ARGUMENT_IDENTIFIER, identifier
+        ));
     }
 
     @Override
     public OaiPmhResponse<ListSets> listSets() throws IOException, OaiPmhException, WebApplicationException {
-        return request(Verb.LIST_SETS, Map.of());
+        return request(Map.of(ARGUMENT_VERB, Verb.LIST_SETS));
     }
 
     @Override
     public OaiPmhResponse<ListSets> listSets(final String resumptionToken)
             throws IOException, OaiPmhException, WebApplicationException {
-        return request(Verb.LIST_SETS, Map.of(ARGUMENT_RESUMPTION_TOKEN, resumptionToken));
+        return request(Map.of(
+                ARGUMENT_VERB, Verb.LIST_SETS,
+                ARGUMENT_RESUMPTION_TOKEN, resumptionToken
+        ));
     }
 
     @Override
     public OaiPmhResponse<ListIdentifiers> listIdentifiers(final String metadataPrefix, final Instant from,
             final Instant until, final SetSpec set) throws IOException, OaiPmhException, WebApplicationException {
         final Map<String, Object> arguments = new HashMap<>();
+        arguments.put(ARGUMENT_VERB, Verb.LIST_IDENTIFIERS);
         arguments.put(ARGUMENT_METADATA_PREFIX, metadataPrefix);
         arguments.put(ARGUMENT_FROM, from);
         arguments.put(ARGUMENT_UNTIL, until);
         arguments.put(ARGUMENT_SET, set);
-        return request(Verb.LIST_IDENTIFIERS, arguments);
+        return request(arguments);
     }
 
     @Override
     public OaiPmhResponse<ListIdentifiers> listIdentifiers(final String resumptionToken)
             throws IOException, OaiPmhException, WebApplicationException {
-        return request(Verb.LIST_IDENTIFIERS, Map.of(ARGUMENT_RESUMPTION_TOKEN, resumptionToken));
+        return request(Map.of(
+                ARGUMENT_VERB, Verb.LIST_IDENTIFIERS,
+                ARGUMENT_RESUMPTION_TOKEN, resumptionToken
+        ));
     }
 
     @Override
     public OaiPmhResponse<ListRecords> listRecords(final String metadataPrefix, final Instant from, final Instant until,
             final SetSpec set) throws IOException, OaiPmhException, WebApplicationException {
         final Map<String, Object> arguments = new HashMap<>();
+        arguments.put(ARGUMENT_VERB, Verb.LIST_RECORDS);
         arguments.put(ARGUMENT_METADATA_PREFIX, metadataPrefix);
         arguments.put(ARGUMENT_FROM, from);
         arguments.put(ARGUMENT_UNTIL, until);
         arguments.put(ARGUMENT_SET, set);
-        return request(Verb.LIST_RECORDS, arguments);
+        return request(arguments);
     }
 
     @Override
     public OaiPmhResponse<ListRecords> listRecords(final String resumptionToken)
             throws IOException, OaiPmhException, WebApplicationException {
-        return request(Verb.LIST_RECORDS, Map.of(ARGUMENT_RESUMPTION_TOKEN, resumptionToken));
+        return request(Map.of(
+                ARGUMENT_VERB, Verb.LIST_RECORDS,
+                ARGUMENT_RESUMPTION_TOKEN, resumptionToken
+        ));
     }
 
     @Override
     public OaiPmhResponse<GetRecord> getRecord(final String metadataPrefix, final URI identifier)
             throws IOException, OaiPmhException, WebApplicationException {
-        return request(Verb.GET_RECORD, Map.of(ARGUMENT_METADATA_PREFIX, metadataPrefix, ARGUMENT_IDENTIFIER, identifier));
+        return request(Map.of(
+                ARGUMENT_VERB, Verb.GET_RECORD,
+                ARGUMENT_METADATA_PREFIX, metadataPrefix,
+                ARGUMENT_IDENTIFIER, identifier
+        ));
     }
 
     @Override
@@ -144,9 +163,9 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
         client.close();
     }
 
-    private <T extends OaiPmhBody> OaiPmhResponse<T> request(final Verb verb, final Map<String, ?> arguments)
+    private <T extends OaiPmhBody> OaiPmhResponse<T> request(final Map<String, ?> arguments)
             throws IOException, OaiPmhException, WebApplicationException {
-        WebTarget target = this.target.queryParam(ARGUMENT_VERB, verb);
+        WebTarget target = this.target;
         for (final Map.Entry<String, ?> argument : arguments.entrySet()) {
             if (argument.getValue() != null) {
                 target = target.queryParam(argument.getKey(), argument.getValue());
@@ -159,9 +178,8 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
                     .header(HEADER_FROM, "thanos.papapetrou@gmail.com") // TODO
                     .get();
             if (httpResponse.getStatusInfo().getFamily() == Response.Status.Family.REDIRECTION) {
-                try (final OaiPmhClient client =
-                        new OaiPmhClient(new URI(httpResponse.getLocation().toString()).toURL())) {
-                    return client.request(verb, arguments);
+                try (final OaiPmhClient client = new OaiPmhClient(httpResponse.getLocation().toURL())) {
+                    return client.request(Map.of());
                 } catch (final MalformedURLException | URISyntaxException e) {
                     throw new HttpRetryException(ERROR_REDIRECTING, httpResponse.getStatus(),
                             httpResponse.getLocation().toString());
