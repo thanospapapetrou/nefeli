@@ -2,8 +2,8 @@ name: nefeli
 services:
   web:
     build:
-      context: ./
-      dockerfile: ./nefeli-web/src/main/docker/Dockerfile
+      context: ./nefeli-web/
+      dockerfile: ./src/main/docker/Dockerfile
     image: nefeli-web:1.0.0-SNAPSHOT
     container_name: nefeli-web
     ports:

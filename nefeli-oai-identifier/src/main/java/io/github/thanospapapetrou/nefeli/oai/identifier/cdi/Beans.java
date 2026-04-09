@@ -10,8 +10,6 @@ import jakarta.xml.bind.Unmarshaller;
 
 import org.openarchives.oai._2_0.oai_identifier.OaiIdentifier;
 
-import jdk.jfr.Name;
-
 @ApplicationScoped
 public class Beans {
     @Named("oaiIdentifierMarshaller")
@@ -28,7 +26,7 @@ public class Beans {
     }
 
     @ApplicationScoped
-    @Name("oaiIdentifierContext")
+    @Named("oaiIdentifierContext")
     @Produces
     public JAXBContext getContext() throws JAXBException {
         return JAXBContext.newInstance(OaiIdentifier.class);

@@ -10,8 +10,6 @@ import jakarta.xml.bind.Unmarshaller;
 
 import org.openarchives.oai._2_0.friends.Friends;
 
-import jdk.jfr.Name;
-
 @ApplicationScoped
 public class Beans {
     @Named("friendsMarshaller")
@@ -28,7 +26,7 @@ public class Beans {
     }
 
     @ApplicationScoped
-    @Name("friendsContext")
+    @Named("friendsContext")
     @Produces
     public JAXBContext getContext() throws JAXBException {
         return JAXBContext.newInstance(Friends.class);

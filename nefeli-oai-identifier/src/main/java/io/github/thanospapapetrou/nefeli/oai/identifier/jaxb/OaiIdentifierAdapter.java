@@ -1,6 +1,7 @@
 package io.github.thanospapapetrou.nefeli.oai.identifier.jaxb;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
@@ -18,8 +19,9 @@ public class OaiIdentifierAdapter extends XmlAdapter<Element, OaiIdentifier> {
     private final Unmarshaller unmarshaller;
 
     @Inject
-    public OaiIdentifierAdapter(final DocumentBuilder builder, final Marshaller marshaller,
-            final Unmarshaller unmarshaller) {
+    public OaiIdentifierAdapter(final DocumentBuilder builder,
+            @Named("oaiIdentifierMarshaller") final Marshaller marshaller,
+            @Named("oaiIdentifierUnmarshaller") final Unmarshaller unmarshaller) {
         this.builder = builder;
         this.marshaller = marshaller;
         this.unmarshaller = unmarshaller;

@@ -6,6 +6,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -25,7 +26,7 @@ public class OaiPmhWriter implements MessageBodyWriter<OaiPmhResponse<OaiPmhBody
     private final Marshaller marshaller;
 
     @Inject
-    public OaiPmhWriter(final Marshaller marshaller) {
+    public OaiPmhWriter(@Named("oaiPmhMarshaller") final Marshaller marshaller) {
         this.marshaller = marshaller;
     }
 

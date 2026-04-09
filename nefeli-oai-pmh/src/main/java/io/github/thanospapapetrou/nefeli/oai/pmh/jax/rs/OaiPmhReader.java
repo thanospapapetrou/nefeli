@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.enterprise.util.AnnotationLiteral;
+import jakarta.inject.Named;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
@@ -36,8 +38,15 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     private final DocumentBuilder builder;
     private final Unmarshaller unmarshaller;
 
+    public static class OaiPmhUnmarshaller extends AnnotationLiteral<Named> implements Named {
+        public String value() {
+            return "oaiPmhUnmarshaller";
+        }
+    }
+
     public OaiPmhReader(final Granularity granularity) {
-        this(CDI.current().select(DocumentBuilder.class).get(), CDI.current().select(Unmarshaller.class).get(),
+        this(CDI.current().select(DocumentBuilder.class).get(), CDI.current().select(Unmarshaller.class,
+                new OaiPmhUnmarshaller()).get(),
                 granularity); // TODO fix injection
     }
 

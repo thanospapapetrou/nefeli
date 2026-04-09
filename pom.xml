@@ -105,7 +105,17 @@
             </dependency>
             <dependency>
                 <groupId>io.github.thanospapapetrou.nefeli</groupId>
+                <artifactId>nefeli-friends</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli</groupId>
                 <artifactId>nefeli-harvester</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli</groupId>
+                <artifactId>nefeli-oai-identifier</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

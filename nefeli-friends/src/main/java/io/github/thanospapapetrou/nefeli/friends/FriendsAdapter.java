@@ -1,6 +1,7 @@
 package io.github.thanospapapetrou.nefeli.friends;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
@@ -18,7 +19,7 @@ public class FriendsAdapter extends XmlAdapter<Element, Friends> {
     private final Unmarshaller unmarshaller;
 
     @Inject
-    public FriendsAdapter(final DocumentBuilder builder, final Marshaller marshaller, final Unmarshaller unmarshaller) {
+    public FriendsAdapter(final DocumentBuilder builder, @Named("friendsMarshaller") final Marshaller marshaller, @Named("friendsUnmarshaller") final Unmarshaller unmarshaller) {
         this.builder = builder;
         this.marshaller = marshaller;
         this.unmarshaller = unmarshaller;
