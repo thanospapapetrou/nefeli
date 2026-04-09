@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.oai.identifier;
+package io.github.thanospapapetrou.nefeli.oai.identifier.jaxb;
 
 import jakarta.inject.Inject;
 import jakarta.xml.bind.JAXBException;
@@ -26,9 +26,9 @@ public class OaiIdentifierAdapter extends XmlAdapter<Element, OaiIdentifier> {
     }
 
     @Override
-    public Element marshal(final OaiIdentifier friends) throws JAXBException {
+    public Element marshal(final OaiIdentifier identifier) throws JAXBException {
         final Document document = builder.newDocument();
-        marshaller.marshal(friends, document);
+        marshaller.marshal(identifier, document);
         return document.getDocumentElement();
     }
 

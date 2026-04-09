@@ -70,6 +70,10 @@ public class OaiIdentifier implements DescriptionContent {
         this.sampleIdentifier = sampleIdentifier;
     }
 
+    private OaiIdentifier() {
+        this(null, null, null, null);
+    }
+
     public String getScheme() {
         return scheme;
     }
