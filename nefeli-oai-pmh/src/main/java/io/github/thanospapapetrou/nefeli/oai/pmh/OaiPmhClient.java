@@ -74,12 +74,14 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
         final OaiPmhResponse<Identify> identify = request(Map.of(
                 ARGUMENT_VERB, Verb.IDENTIFY
         ));
-        this.target.register(new OaiPmhReader<Identify>(identify.getBody().getGranularity()), 0);
-        this.target.register(new OaiPmhReader<ListSets>(identify.getBody().getGranularity()), 0);
-        this.target.register(new OaiPmhReader<ListMetadataFormats>(identify.getBody().getGranularity()), 0);
-        this.target.register(new OaiPmhReader<ListIdentifiers>(identify.getBody().getGranularity()), 0);
-        this.target.register(new OaiPmhReader<ListRecords>(identify.getBody().getGranularity()), 0);
-        this.target.register(new OaiPmhReader<GetRecord>(identify.getBody().getGranularity()), 0);
+        if (identify.getBody() != null) {
+            this.target.register(new OaiPmhReader<Identify>(identify.getBody().getGranularity()), 0);
+            this.target.register(new OaiPmhReader<ListSets>(identify.getBody().getGranularity()), 0);
+            this.target.register(new OaiPmhReader<ListMetadataFormats>(identify.getBody().getGranularity()), 0);
+            this.target.register(new OaiPmhReader<ListIdentifiers>(identify.getBody().getGranularity()), 0);
+            this.target.register(new OaiPmhReader<ListRecords>(identify.getBody().getGranularity()), 0);
+            this.target.register(new OaiPmhReader<GetRecord>(identify.getBody().getGranularity()), 0);
+        }
         return identify;
     }
 
@@ -178,7 +180,7 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
                     .header(HEADER_FROM, "thanos.papapetrou@gmail.com") // TODO
                     .get();
             if (httpResponse.getStatusInfo().getFamily() == Response.Status.Family.REDIRECTION) {
-                try (final OaiPmhClient client = new OaiPmhClient(httpResponse.getLocation().toURL())) {
+                try (final OaiPmhClient client = new OaiPmhClient(httpResponse.getLocation().toURL())) { // TODO relativize based on this
                     return client.request(Map.of());
                 } catch (final MalformedURLException | URISyntaxException e) {
                     throw new HttpRetryException(ERROR_REDIRECTING, httpResponse.getStatus(),

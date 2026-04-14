@@ -57,7 +57,7 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantCalendarAdapter;
     "listRecords"
 })
 public class OaiPmhResponse<T extends OaiPmhBody> {
-    public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
+    public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0";
     public static final String PREFIX = "oai";
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/OAI-PMH.xsd";
 
@@ -128,7 +128,7 @@ public class OaiPmhResponse<T extends OaiPmhBody> {
     }
 
     public T getBody() {
-        return (request.getVerb() == null) ? null : (T) switch (request.getVerb()) {
+        return ((request == null) || (request.getVerb() == null)) ? null : (T) switch (request.getVerb()) {
             case IDENTIFY -> identify;
             case LIST_METADATA_FORMATS -> listMetadataFormats;
             case LIST_SETS -> listSets;

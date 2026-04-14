@@ -42,7 +42,7 @@ import org.openarchives.oai._2.DescriptionContent;
 })
 public class OaiIdentifier implements DescriptionContent {
     public static final String DELIMITER = ":";
-    public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/oai-identifier/";
+    public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/oai-identifier";
     public static final String PREFIX = "oai-identifier";
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/oai-identifier.xsd";
     public static final String SCHEME = "oai";
