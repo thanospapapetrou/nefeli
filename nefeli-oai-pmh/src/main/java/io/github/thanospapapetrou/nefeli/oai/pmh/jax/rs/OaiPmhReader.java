@@ -28,12 +28,12 @@ import org.xml.sax.SAXException;
 
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
-@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+@Consumes({MediaType.TEXT_XML, MediaType.WILDCARD})
 @Provider
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private static final String ERROR_READING = "Error reading OAI-PMH response";
     private static final Logger LOGGER = Logger.getLogger(OaiPmhReader.class.getName());
-    private static final String WARNING_INVALID_MEDIA_TYPE = "OAI-PMH response has invalid media type %1$s";
+    private static final String WARNING_INVALID_MEDIA_TYPE = "OAI-PMH response from %1$s has invalid media type %2$s";
 
     private final DocumentBuilder builder;
     private final Unmarshaller unmarshaller;
@@ -64,10 +64,6 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     @Override
     public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations,
             final MediaType mediaType) {
-        // TODO include URL
-        if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()))) {
-            LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, mediaType));
-        }
         return true;
     }
 
@@ -75,6 +71,10 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     public OaiPmhResponse<T> readFrom(final Class<OaiPmhResponse<T>> clazz, final Type type,
             final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, String> headers,
             final InputStream body) throws IOException, WebApplicationException {
+        if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()))) {
+            LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, headers.getFirst(RequestUrlFilter.class.getName()),
+                    mediaType));
+        }
         try {
             return unmarshaller.unmarshal(builder.parse(body).getDocumentElement(), OaiPmhResponse.class).getValue();
         } catch (final JAXBException | SAXException e) {

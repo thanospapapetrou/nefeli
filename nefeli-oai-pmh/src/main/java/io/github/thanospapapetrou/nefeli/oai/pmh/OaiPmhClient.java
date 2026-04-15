@@ -32,6 +32,7 @@ import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.SetSpec;
 import org.openarchives.oai._2.Verb;
 
+import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.RequestUrlFilter;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhReader;
 
 public class OaiPmhClient implements OaiPmh, AutoCloseable {
@@ -48,6 +49,7 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
 
     private OaiPmhClient(final Client client, final URL url) throws URISyntaxException {
         this(client, client.target(url.toURI()));
+        this.target.register(RequestUrlFilter.class);
         this.target.register(new OaiPmhReader<Identify>(null), 1);
         this.target.register(new OaiPmhReader<ListSets>(null), 1);
         this.target.register(new OaiPmhReader<ListMetadataFormats>(null), 1);
