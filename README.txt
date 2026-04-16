@@ -17,4 +17,5 @@ handle HTTP
 503 Service Unavailable
 400 Bad Request
 
-Content provider -> get namespace etc. based on class
+handle redirects
+http://ejournal.uin-suka.ac.id/tarbiyah/index.php/alathfal/oai

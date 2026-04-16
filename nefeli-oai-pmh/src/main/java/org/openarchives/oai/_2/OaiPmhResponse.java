@@ -57,7 +57,7 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantCalendarAdapter;
     "listRecords"
 })
 public class OaiPmhResponse<T extends OaiPmhBody> {
-    public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0";
+    public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/";
     public static final String PREFIX = "oai";
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/OAI-PMH.xsd";
 

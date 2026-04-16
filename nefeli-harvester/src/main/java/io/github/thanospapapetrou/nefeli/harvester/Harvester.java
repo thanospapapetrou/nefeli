@@ -39,7 +39,6 @@ import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhException;
-import io.github.thanospapapetrou.nefeli.oai.pmh.UnsupportedMediaTypeException;
 
 @ApplicationScoped
 public class Harvester implements AutoCloseable, Runnable {
@@ -191,15 +190,14 @@ public class Harvester implements AutoCloseable, Runnable {
                     .collect(Collectors.joining(DELIMITER));
         } else if (e instanceof WebApplicationException w) {
             return String.format(ERROR_HTTP, w.getResponse().getStatus());
-        } else if (e instanceof UnsupportedMediaTypeException u) {
-            return u.getMediaType().toString();
         } else if (e instanceof HttpRetryException r) {
             return String.format(ERROR_REDIRECT, r.responseCode(), r.getLocation());
         } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
                 && ((e.getCause().getCause() instanceof UnknownHostException)
                 || (e.getCause().getCause() instanceof ConnectException)
                 || (e.getCause().getCause() instanceof SocketException)
-                || (e.getCause().getCause() instanceof SSLHandshakeException))) {
+                || (e.getCause().getCause() instanceof SSLHandshakeException)
+                || (e.getCause().getCause() instanceof IOException))) {
             return e.getCause().getCause().getClass().getSimpleName();
         }
         return null;

@@ -32,8 +32,8 @@ import org.openarchives.oai._2.OaiPmhResponse;
 import org.openarchives.oai._2.SetSpec;
 import org.openarchives.oai._2.Verb;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.RequestUrlFilter;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhReader;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.RequestUrlFilter;
 
 public class OaiPmhClient implements OaiPmh, AutoCloseable {
     private static final String ERROR_SENDING_REQUEST = "Error sending OAI-PMH request";
@@ -188,13 +188,10 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
                     throw new HttpRetryException(ERROR_REDIRECTING, httpResponse.getStatus(),
                             httpResponse.getLocation().toString());
                 }
-            }
-            if (httpResponse.getStatus() != Response.Status.OK.getStatusCode()) {
+//            } else if (httpResponse.getStatus() == Response.Status.SERVICE_UNAVAILABLE.getStatusCode()) {
+
+            } else if (httpResponse.getStatus() != Response.Status.OK.getStatusCode()) {
                 throw new WebApplicationException(httpResponse.getStatus());
-            }
-            if ((!httpResponse.getMediaType().isCompatible(MediaType.TEXT_XML_TYPE))
-                    && (!httpResponse.getMediaType().isCompatible(MediaType.APPLICATION_XML_TYPE))) {
-                throw new UnsupportedMediaTypeException(httpResponse.getMediaType());
             }
             final OaiPmhResponse<T> oaiPmhResponse = httpResponse.readEntity(new GenericType<>() {
             });
@@ -203,7 +200,7 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
             }
             return oaiPmhResponse;
         } catch (final ProcessingException e) {
-            throw new IOException(ERROR_SENDING_REQUEST, e);
+            throw new IOException(ERROR_SENDING_REQUEST, e); // TODO this is not necessarily sending error
         }
     }
 }
