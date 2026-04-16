@@ -1,6 +1,5 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,12 +26,13 @@ public class NefeliErrorHandler implements ErrorHandler {
     public void error(final SAXParseException exception) throws SAXException {
         LOGGER.warning(String.format(PARSING_ERROR, exception.getLineNumber(), exception.getColumnNumber(),
                 exception.getMessage()));
+        throw exception;
     }
 
     @Override
     public void fatalError(final SAXParseException exception) throws SAXException {
-        LOGGER.log(Level.WARNING, String.format(PARSING_FATAL_ERROR, exception.getLineNumber(),
-                exception.getColumnNumber(), exception.getMessage()), exception);
+        LOGGER.warning(String.format(PARSING_FATAL_ERROR, exception.getLineNumber(), exception.getColumnNumber(),
+                exception.getMessage()));
         throw exception;
     }
 }

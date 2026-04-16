@@ -15,9 +15,11 @@ import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 
 @ApplicationScoped
 public class RepositoryDaoImpl implements RepositoryDao { // TODO move to private package
+    private static final String ERROR_DELETING = "Error deleting repository";
     private static final String ERROR_RETRIEVING = "Error retrieving repositories";
     private static final String ERROR_RETRIEVING_HARVEST = "Error retrieving repositories to harvest";
     private static final String ERROR_SETTING_ERROR = "Error setting repository error";
+    private static final String ERROR_UPDATING = "Error updating repository";
     private static final String QUERY_GET_HARVEST_REPOSITORIES = """
             SELECT r
             FROM Repository r
@@ -91,7 +93,24 @@ public class RepositoryDaoImpl implements RepositoryDao { // TODO move to privat
                 throw e;
             }
         } catch (final PersistenceException e) {
-            throw new DaoException(ERROR_RETRIEVING, e);
+            throw new DaoException(ERROR_UPDATING, e);
+        }
+    }
+
+    @Override
+    public void delete(final URL url) throws DaoException {
+        try (final EntityManager manager = factory.createEntityManager()) {
+            final EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            try {
+                manager.remove(manager.find(Repository.class, url));
+                transaction.commit();
+            } catch (final Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        } catch (final PersistenceException e) {
+            throw new DaoException(ERROR_DELETING, e);
         }
     }
 

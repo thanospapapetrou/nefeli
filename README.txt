@@ -17,5 +17,18 @@ handle HTTP
 503 Service Unavailable
 400 Bad Request
 
+handle HTTP 429 Too Many Requests -> Retry-After (seconds)
+handle HTTP 503 Service Unavailable -> Retry-After (seconds)
+Retry-After: <http-date>
+Retry-After: <delay-seconds>
 handle redirects
 http://ejournal.uin-suka.ac.id/tarbiyah/index.php/alathfal/oai
+
+replace URL equals
+cleanup harvester
+cleanup client
+cleanup DAO
+
+Toolkit http://oai.dlib.vt.edu/OAI/metadata/toolkit.xsd
+
+{http://www.language-archives.org/OLAC/1.1/olac-archive}olac-archive

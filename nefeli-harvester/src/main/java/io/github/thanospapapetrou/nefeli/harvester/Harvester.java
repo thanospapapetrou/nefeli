@@ -1,8 +1,6 @@
 package io.github.thanospapapetrou.nefeli.harvester;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.ConnectException;
 import java.net.HttpRetryException;
 import java.net.SocketException;
@@ -39,10 +37,12 @@ import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;
 import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhClient;
 import io.github.thanospapapetrou.nefeli.oai.pmh.OaiPmhException;
+import io.github.thanospapapetrou.nefeli.oai.pmh.RetryAfterException;
 
 @ApplicationScoped
 public class Harvester implements AutoCloseable, Runnable {
     private static final String DELIMITER = "\n";
+    private static final String ERROR_DELETING = "Error deleting repository %1$s";
     private static final String ERROR_HTTP = "HTTP %1$d";
     private static final String ERROR_IDENTIFYING = "Error identifying repository %1$s";
     private static final String ERROR_LISTING_SETS = "Error listing sets of repository %1$s";
@@ -130,8 +130,15 @@ public class Harvester implements AutoCloseable, Runnable {
                                     identify.getBody().getRepositoryName(), identify.getBody().getAdminEmails(),
                                     identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
                                     identify.getBody().getGranularity(), identify.getBody().getCompressions()));
+                    return identify.getBody().getBaseUrl();
+                }, client, String.format(ERROR_UPDATING, identify.getBody().getBaseUrl())), workers)
+                .thenComposeAsync(url -> step(() -> {
+                    if (!client.getUrl().toString().equals(url.toString())) {
+                        repositoryDao.delete(client.getUrl());
+                        // TODO do not continue using same client, stop chain
+                    }
                     return null;
-                }, client, String.format(ERROR_UPDATING, identify.getBody().getBaseUrl())), workers);
+                }, client, String.format(ERROR_DELETING, url)), workers);
     }
 
     private CompletableFuture<String> listSets(final OaiPmhClient client, final String token) {
@@ -166,6 +173,12 @@ public class Harvester implements AutoCloseable, Runnable {
         workers.submit(() -> {
             try {
                 future.complete(step.call());
+            } catch (final RetryAfterException e) {
+                LOGGER.info(String.format("Waiting %1$s for %2$d seconds", client.getUrl(), e.getSeconds()));
+                scheduler.schedule(() -> {
+                    step(step, client, error).thenAcceptAsync(future::complete, workers);
+                }, e.getSeconds(), TimeUnit.SECONDS);
+                future.completeExceptionally(e);
             } catch (final Exception e) {
                 final String unrecoverable = getUnrecoverableError(e);
                 if (unrecoverable != null) {
@@ -173,8 +186,6 @@ public class Harvester implements AutoCloseable, Runnable {
                     setRepositoryError(client.getUrl(), unrecoverable);
                 } else {
                     LOGGER.log(Level.WARNING, error, e);
-                    final StringWriter stackTrace = new StringWriter();
-                    e.printStackTrace(new PrintWriter(stackTrace, true));
                 }
                 future.completeExceptionally(e);
             }
