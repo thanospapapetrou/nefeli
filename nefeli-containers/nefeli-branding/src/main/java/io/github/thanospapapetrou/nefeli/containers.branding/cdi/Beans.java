@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.branding.cdi;
+package io.github.thanospapapetrou.nefeli.containers.branding.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;

@@ -7,17 +7,17 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.openarchives.oai._2.XmlContent;
+import org.openarchives.oai._2.Container;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public abstract class XmlContentAdapter<T extends XmlContent> extends XmlAdapter<Element, T> {
+public abstract class ContainerAdapter<T extends Container> extends XmlAdapter<Element, T> {
     protected final DocumentBuilder builder;
     protected final Marshaller marshaller;
     protected final Unmarshaller unmarshaller;
     protected final Class<T> clazz;
 
-    protected XmlContentAdapter(final DocumentBuilder builder, final Marshaller marshaller,
+    protected ContainerAdapter(final DocumentBuilder builder, final Marshaller marshaller,
             final Unmarshaller unmarshaller, final Class<T> clazz) {
         this.builder = builder;
         this.marshaller = marshaller;

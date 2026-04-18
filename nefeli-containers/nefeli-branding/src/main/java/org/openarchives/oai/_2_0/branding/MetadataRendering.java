@@ -12,7 +12,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.branding.jaxb.MediaTypeAdapter;
+import io.github.thanospapapetrou.nefeli.containers.branding.jaxb.MediaTypeAdapter;
 
 /**
  * &lt;p&gt;Java class for metadataRenderingType complex type&lt;/p&gt;.

@@ -9,7 +9,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.openarchives.oai._2.DescriptionContent;
+import org.openarchives.oai._2.DescriptionContainer;
 
 /**
  * &lt;p&gt;Java class for toolkitType complex type&lt;/p&gt;.
@@ -43,7 +43,7 @@ import org.openarchives.oai._2.DescriptionContent;
         "toolkitIcon",
         "url"
 })
-public class Toolkit implements DescriptionContent {
+public class Toolkit implements DescriptionContainer {
     public static final String NAMESPACE = "http://oai.dlib.vt.edu/OAI/metadata/toolkit";
     public static final String PREFIX = "toolkit";
     public static final String SCHEMA = "http://oai.dlib.vt.edu/OAI/metadata/toolkit.xsd";

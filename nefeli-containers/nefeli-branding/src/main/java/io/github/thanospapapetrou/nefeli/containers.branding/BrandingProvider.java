@@ -1,11 +1,11 @@
-package io.github.thanospapapetrou.nefeli.branding;
+package io.github.thanospapapetrou.nefeli.containers.branding;
 
 import org.openarchives.oai._2_0.branding.Branding;
 
-import io.github.thanospapapetrou.nefeli.branding.jaxb.BrandingAdapter;
-import io.github.thanospapapetrou.nefeli.oai.pmh.XmlContentProvider;
+import io.github.thanospapapetrou.nefeli.containers.branding.jaxb.BrandingAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerProvider;
 
-public class BrandingProvider extends XmlContentProvider<Branding> {
+public class BrandingProvider extends ContainerProvider<Branding> {
     public BrandingProvider() {
         super(BrandingAdapter.class);
     }

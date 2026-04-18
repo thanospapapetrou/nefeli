@@ -37,9 +37,9 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.XmlContainerAdapter;
 public class Description {
     @XmlAnyElement(lax = true)
     @XmlJavaTypeAdapter(XmlContainerAdapter.class)
-    private final DescriptionContent description;
+    private final DescriptionContainer description;
 
-    public Description(final DescriptionContent description) {
+    public Description(final DescriptionContainer description) {
         this.description = description;
     }
 
@@ -47,7 +47,7 @@ public class Description {
         this(null);
     }
 
-    public DescriptionContent getDescription() {
+    public DescriptionContainer getDescription() {
         return description;
     }
 }

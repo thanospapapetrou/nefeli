@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.branding.jaxb;
+package io.github.thanospapapetrou.nefeli.containers.branding.jaxb;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.mail.internet.AddressException;

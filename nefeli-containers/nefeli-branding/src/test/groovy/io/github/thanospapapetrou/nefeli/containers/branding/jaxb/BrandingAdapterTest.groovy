@@ -1,6 +1,5 @@
 package io.github.thanospapapetrou.nefeli.containers.branding.jaxb
 
-import io.github.thanospapapetrou.nefeli.branding.jaxb.BrandingAdapter
 import jakarta.xml.bind.Marshaller
 import jakarta.xml.bind.Unmarshaller
 import org.openarchives.oai._2_0.branding.Branding

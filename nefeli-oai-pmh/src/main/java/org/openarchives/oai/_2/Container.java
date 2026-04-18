@@ -1,4 +1,4 @@
 package org.openarchives.oai._2;
 
-public interface XmlContent {
+public interface Container {
 }

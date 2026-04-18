@@ -9,11 +9,11 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.openarchives.oai._2_0.friends.Friends;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.XmlContentAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerAdapter;
 
-public class FriendsAdapter extends XmlContentAdapter<Friends> {
+public class FriendsAdapter extends ContainerAdapter<Friends> {
     @Inject
-    public FriendsAdapter(final DocumentBuilder builder, @Named("friendsContext") final Marshaller marshaller,
+    public FriendsAdapter(final DocumentBuilder builder, @Named("friendsMarshaller") final Marshaller marshaller,
             @Named("friendsUnmarshaller") final Unmarshaller unmarshaller) {
         super(builder, marshaller, unmarshaller, Friends.class);
     }

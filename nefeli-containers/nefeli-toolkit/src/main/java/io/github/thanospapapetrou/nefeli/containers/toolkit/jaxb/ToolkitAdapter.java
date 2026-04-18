@@ -8,9 +8,9 @@ import jakarta.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 
 import edu.vt.dlib.oai.oai.metadata.toolkit.Toolkit;
-import io.github.thanospapapetrou.nefeli.oai.pmh.XmlContentAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerAdapter;
 
-public class ToolkitAdapter extends XmlContentAdapter<Toolkit> {
+public class ToolkitAdapter extends ContainerAdapter<Toolkit> {
     @Inject
     public ToolkitAdapter(final DocumentBuilder builder,
             @Named("toolkitMarshaller") final Marshaller marshaller,

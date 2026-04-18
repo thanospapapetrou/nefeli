@@ -1,6 +1,5 @@
 package io.github.thanospapapetrou.nefeli.containers.branding.cdi
 
-import io.github.thanospapapetrou.nefeli.branding.cdi.Beans
 import jakarta.xml.bind.JAXBContext
 import jakarta.xml.bind.Marshaller
 import jakarta.xml.bind.Unmarshaller

@@ -1,6 +1,5 @@
 package io.github.thanospapapetrou.nefeli.containers.branding.jaxb
 
-import io.github.thanospapapetrou.nefeli.branding.jaxb.MediaTypeAdapter
 import jakarta.ws.rs.core.MediaType
 import spock.lang.Specification
 import spock.lang.Unroll

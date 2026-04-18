@@ -7,7 +7,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.openarchives.oai._2.DescriptionContent;
+import org.openarchives.oai._2.DescriptionContainer;
 
 /**
  * &lt;p&gt;Java class for anonymous complex type&lt;/p&gt;.
@@ -35,7 +35,7 @@ import org.openarchives.oai._2.DescriptionContent;
     "collectionIcon",
     "metadataRendering"
 })
-public class Branding implements DescriptionContent {
+public class Branding implements DescriptionContainer {
     public static final String NAMESPACE = "http://www.openarchives.org/OAI/2.0/branding/";
     public static final String PREFIX = "branding";
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/branding.xsd";

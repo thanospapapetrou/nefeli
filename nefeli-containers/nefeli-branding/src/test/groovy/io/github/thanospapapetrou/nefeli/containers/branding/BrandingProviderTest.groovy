@@ -1,7 +1,6 @@
 package io.github.thanospapapetrou.nefeli.containers.branding
 
-import io.github.thanospapapetrou.nefeli.branding.BrandingProvider
-import io.github.thanospapapetrou.nefeli.branding.jaxb.BrandingAdapter
+import io.github.thanospapapetrou.nefeli.containers.branding.jaxb.BrandingAdapter
 import spock.lang.Specification
 
 class BrandingProviderTest extends Specification {

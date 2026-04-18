@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.branding.jaxb;
+package io.github.thanospapapetrou.nefeli.containers.branding.jaxb;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -9,9 +9,9 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.openarchives.oai._2_0.branding.Branding;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.XmlContentAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerAdapter;
 
-public class BrandingAdapter extends XmlContentAdapter<Branding> {
+public class BrandingAdapter extends ContainerAdapter<Branding> {
     @Inject
     public BrandingAdapter(final DocumentBuilder builder, @Named("brandingMarshaller") final Marshaller marshaller,
             @Named("brandingUnmarshaller") final Unmarshaller unmarshaller) {

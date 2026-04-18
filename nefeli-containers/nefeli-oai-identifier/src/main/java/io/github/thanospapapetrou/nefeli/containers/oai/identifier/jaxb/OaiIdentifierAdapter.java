@@ -9,9 +9,9 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.openarchives.oai._2_0.oai_identifier.OaiIdentifier;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.XmlContentAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerAdapter;
 
-public class OaiIdentifierAdapter extends XmlContentAdapter<OaiIdentifier> {
+public class OaiIdentifierAdapter extends ContainerAdapter<OaiIdentifier> {
     @Inject
     public OaiIdentifierAdapter(final DocumentBuilder builder,
             @Named("oaiIdentifierMarshaller") final Marshaller marshaller,
