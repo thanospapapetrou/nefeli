@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+    <artifactId>nefeli-containers</artifactId>
+    <packaging>pom</packaging>
+    <name>Nefeli Containers</name>
+    <parent>
+        <groupId>io.github.thanospapapetrou.nefeli</groupId>
+        <artifactId>nefeli</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modules>
+        <module>nefeli-branding</module>
+        <module>nefeli-friends</module>
+        <module>nefeli-oai-identifier</module>
+        <module>nefeli-toolkit</module>
+    </modules>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Specification-Title>${specification.title}</Specification-Title>
+                                <Specification-Version>${specification.version}</Specification-Version>
+                                <Specification-Vendor>${specification.vendor}</Specification-Vendor>
+                                <Implementation-Title>${project.name}</Implementation-Title>
+                                <Implementation-Version>${project.version}</Implementation-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

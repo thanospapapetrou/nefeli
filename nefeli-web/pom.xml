@@ -62,17 +62,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.thanospapapetrou.nefeli</groupId>
-            <artifactId>nefeli-branding</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.thanospapapetrou.nefeli</groupId>
             <artifactId>nefeli-db</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.thanospapapetrou.nefeli</groupId>
-            <artifactId>nefeli-friends</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.github.thanospapapetrou.nefeli</groupId>
@@ -80,15 +70,25 @@
         </dependency>
         <dependency>
             <groupId>io.github.thanospapapetrou.nefeli</groupId>
+            <artifactId>nefeli-oai-pmh</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+            <artifactId>nefeli-branding</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+            <artifactId>nefeli-friends</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
             <artifactId>nefeli-oai-identifier</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.thanospapapetrou.nefeli</groupId>
-            <artifactId>nefeli-oai-pmh</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.thanospapapetrou.nefeli</groupId>
+            <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
             <artifactId>nefeli-toolkit</artifactId>
             <scope>runtime</scope>
         </dependency>

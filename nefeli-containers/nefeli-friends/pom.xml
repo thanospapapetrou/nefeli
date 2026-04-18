@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>nefeli-friends</artifactId>
+    <name>Nefeli Friends</name>
+    <parent>
+        <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+        <artifactId>nefeli-containers</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <properties>
+        <specification.title>XML Schema for repositories to list confederate repositories</specification.title>
+        <specification.vendor>Open Archives Initiative</specification.vendor>
+        <specification.version>2002/09/30T15:33:00Z</specification.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thanospapapetrou.nefeli</groupId>
+            <artifactId>nefeli-oai-pmh</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

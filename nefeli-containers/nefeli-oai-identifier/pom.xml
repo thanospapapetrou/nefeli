@@ -3,17 +3,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>nefeli-toolkit</artifactId>
-    <name>Nefeli Toolkit</name>
+    <artifactId>nefeli-oai-identifier</artifactId>
+    <name>Nefeli OAI Identifier</name>
     <parent>
-        <groupId>io.github.thanospapapetrou.nefeli</groupId>
-        <artifactId>nefeli</artifactId>
+        <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+        <artifactId>nefeli-containers</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+    <properties>
+        <specification.title>Specification and XML Schema for the OAI Identifier Format</specification.title>
+        <specification.vendor>Open Archives Initiative</specification.vendor>
+        <specification.version>2006/03/09T19:52:00Z</specification.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
@@ -35,24 +45,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.5.0</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Specification-Title>OAI Toolkit</Specification-Title>
-                            <Specification-Version>2.0</Specification-Version>
-                            <Specification-Vendor>Virginia Tech</Specification-Vendor>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

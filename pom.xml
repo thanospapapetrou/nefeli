@@ -9,14 +9,11 @@
     <packaging>pom</packaging>
     <name>Nefeli</name>
     <modules>
-        <module>nefeli-branding</module>
         <module>nefeli-common</module>
+        <module>nefeli-containers</module>
         <module>nefeli-db</module>
-        <module>nefeli-friends</module>
         <module>nefeli-harvester</module>
-        <module>nefeli-oai-identifier</module>
         <module>nefeli-oai-pmh</module>
-        <module>nefeli-toolkit</module>
         <module>nefeli-web</module>
     </modules>
     <properties>
@@ -97,11 +94,6 @@
             </dependency>
             <dependency>
                 <groupId>io.github.thanospapapetrou.nefeli</groupId>
-                <artifactId>nefeli-branding</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.thanospapapetrou.nefeli</groupId>
                 <artifactId>nefeli-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -112,17 +104,7 @@
             </dependency>
             <dependency>
                 <groupId>io.github.thanospapapetrou.nefeli</groupId>
-                <artifactId>nefeli-friends</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.thanospapapetrou.nefeli</groupId>
                 <artifactId>nefeli-harvester</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.github.thanospapapetrou.nefeli</groupId>
-                <artifactId>nefeli-oai-identifier</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -131,7 +113,22 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.github.thanospapapetrou.nefeli</groupId>
+                <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+                <artifactId>nefeli-branding</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+                <artifactId>nefeli-friends</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
+                <artifactId>nefeli-oai-identifier</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.thanospapapetrou.nefeli.containers</groupId>
                 <artifactId>nefeli-toolkit</artifactId>
                 <version>${project.version}</version>
             </dependency>
