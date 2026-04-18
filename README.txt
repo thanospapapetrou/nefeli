@@ -30,3 +30,7 @@ cleanup client
 cleanup DAO
 why marshallers and unmarshallers don't have a schema?
 {http://www.language-archives.org/OLAC/1.1/olac-archive}olac-archive
+
+maven-jar-plugin should be configured in a single pom (preferably parent)
+package names for containers
+*Content -> Container
