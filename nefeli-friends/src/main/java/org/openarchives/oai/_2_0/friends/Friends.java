@@ -12,8 +12,6 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import org.openarchives.oai._2.DescriptionContent;
 
-// TODO https://www.openarchives.org/OAI/2.0/guidelines-friends.htm
-
 /**
  * &lt;p&gt;Java class for friendsType complex type&lt;/p&gt;.
  * 
@@ -47,6 +45,10 @@ public class Friends implements DescriptionContent {
 
     public Friends(final List<URL> baseUrls) {
         this.baseUrls = baseUrls;
+    }
+
+    private Friends() {
+        this(null);
     }
 
     public List<URL> getBaseUrls() {

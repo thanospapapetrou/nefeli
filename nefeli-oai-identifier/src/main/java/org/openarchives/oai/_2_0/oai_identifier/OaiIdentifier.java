@@ -47,8 +47,6 @@ public class OaiIdentifier implements DescriptionContent {
     public static final String SCHEMA = "https://www.openarchives.org/OAI/2.0/oai-identifier.xsd";
     public static final String SCHEME = "oai";
 
-// TODO https://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
-
     @XmlElement(required = true)
     private final String scheme;
     @XmlElement(required = true)

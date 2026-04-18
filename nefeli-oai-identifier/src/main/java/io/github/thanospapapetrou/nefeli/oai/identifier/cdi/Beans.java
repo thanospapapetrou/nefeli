@@ -14,8 +14,7 @@ import org.openarchives.oai._2_0.oai_identifier.OaiIdentifier;
 public class Beans {
     @Named("oaiIdentifierMarshaller")
     @Produces
-    public Marshaller getMarshaller(@Named("oaiIdentifierContext") final JAXBContext context)
-            throws JAXBException {
+    public Marshaller getMarshaller(@Named("oaiIdentifierContext") final JAXBContext context) throws JAXBException {
         return context.createMarshaller();
     }
 

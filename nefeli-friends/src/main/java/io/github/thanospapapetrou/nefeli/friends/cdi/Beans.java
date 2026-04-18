@@ -14,8 +14,7 @@ import org.openarchives.oai._2_0.friends.Friends;
 public class Beans {
     @Named("friendsMarshaller")
     @Produces
-    public Marshaller getMarshaller(@Named("friendsContext") final JAXBContext context)
-            throws JAXBException {
+    public Marshaller getMarshaller(@Named("friendsContext") final JAXBContext context) throws JAXBException {
         return context.createMarshaller();
     }
 

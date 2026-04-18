@@ -4,7 +4,7 @@ import jakarta.xml.bind.JAXBContext
 import jakarta.xml.bind.Marshaller
 import jakarta.xml.bind.Unmarshaller
 import org.openarchives.oai._2_0.oai_identifier.OaiIdentifier
-import spock.lang.Specification;
+import spock.lang.Specification
 
 class BeansTest extends Specification {
     private final Beans beans = new Beans()
@@ -29,9 +29,9 @@ class BeansTest extends Specification {
 
     def 'Test context'() {
         when:
-        final JAXBContext context = beans.context
+        final JAXBContext result = beans.context
         then:
-        context
-        context.classes == [OaiIdentifier]
+        result
+        result.classes == [OaiIdentifier]
     }
 }

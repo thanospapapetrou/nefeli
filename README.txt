@@ -28,7 +28,5 @@ replace URL equals
 cleanup harvester
 cleanup client
 cleanup DAO
-
-Toolkit http://oai.dlib.vt.edu/OAI/metadata/toolkit.xsd
-
+why marshallers and unmarshallers don't have a schema?
 {http://www.language-archives.org/OLAC/1.1/olac-archive}olac-archive

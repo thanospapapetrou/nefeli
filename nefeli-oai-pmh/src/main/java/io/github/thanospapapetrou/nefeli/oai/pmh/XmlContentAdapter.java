@@ -1,0 +1,39 @@
+package io.github.thanospapapetrou.nefeli.oai.pmh;
+
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+
+import javax.xml.parsers.DocumentBuilder;
+
+import org.openarchives.oai._2.XmlContent;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+public abstract class XmlContentAdapter<T extends XmlContent> extends XmlAdapter<Element, T> {
+    protected final DocumentBuilder builder;
+    protected final Marshaller marshaller;
+    protected final Unmarshaller unmarshaller;
+    protected final Class<T> clazz;
+
+    protected XmlContentAdapter(final DocumentBuilder builder, final Marshaller marshaller,
+            final Unmarshaller unmarshaller, final Class<T> clazz) {
+        this.builder = builder;
+        this.marshaller = marshaller;
+        this.unmarshaller = unmarshaller;
+        this.clazz = clazz;
+    }
+
+    @Override
+    public Element marshal(final T content) throws JAXBException {
+        final Document document = builder.newDocument();
+        marshaller.marshal(content, document);
+        return document.getDocumentElement();
+    }
+
+    @Override
+    public T unmarshal(final Element element) throws JAXBException {
+        return unmarshaller.unmarshal(element, clazz).getValue();
+    }
+}
