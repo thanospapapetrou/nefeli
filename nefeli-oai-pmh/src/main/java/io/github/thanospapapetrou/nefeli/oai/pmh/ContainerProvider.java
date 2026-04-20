@@ -1,39 +1,33 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.JAXBException;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.openarchives.oai._2.Container;
-import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import io.github.thanospapapetrou.nefeli.common.jaxb.JaxbHelper;
+import io.github.thanospapapetrou.nefeli.common.xml.XmlHelper;
 
 public abstract class ContainerProvider<T extends Container> {
-    protected final Class<? extends XmlAdapter<Element, T>> adapter;
+    protected final XmlHelper xml;
+    protected final JaxbHelper jaxb;
+    protected final Class<T> container;
 
-    public static Class<?> getXmlContentClass(final Class<? extends ContainerProvider<?>> provider) {
-        return Arrays.stream(provider.getGenericInterfaces()).filter(ParameterizedType.class::isInstance)
-                .map(ParameterizedType.class::cast).filter(t -> t.getRawType() == ContainerProvider.class)
-                .map(ParameterizedType::getActualTypeArguments).map(Arrays::asList).map(List::getFirst)
-                .map(Class.class::cast).findFirst().orElse(null);
+    protected ContainerProvider(final XmlHelper xml, final JaxbHelper jaxb, final Class<T> container) {
+        this.xml = xml;
+        this.jaxb = jaxb;
+        this.container = container;
     }
 
-    public static String getNamespace(final Class<? extends ContainerProvider<?>> provider) {
-        return getXmlContentClass(provider).getAnnotation(XmlRootElement.class).namespace();
-    }
-
-    public static String getLocalName(final Class<? extends ContainerProvider<?>> provider) {
-        return getXmlContentClass(provider).getAnnotation(XmlRootElement.class).name();
-    }
-
-    protected ContainerProvider(final Class<? extends XmlAdapter<Element, T>> adapter) {
-        this.adapter = adapter;
-    }
-
-    public XmlAdapter<Element, T> getAdapter() {
-        return CDI.current().select(adapter).get();
+    public ContainerAdapter<T> getAdapter()
+            throws JAXBException, MalformedURLException, ParserConfigurationException, SAXException,
+            URISyntaxException {
+        return new ContainerAdapter<T>(xml.getBuilder(jaxb.getSchema(container)), jaxb.getMarshaller(container),
+                jaxb.getUnmarshaller(container), container);
     }
 }

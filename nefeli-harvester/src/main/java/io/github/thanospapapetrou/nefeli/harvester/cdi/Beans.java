@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 
-import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 import io.github.thanospapapetrou.nefeli.harvester.DaemonThreadFactory;
 
 @ApplicationScoped

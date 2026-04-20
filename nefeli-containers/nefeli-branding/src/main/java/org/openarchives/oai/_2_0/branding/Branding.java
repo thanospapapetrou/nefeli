@@ -30,7 +30,7 @@ import org.openarchives.oai._2.DescriptionContainer;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "branding")
+@XmlRootElement(name = "branding", namespace = Branding.NAMESPACE)
 @XmlType(name = "", propOrder = {
     "collectionIcon",
     "metadataRendering"

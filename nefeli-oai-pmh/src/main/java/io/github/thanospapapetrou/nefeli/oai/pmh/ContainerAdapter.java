@@ -11,7 +11,7 @@ import org.openarchives.oai._2.Container;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public abstract class ContainerAdapter<T extends Container> extends XmlAdapter<Element, T> {
+public class ContainerAdapter<T extends Container> extends XmlAdapter<Element, T> {
     protected final DocumentBuilder builder;
     protected final Marshaller marshaller;
     protected final Unmarshaller unmarshaller;

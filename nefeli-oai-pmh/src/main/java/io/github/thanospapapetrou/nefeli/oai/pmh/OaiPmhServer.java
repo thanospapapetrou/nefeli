@@ -20,7 +20,7 @@ import org.openarchives.oai._2.MetadataFormat;
 import org.openarchives.oai._2.Record;
 import org.openarchives.oai._2.SetSpec;
 
-import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhParameterConverterProvider;
 
 @ApplicationScoped

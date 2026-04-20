@@ -8,7 +8,7 @@ import jakarta.ws.rs.ext.ParamConverter;
 
 import org.openarchives.oai._2.Granularity;
 
-import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 
 @ApplicationScoped
 public class InstantParameterConverter implements ParamConverter<Instant> {

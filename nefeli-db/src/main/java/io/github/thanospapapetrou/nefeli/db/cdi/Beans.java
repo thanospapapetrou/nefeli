@@ -8,7 +8,7 @@ import jakarta.enterprise.inject.Produces;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 
 @ApplicationScoped
 public class Beans {

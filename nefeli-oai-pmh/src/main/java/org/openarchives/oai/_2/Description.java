@@ -6,7 +6,7 @@ import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.XmlContainerAdapter;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.ContainerAdapter;
 
 /**
  * The descriptionType is used for the description
@@ -36,7 +36,7 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.XmlContainerAdapter;
 @XmlType(name = "descriptionType", propOrder = {"description"})
 public class Description {
     @XmlAnyElement(lax = true)
-    @XmlJavaTypeAdapter(XmlContainerAdapter.class)
+    @XmlJavaTypeAdapter(ContainerAdapter.class)
     private final DescriptionContainer description;
 
     public Description(final DescriptionContainer description) {

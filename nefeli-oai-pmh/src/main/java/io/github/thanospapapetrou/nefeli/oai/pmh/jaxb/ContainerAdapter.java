@@ -1,24 +1,25 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh.jaxb;
 
-import java.util.Objects;
+import java.lang.reflect.ParameterizedType;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import javax.xml.namespace.QName;
 
-import org.openarchives.oai._2.GenericContainer;
 import org.openarchives.oai._2.Container;
+import org.openarchives.oai._2.GenericContainer;
 import org.w3c.dom.Element;
 
 import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerProvider;
 
 @ApplicationScoped
-public class XmlContainerAdapter extends XmlAdapter<Element, Container> {
-    private static final Logger LOGGER = Logger.getLogger(XmlContainerAdapter.class.getName());
+public class ContainerAdapter extends XmlAdapter<Element, Container> {
+    private static final Logger LOGGER = Logger.getLogger(ContainerAdapter.class.getName());
     private static final String ERROR_MARSHALLING = "Error marshalling %1$s";
     private static final String ERROR_NO_CONTENT_PROVIDER_CLASS = "No content provider found for class %1$s";
     private static final String ERROR_NO_CONTENT_PROVIDER_ELEMENT =
@@ -66,17 +67,26 @@ public class XmlContainerAdapter extends XmlAdapter<Element, Container> {
 
     private ServiceLoader.Provider<ContainerProvider> getProvider(final Container element) {
         return ServiceLoader.load(ContainerProvider.class).stream()
-                .filter(p -> ContainerProvider.getXmlContentClass((Class<? extends ContainerProvider<?>>) p.type())
-                        .isInstance(element))
+                .filter(p -> getContainerClass(p).isInstance(element))
                 .findFirst().orElse(null);
     }
 
     private ServiceLoader.Provider<ContainerProvider> getProvider(final Element element) {
         return ServiceLoader.load(ContainerProvider.class).stream()
-                .filter(p -> ContainerProvider.getNamespace((Class<? extends ContainerProvider<?>>) p.type())
-                        .equals(element.getNamespaceURI())
-                        && Objects.equals(ContainerProvider.getLocalName((Class<? extends ContainerProvider<?>>) p.type()),
-                        element.getLocalName()))
+                .filter(p -> getContainerNamespace(p).equals(element.getNamespaceURI())
+                        && getContainerName(p).equals(element.getLocalName()))
                 .findFirst().orElse(null);
+    }
+
+    private Class<?> getContainerClass(final ServiceLoader.Provider<ContainerProvider> provider) {
+        return (Class<?>) ((ParameterizedType) provider.type().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    private String getContainerNamespace(final ServiceLoader.Provider<ContainerProvider> provider) {
+        return getContainerClass(provider).getAnnotation(XmlRootElement.class).namespace();
+    }
+
+    private String getContainerName(final ServiceLoader.Provider<ContainerProvider> provider) {
+        return getContainerClass(provider).getAnnotation(XmlRootElement.class).name();
     }
 }

@@ -26,7 +26,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
-import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
 @ApplicationScoped

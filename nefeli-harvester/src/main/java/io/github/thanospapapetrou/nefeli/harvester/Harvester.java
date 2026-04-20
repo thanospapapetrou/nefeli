@@ -31,7 +31,7 @@ import javax.net.ssl.SSLHandshakeException;
 import org.openarchives.oai._2.OaiPmhError;
 import org.openarchives.oai._2.OaiPmhErrorCode;
 
-import io.github.thanospapapetrou.nefeli.common.Configuration;
+import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 import io.github.thanospapapetrou.nefeli.db.DaoException;
 import io.github.thanospapapetrou.nefeli.db.RepositoryDao;
 import io.github.thanospapapetrou.nefeli.db.domain.Repository;

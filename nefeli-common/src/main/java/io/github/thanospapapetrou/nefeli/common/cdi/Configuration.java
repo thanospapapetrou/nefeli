@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.common;
+package io.github.thanospapapetrou.nefeli.common.cdi;
 
 import java.io.IOException;
 import java.io.InputStream;
