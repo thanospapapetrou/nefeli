@@ -36,6 +36,10 @@ public class JaxbHelper {
         this(schema, handler, new HashMap<>());
     }
 
+    JaxbHelper() {
+        this(null, null, null);
+    }
+
     private JaxbHelper(final SchemaHelper schema, final ValidationEventHandler handler,
             final Map<Class<?>, JAXBContext> contexts) {
         this.schema = schema;

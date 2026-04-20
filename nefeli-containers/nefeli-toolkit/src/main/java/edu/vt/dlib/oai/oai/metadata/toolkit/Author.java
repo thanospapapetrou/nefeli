@@ -47,6 +47,10 @@ public class Author {
         this.institution = institution;
     }
 
+    private Author() {
+        this(null, null, null);
+    }
+
     public String getName() {
         return name;
     }

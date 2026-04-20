@@ -28,6 +28,10 @@ public class XmlHelper {
         this(resolver, handler, new HashMap<>());
     }
 
+    XmlHelper() {
+        this(null, null, null);
+    }
+
     private XmlHelper(final EntityResolver resolver, final ErrorHandler handler,
             final Map<Schema, DocumentBuilderFactory> factories) {
         this.resolver = resolver;

@@ -19,6 +19,10 @@ public class SchemaHelper {
         this.factory = factory;
     }
 
+    SchemaHelper() {
+        this(null);
+    }
+
     public Schema getSchema(final URL schema) throws SAXException {
         synchronized (factory) {
             return factory.newSchema(schema);
