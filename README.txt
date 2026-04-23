@@ -34,3 +34,7 @@ why marshallers and unmarshallers don't have a schema?
 maven-jar-plugin should be configured in a single pom (preferably parent)
 package names for containers
 *Content -> Container
+
+there are two container adapters
+delegatingcontaineradapter to extend containeradapter?
+isolate container parsing errors

@@ -6,6 +6,7 @@ import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.dom.DOMSource;
 
 import org.openarchives.oai._2.Container;
 import org.w3c.dom.Document;
@@ -26,14 +27,14 @@ public class ContainerAdapter<T extends Container> extends XmlAdapter<Element, T
     }
 
     @Override
-    public Element marshal(final T content) throws JAXBException {
+    public Element marshal(final T container) throws JAXBException {
         final Document document = builder.newDocument();
-        marshaller.marshal(content, document);
+        marshaller.marshal(container, document);
         return document.getDocumentElement();
     }
 
     @Override
     public T unmarshal(final Element element) throws JAXBException {
-        return unmarshaller.unmarshal(element, clazz).getValue();
+        return unmarshaller.unmarshal(new DOMSource(element, "http://www.example.org/"), clazz).getValue(); // TODO
     }
 }

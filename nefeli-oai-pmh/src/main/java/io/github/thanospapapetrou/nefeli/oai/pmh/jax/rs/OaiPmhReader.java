@@ -21,6 +21,8 @@ import jakarta.xml.bind.Unmarshaller;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
 import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhBody;
@@ -78,7 +80,7 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
         }
         try {
             // TODO read from stream source with system ID
-            return unmarshaller.unmarshal(builder.parse(body).getDocumentElement(), OaiPmhResponse.class).getValue();
+            return unmarshaller.unmarshal(new DOMSource(builder.parse(body).getDocumentElement(), "https://www.example.com/"), OaiPmhResponse.class).getValue();
         } catch (final JAXBException | SAXException e) {
             throw new IOException(ERROR_READING, e);
         }

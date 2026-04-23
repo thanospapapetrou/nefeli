@@ -27,7 +27,7 @@ public abstract class ContainerProvider<T extends Container> {
     public ContainerAdapter<T> getAdapter()
             throws JAXBException, MalformedURLException, ParserConfigurationException, SAXException,
             URISyntaxException {
-        return new ContainerAdapter<T>(xml.getBuilder(jaxb.getSchema(container)), jaxb.getMarshaller(container),
+        return new ContainerAdapter<>(xml.getBuilder(jaxb.getSchema(container)), jaxb.getMarshaller(container),
                 jaxb.getUnmarshaller(container), container);
     }
 }

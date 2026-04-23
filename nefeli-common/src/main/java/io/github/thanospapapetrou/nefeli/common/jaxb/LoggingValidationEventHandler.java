@@ -6,13 +6,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.xml.bind.ValidationEvent;
 import jakarta.xml.bind.ValidationEventHandler;
 
+import javax.xml.namespace.QName;
+
 @ApplicationScoped
 public class LoggingValidationEventHandler implements ValidationEventHandler {
-    private static final String ERROR = "Error parsing XML at %1$s, line %2$d, column %3$d, offset %4d: %5$s";
-    private static final String FATAL_ERROR =
-            "Fatal error parsing XML at %1$s, line %2$d, column %3$d, offset %4d: %5$s";
+    private static final String ERROR = "Error parsing XML at %1$s: %2$s";
+    private static final String FATAL_ERROR = "Fatal error parsing XML at %1$s: %2$s";
     private static final Logger LOGGER = Logger.getLogger(LoggingValidationEventHandler.class.getName());
-    private static final String WARNING = "Warning parsing XML at %1$s, line %2$d, column %3$d, offset %4d: %5$s";
+    private static final String WARNING = "Warning parsing XML at %1$s: %2$s";
 
     @Override
     public boolean handleEvent(final ValidationEvent event) {
@@ -20,8 +21,9 @@ public class LoggingValidationEventHandler implements ValidationEventHandler {
                     case ValidationEvent.FATAL_ERROR -> FATAL_ERROR;
                     case ValidationEvent.ERROR -> ERROR;
                     default -> WARNING;
-                }, event.getLocator().getURL(), event.getLocator().getLineNumber(), event.getLocator().getColumnNumber(),
-                event.getLocator().getOffset(), event.getMessage()));
+                },
+                new QName(event.getLocator().getNode().getNamespaceURI(), event.getLocator().getNode().getLocalName()),
+                event.getMessage()));
         return event.getSeverity() != ValidationEvent.FATAL_ERROR;
     }
 }
