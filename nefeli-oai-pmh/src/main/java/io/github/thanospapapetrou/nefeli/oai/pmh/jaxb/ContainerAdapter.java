@@ -1,4 +1,4 @@
-package io.github.thanospapapetrou.nefeli.oai.pmh;
+package io.github.thanospapapetrou.nefeli.oai.pmh.jaxb;
 
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -18,7 +18,7 @@ public class ContainerAdapter<T extends Container> extends XmlAdapter<Element, T
     protected final Unmarshaller unmarshaller;
     protected final Class<T> clazz;
 
-    protected ContainerAdapter(final DocumentBuilder builder, final Marshaller marshaller,
+    public ContainerAdapter(final DocumentBuilder builder, final Marshaller marshaller,
             final Unmarshaller unmarshaller, final Class<T> clazz) {
         this.builder = builder;
         this.marshaller = marshaller;
@@ -35,6 +35,6 @@ public class ContainerAdapter<T extends Container> extends XmlAdapter<Element, T
 
     @Override
     public T unmarshal(final Element element) throws JAXBException {
-        return unmarshaller.unmarshal(new DOMSource(element, "http://www.example.org/"), clazz).getValue(); // TODO
+        return unmarshaller.unmarshal(element, clazz).getValue();
     }
 }

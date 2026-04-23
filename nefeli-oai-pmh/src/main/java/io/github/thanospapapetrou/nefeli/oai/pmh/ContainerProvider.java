@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import io.github.thanospapapetrou.nefeli.common.jaxb.JaxbHelper;
 import io.github.thanospapapetrou.nefeli.common.xml.XmlHelper;
+import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.ContainerAdapter;
 
 public abstract class ContainerProvider<T extends Container> {
     protected final XmlHelper xml;
