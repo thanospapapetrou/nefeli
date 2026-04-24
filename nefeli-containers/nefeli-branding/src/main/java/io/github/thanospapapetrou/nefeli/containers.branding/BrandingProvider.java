@@ -1,19 +1,11 @@
 package io.github.thanospapapetrou.nefeli.containers.branding;
 
-import jakarta.enterprise.inject.spi.CDI;
-
 import org.openarchives.oai._2_0.branding.Branding;
 
-import io.github.thanospapapetrou.nefeli.common.jaxb.JaxbHelper;
-import io.github.thanospapapetrou.nefeli.common.xml.XmlHelper;
 import io.github.thanospapapetrou.nefeli.oai.pmh.ContainerProvider;
 
 public class BrandingProvider extends ContainerProvider<Branding> {
     public BrandingProvider() {
-        this(CDI.current().select(XmlHelper.class).get(), CDI.current().select(JaxbHelper.class).get());
-    }
-
-    private BrandingProvider(final XmlHelper xml, final JaxbHelper jaxb) {
-        super(xml, jaxb, Branding.class);
+        super(Branding.class);
     }
 }

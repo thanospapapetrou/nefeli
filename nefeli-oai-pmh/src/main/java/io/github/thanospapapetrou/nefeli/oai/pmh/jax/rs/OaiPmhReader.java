@@ -7,9 +7,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.enterprise.util.AnnotationLiteral;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
@@ -19,16 +17,13 @@ import jakarta.ws.rs.ext.Provider;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.openarchives.oai._2.Granularity;
 import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhResponse;
-import org.xml.sax.SAXException;
 
+import io.github.thanospapapetrou.nefeli.common.cdi.Beans;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
 @Consumes({MediaType.TEXT_XML, MediaType.WILDCARD})
@@ -36,37 +31,26 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private static final String ERROR_READING = "Error reading OAI-PMH response";
     private static final Logger LOGGER = Logger.getLogger(OaiPmhReader.class.getName());
-    private static final String WARNING_INVALID_MEDIA_TYPE = "OAI-PMH response from %1$s has invalid media type %2$s";
+    private static final String WARNING_INVALID_MEDIA_TYPE = "Invalid  media type %1$s";
 
-    private final DocumentBuilder builder;
     private final Unmarshaller unmarshaller;
 
-    public static class OaiPmhUnmarshaller extends AnnotationLiteral<Named> implements Named {
-        public String value() {
-            return "oaiPmhUnmarshaller";
-        }
-    }
-
-    public OaiPmhReader(final Granularity granularity) {
-        this(CDI.current().select(DocumentBuilder.class).get(), CDI.current().select(Unmarshaller.class,
-                new OaiPmhUnmarshaller()).get(),
-                granularity); // TODO fix injection
-    }
-
-    private OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller,
-            final Granularity granularity) {
-        this(builder, unmarshaller);
-        this.unmarshaller.setAdapter(InstantStringAdapter.class, new InstantStringAdapter(granularity));
-    }
-
-    private OaiPmhReader(final DocumentBuilder builder, final Unmarshaller unmarshaller) {
-        this.builder = builder;
+    @Inject
+    public OaiPmhReader(@Beans.Jaxb(OaiPmhResponse.class) final Unmarshaller unmarshaller) {
         this.unmarshaller = unmarshaller;
+        setGranularity(null);
+    }
+
+    public void setGranularity(final Granularity granularity) {
+        unmarshaller.setAdapter(InstantStringAdapter.class, new InstantStringAdapter(granularity));
     }
 
     @Override
     public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations,
             final MediaType mediaType) {
+        if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()))) {
+            LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, mediaType));
+        }
         return true;
     }
 
@@ -74,14 +58,9 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     public OaiPmhResponse<T> readFrom(final Class<OaiPmhResponse<T>> clazz, final Type type,
             final Annotation[] annotations, final MediaType mediaType, final MultivaluedMap<String, String> headers,
             final InputStream body) throws IOException, WebApplicationException {
-        if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()))) {
-            LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, headers.getFirst(RequestUrlFilter.class.getName()),
-                    mediaType));
-        }
         try {
-            // TODO read from stream source with system ID
-            return unmarshaller.unmarshal(new DOMSource(builder.parse(body).getDocumentElement(), "https://www.example.com/"), OaiPmhResponse.class).getValue();
-        } catch (final JAXBException | SAXException e) {
+            return unmarshaller.unmarshal(new StreamSource(body), OaiPmhResponse.class).getValue();
+        } catch (final JAXBException e) {
             throw new IOException(ERROR_READING, e);
         }
     }

@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.ws.rs.ProcessingException;
@@ -34,30 +33,22 @@ import org.openarchives.oai._2.SetSpec;
 import org.openarchives.oai._2.Verb;
 
 import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhReader;
-import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.RequestUrlFilter;
 
 public class OaiPmhClient implements OaiPmh, AutoCloseable {
     private static final String ERROR_SENDING_REQUEST = "Error sending OAI-PMH request";
     private static final String ERROR_REDIRECTING = "Error redirecting to %1$s";
     private static final String HEADER_FROM = "From";
-    private static final Logger LOGGER = Logger.getLogger(OaiPmhClient.class.getName());
 
     private final Client client;
     private final WebTarget target;
 
     public OaiPmhClient(final URL url) throws URISyntaxException {
-        this(CDI.current().select(Client.class).get(), url);
+        this(CDI.current().select(Client.class).get(), url, CDI.current().select(OaiPmhReader.class).get());
     }
 
-    private OaiPmhClient(final Client client, final URL url) throws URISyntaxException {
+    private OaiPmhClient(final Client client, final URL url, final OaiPmhReader<?> reader) throws URISyntaxException {
         this(client, client.target(url.toURI()));
-        this.target.register(RequestUrlFilter.class);
-        this.target.register(new OaiPmhReader<Identify>(null), 1);
-        this.target.register(new OaiPmhReader<ListSets>(null), 1);
-        this.target.register(new OaiPmhReader<ListMetadataFormats>(null), 1);
-        this.target.register(new OaiPmhReader<ListIdentifiers>(null), 1);
-        this.target.register(new OaiPmhReader<ListRecords>(null), 1);
-        this.target.register(new OaiPmhReader<GetRecord>(null), 1);
+        this.target.register(reader);
     }
 
     private OaiPmhClient(final Client client, final WebTarget target) {
@@ -80,12 +71,10 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
                 ARGUMENT_VERB, Verb.IDENTIFY
         ));
         if (identify.getBody() != null) {
-            this.target.register(new OaiPmhReader<Identify>(identify.getBody().getGranularity()), 0);
-            this.target.register(new OaiPmhReader<ListSets>(identify.getBody().getGranularity()), 0);
-            this.target.register(new OaiPmhReader<ListMetadataFormats>(identify.getBody().getGranularity()), 0);
-            this.target.register(new OaiPmhReader<ListIdentifiers>(identify.getBody().getGranularity()), 0);
-            this.target.register(new OaiPmhReader<ListRecords>(identify.getBody().getGranularity()), 0);
-            this.target.register(new OaiPmhReader<GetRecord>(identify.getBody().getGranularity()), 0);
+            this.target.getConfiguration().getInstances().stream()
+                    .filter(instance -> instance instanceof OaiPmhReader)
+                    .map(instance -> (OaiPmhReader<?>) instance)
+                    .forEach(reader -> reader.setGranularity(identify.getBody().getGranularity()));
         }
         return identify;
     }

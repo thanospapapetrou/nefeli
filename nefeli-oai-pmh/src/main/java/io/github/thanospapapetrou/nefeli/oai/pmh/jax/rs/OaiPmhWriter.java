@@ -5,8 +5,6 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -18,6 +16,8 @@ import jakarta.xml.bind.Marshaller;
 import org.openarchives.oai._2.OaiPmhBody;
 import org.openarchives.oai._2.OaiPmhResponse;
 
+import io.github.thanospapapetrou.nefeli.common.cdi.Beans;
+
 @Provider
 @Produces("text/xml; charset=UTF-8")
 public class OaiPmhWriter implements MessageBodyWriter<OaiPmhResponse<OaiPmhBody>> {
@@ -25,8 +25,7 @@ public class OaiPmhWriter implements MessageBodyWriter<OaiPmhResponse<OaiPmhBody
 
     private final Marshaller marshaller;
 
-    @Inject
-    public OaiPmhWriter(@Named("oaiPmhMarshaller") final Marshaller marshaller) {
+    private OaiPmhWriter(@Beans.Jaxb(OaiPmhResponse.class) final Marshaller marshaller) {
         this.marshaller = marshaller;
     }
 
