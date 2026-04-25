@@ -31,6 +31,7 @@ public class Configuration {
     }
 
     private static final String DELIMITER = ",";
+    private static final String ERROR_NO_QUALIFIER = "No qualifier %1$s found";
     private static final String PROPERTIES = "/nefeli.properties";
 
     private final Properties properties;
@@ -56,7 +57,13 @@ public class Configuration {
     @Produces
     @Property
     public String getString(final InjectionPoint point) {
-        return properties.getProperty(point.getAnnotated().getAnnotation(Property.class).value());
+        return properties.getProperty(point.getQualifiers().stream()
+                .filter(Property.class::isInstance)
+                .map(Property.class::cast)
+                .findFirst()
+                .orElseThrow(() ->
+                        new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Property.class.getName())))
+                .value());
     }
 
     @Produces

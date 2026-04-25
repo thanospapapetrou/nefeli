@@ -26,7 +26,7 @@ import org.openarchives.oai._2.OaiPmhResponse;
 import io.github.thanospapapetrou.nefeli.common.cdi.Beans;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
-@Consumes({MediaType.TEXT_XML, MediaType.WILDCARD})
+@Consumes({"text/xml; charset=UTF-8", MediaType.WILDCARD}) // TODO media type in response as constant
 @Provider
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private static final String ERROR_READING = "Error reading OAI-PMH response";

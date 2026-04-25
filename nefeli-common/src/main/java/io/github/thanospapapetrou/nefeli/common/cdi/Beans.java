@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.Produces;
 import jakarta.enterprise.inject.spi.InjectionPoint;
@@ -76,13 +77,18 @@ public class Beans {
     }
 
     private static final String DELIMITER = " ";
+    private static final String ERROR_NO_QUALIFIER = "No qualifier %1$s found";
     private static final String PROTOCOLS = "http,https";
 
     @Jaxb
     @Produces
-    public Marshaller getMarshaller(final Instance<JAXBContext> context, final Instance<Schema> schema,
+    public Marshaller getMarshaller(@Any final Instance<JAXBContext> context, @Any final Instance<Schema> schema,
             final ValidationEventHandler handler, final InjectionPoint point) throws JAXBException {
-        final Jaxb jaxb = point.getAnnotated().getAnnotation(Jaxb.class);
+        final Jaxb jaxb = point.getQualifiers().stream()
+                .filter(Jaxb.class::isInstance)
+                .map(Jaxb.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Jaxb.class.getName())));
         final Marshaller marshaller = context.select(jaxb).get().createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -97,9 +103,13 @@ public class Beans {
 
     @Jaxb
     @Produces
-    public Unmarshaller getUnmarshaller(final Instance<JAXBContext> context, final Instance<Schema> schema,
+    public Unmarshaller getUnmarshaller(@Any final Instance<JAXBContext> context, @Any final Instance<Schema> schema,
             final ValidationEventHandler handler, final InjectionPoint point) throws JAXBException {
-        final Jaxb jaxb = point.getAnnotated().getAnnotation(Jaxb.class);
+        final Jaxb jaxb = point.getQualifiers().stream()
+                .filter(Jaxb.class::isInstance)
+                .map(Jaxb.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Jaxb.class.getName())));
         final Unmarshaller unmarshaller = context.select(jaxb).get().createUnmarshaller();
         unmarshaller.setSchema(schema.select(new Xsd.Literal(jaxb.value().getPackage().getAnnotation(XmlSchema.class)
                 .location())).get());
@@ -107,19 +117,28 @@ public class Beans {
         return unmarshaller;
     }
 
-    @ApplicationScoped
     @Jaxb
     @Produces
     private JAXBContext getContext(final InjectionPoint point) throws JAXBException {
-        return JAXBContext.newInstance(point.getAnnotated().getAnnotation(Jaxb.class).value());
+        return JAXBContext.newInstance(point.getQualifiers().stream()
+                .filter(Jaxb.class::isInstance)
+                .map(Jaxb.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Jaxb.class.getName())))
+                .value());
     }
 
     @Produces
     @Xsd
-    public DocumentBuilder getBuilder(final Instance<DocumentBuilderFactory> factory, final EntityResolver resolver,
-            final ErrorHandler handler, final InjectionPoint point) throws ParserConfigurationException {
-        final DocumentBuilder builder = factory.select(point.getAnnotated().getAnnotation(Xsd.class)).get()
-                .newDocumentBuilder();
+    public DocumentBuilder getBuilder(@Any final Instance<DocumentBuilderFactory> factory,
+            final EntityResolver resolver, final ErrorHandler handler, final InjectionPoint point)
+            throws ParserConfigurationException {
+        final DocumentBuilder builder = factory.select(point.getQualifiers().stream()
+                        .filter(Xsd.class::isInstance)
+                        .map(Xsd.class::cast)
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Xsd.class.getName()))))
+                .get().newDocumentBuilder();
         builder.setEntityResolver(resolver);
         builder.setErrorHandler(handler);
         return builder;
@@ -127,7 +146,7 @@ public class Beans {
 
     @Produces
     @Xsd
-    public DocumentBuilderFactory getFactory(final Instance<Schema> schema, final InjectionPoint point)
+    public DocumentBuilderFactory getFactory(@Any final Instance<Schema> schema, final InjectionPoint point)
             throws ParserConfigurationException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setCoalescing(false);
@@ -139,16 +158,25 @@ public class Beans {
         factory.setXIncludeAware(true);
         factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, PROTOCOLS);
-        factory.setSchema(schema.select(point.getAnnotated().getAnnotation(Xsd.class)).get());
+        factory.setSchema(schema.select(point.getQualifiers().stream()
+                        .filter(Xsd.class::isInstance)
+                        .map(Xsd.class::cast)
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Xsd.class.getName()))))
+                .get());
         return factory;
     }
 
-    @ApplicationScoped
     @Produces
     @Xsd
     public Schema getSchema(final SchemaFactory factory, final InjectionPoint point)
             throws MalformedURLException, SAXException, URISyntaxException {
-        return factory.newSchema(new URI(point.getAnnotated().getAnnotation(Xsd.class).value()).toURL());
+        return factory.newSchema(new URI(point.getQualifiers().stream()
+                .filter(Xsd.class::isInstance)
+                .map(Xsd.class::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Xsd.class.getName())))
+                .value()).toURL());
     }
 
     @Produces
