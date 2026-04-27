@@ -149,6 +149,11 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.5.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.5.0</version>
                 </plugin>
@@ -172,6 +177,23 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.class</include>
+                    </includes>
+                    <testClassesDirectory>${project.build.directory}/it-classes</testClassesDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <includes>
@@ -184,9 +206,43 @@
                 <artifactId>gmavenplus-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>default-compileTests</id>
                         <goals>
                             <goal>compileTests</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>default-compileIntegrationTests</id>
+                        <goals>
+                            <goal>compileTests</goal>
+                        </goals>
+                        <configuration>
+                            <testSources>
+                                <testSource>
+                                    <directory>${project.basedir}/src/it/groovy</directory>
+                                    <includes>
+                                        <include>**/*.groovy</include>
+                                    </includes>
+                                </testSource>
+                            </testSources>
+                            <testOutputDirectory>${project.build.directory}/it-classes</testOutputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-addTestSources</id>
+                        <goals>
+                            <goal>addTestSources</goal>
+                        </goals>
+                        <configuration>
+                            <testSources>
+                                <testSource>
+                                    <directory>${project.basedir}/src/it/groovy</directory>
+                                    <includes>
+                                        <include>**/*.groovy</include>
+                                    </includes>
+                                </testSource>
+                            </testSources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
