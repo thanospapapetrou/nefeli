@@ -36,6 +36,9 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhParameterConverter
 
 @Path("/oai-pmh")
 public abstract class AbstractOaiPmhServer implements OaiPmh {
+    private static final String ERROR_VERB_ILLEGAL = "Verb argument is illegal";
+    private static final String ERROR_VERB_MISSING = "Verb argument is missing";
+    private static final String ERROR_VERB_REPEATED = "Verb argument is repeated";
     private static final String ERROR_NO_SETS = "Repository does not support sets";
 
     private final Clock clock;
@@ -63,7 +66,7 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
 
     @GET
     @Path("/")
-    @Produces("text/xml; charset=UTF-8")
+    @Produces(OaiPmhResponse.CONTENT_TYPE)
     public OaiPmhResponse<? extends OaiPmhBody> respond(@QueryParam(ARGUMENT_VERB) final Verb verb,
             @QueryParam(ARGUMENT_IDENTIFIER) final URI identifier,
             @QueryParam(ARGUMENT_METADATA_PREFIX) final String metadataPrefix,
@@ -71,6 +74,15 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
             @QueryParam(ARGUMENT_SET) final SetSpec set,
             @QueryParam(ARGUMENT_RESUMPTION_TOKEN) final String resumptionToken) throws MalformedURLException {
         try {
+            if (!info.getQueryParameters().containsKey(ARGUMENT_VERB)) {
+                error(OaiPmhErrorCode.BAD_VERB, ERROR_VERB_MISSING);
+            }
+            if (info.getQueryParameters().get(ARGUMENT_VERB).size() > 1) {
+                error(OaiPmhErrorCode.BAD_VERB, ERROR_VERB_REPEATED);
+            }
+            if (verb == null) {
+                error(OaiPmhErrorCode.BAD_VERB, ERROR_VERB_ILLEGAL);
+            }
             return switch (verb) {
                 case IDENTIFY -> identify();
                 case LIST_METADATA_FORMATS -> listMetadataFormats(identifier);
@@ -82,9 +94,20 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
                 case GET_RECORD -> getRecord(metadataPrefix, identifier);
             };
         } catch (final OaiPmhException e) {
+            final boolean isBadVerbOrBadArgument = e.getErrors().stream()
+                    .map(OaiPmhError::getCode)
+                    .anyMatch(code -> OaiPmhErrorCode.BAD_VERB.equals(code)
+                            || OaiPmhErrorCode.BAD_ARGUMENT.equals(code));
             return new OaiPmhResponse<>(clock.instant(),
-                    new Request(info.getBaseUri().toURL(), verb, identifier, metadataPrefix, from, until, set,
-                            resumptionToken), e.getErrors());
+                    new Request(info.getAbsolutePath().toURL(),
+                            isBadVerbOrBadArgument ? null : verb,
+                            isBadVerbOrBadArgument ? null : identifier,
+                            isBadVerbOrBadArgument ? null : metadataPrefix,
+                            isBadVerbOrBadArgument ? null : from,
+                            isBadVerbOrBadArgument ? null : until,
+                            isBadVerbOrBadArgument ? null : set,
+                            isBadVerbOrBadArgument ? null : resumptionToken),
+                    e.getErrors());
         }
     }
 

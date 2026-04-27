@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import jakarta.enterprise.inject.spi.CDI;
@@ -171,7 +172,7 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
         }
         try {
             final Response httpResponse = target.request()
-                    .accept(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()))
+                    .accept(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name().toLowerCase(Locale.ROOT)))
                     .header(HttpHeaders.USER_AGENT, "Nefeli 1.0.0-SNAPSHOT") // TODO
                     .header(HEADER_FROM, "thanos.papapetrou@gmail.com") // TODO
                     .get();

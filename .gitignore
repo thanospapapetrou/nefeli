@@ -1,3 +1,4 @@
 .idea/
 jaxb-ri/
+**/*.iml
 **/target/

@@ -30,3 +30,5 @@ cleanup client
 cleanup DAO
 {http://www.language-archives.org/OLAC/1.1/olac-archive}olac-archive
 isolate container parsing errors
+content type should be lowercase charset=utf-8
+content type can be just text/xml, since xml encoding is utf-8

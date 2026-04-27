@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import jakarta.inject.Inject;
@@ -26,7 +27,7 @@ import org.openarchives.oai._2.OaiPmhResponse;
 import io.github.thanospapapetrou.nefeli.common.cdi.Beans;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
-@Consumes({"text/xml; charset=UTF-8", MediaType.WILDCARD}) // TODO media type in response as constant
+@Consumes({OaiPmhResponse.CONTENT_TYPE, MediaType.WILDCARD})
 @Provider
 public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<OaiPmhResponse<T>> {
     private static final String ERROR_READING = "Error reading OAI-PMH response";
@@ -48,7 +49,7 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     @Override
     public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations,
             final MediaType mediaType) {
-        if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name()))) {
+        if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name().toLowerCase(Locale.ROOT)))) {
             LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, mediaType));
         }
         return true;

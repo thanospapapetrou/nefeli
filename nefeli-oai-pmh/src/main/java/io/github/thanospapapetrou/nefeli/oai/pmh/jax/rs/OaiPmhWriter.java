@@ -23,7 +23,7 @@ import io.github.thanospapapetrou.nefeli.common.cdi.Configuration;
 import io.github.thanospapapetrou.nefeli.oai.pmh.jaxb.InstantStringAdapter;
 
 @Provider
-@Produces("text/xml; charset=UTF-8")
+@Produces(OaiPmhResponse.CONTENT_TYPE)
 public class OaiPmhWriter implements MessageBodyWriter<OaiPmhResponse<OaiPmhBody>> {
     private static final String ERROR_WRITING = "Error writing OAI-PMH response";
 
