@@ -4,7 +4,7 @@ import org.openarchives.oai._2.OaiPmhError
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class OaiPmhExceptionTest extends Specification {
+class OaiPmhExceptionSpec extends Specification {
     private static final String ERROR = 'error'
     private static final String OTHER_ERROR = 'other error'
 

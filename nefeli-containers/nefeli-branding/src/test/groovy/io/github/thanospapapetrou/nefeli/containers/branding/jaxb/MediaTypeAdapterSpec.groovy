@@ -4,7 +4,7 @@ import jakarta.ws.rs.core.MediaType
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class MediaTypeAdapterTest extends Specification {
+class MediaTypeAdapterSpec extends Specification {
     private static final List<String> MEDIA_TYPES = ['text/dsssl', 'text/css', 'text/xsl']
 
     private final MediaTypeAdapter adapter = new MediaTypeAdapter()
