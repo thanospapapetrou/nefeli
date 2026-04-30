@@ -19,8 +19,8 @@ import org.openarchives.oai._2.SetSpec;
  * <a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH 2.0</a>
  */
 public interface OaiPmh {
-    String ARGUMENT_IDENTIFIER = "identifier";
     String ARGUMENT_FROM = "from";
+    String ARGUMENT_IDENTIFIER = "identifier";
     String ARGUMENT_METADATA_PREFIX = "metadataPrefix";
     String ARGUMENT_RESUMPTION_TOKEN = "resumptionToken";
     String ARGUMENT_SET = "set";
@@ -52,6 +52,6 @@ public interface OaiPmh {
     OaiPmhResponse<ListRecords> listRecords(final String resumptionToken)
             throws IOException, OaiPmhException, RetryAfterException, WebApplicationException;
 
-    OaiPmhResponse<GetRecord> getRecord(final String metadataPrefix, final URI identifier)
+    OaiPmhResponse<GetRecord> getRecord(final URI identifier, final String metadataPrefix)
             throws IOException, OaiPmhException, RetryAfterException, WebApplicationException;
 }

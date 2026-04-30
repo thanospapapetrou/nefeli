@@ -1,6 +1,7 @@
 package io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs;
 
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -26,11 +27,15 @@ public class InstantParameterConverter implements ParamConverter<Instant> {
 
     @Override
     public Instant fromString(final String string) {
-        return granularity.parse(string);
+        try {
+            return (string == null) ? null : granularity.parse(string);
+        } catch (final DateTimeParseException e) {
+            return null;
+        }
     }
 
     @Override
     public String toString(final Instant instant) {
-        return granularity.format(instant);
+        return (instant == null) ? null : granularity.format(instant);
     }
 }

@@ -46,7 +46,7 @@ public class OaiPmhServer extends AbstractOaiPmhServer {
 
     @Override
 
-    protected List<MetadataFormat> listMetadataFormats(final Instant datestamp) {
+    protected List<MetadataFormat> listMetadataFormats(final Instant datestamp, final URI identifier) {
         return List.of(); // TODO
     }
 
@@ -78,7 +78,7 @@ public class OaiPmhServer extends AbstractOaiPmhServer {
     }
 
     @Override
-    protected Record getRecord(final Instant datestamp, final String metadataPrefix, final URI identifier) {
+    protected Record getRecord(final Instant datestamp, final URI identifier, final String metadataPrefix) {
         return new Record(new Header(identifier, datestamp, List.of(), false), new Metadata(null), List.of()); // TODO
     }
 }

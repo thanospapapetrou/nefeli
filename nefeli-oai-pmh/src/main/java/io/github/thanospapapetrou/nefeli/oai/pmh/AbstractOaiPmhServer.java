@@ -4,7 +4,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.time.Clock;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import jakarta.mail.internet.InternetAddress;
 import jakarta.ws.rs.GET;
@@ -36,10 +40,16 @@ import io.github.thanospapapetrou.nefeli.oai.pmh.jax.rs.OaiPmhParameterConverter
 
 @Path("/oai-pmh")
 public abstract class AbstractOaiPmhServer implements OaiPmh {
-    private static final String ERROR_VERB_ILLEGAL = "Verb argument is illegal";
-    private static final String ERROR_VERB_MISSING = "Verb argument is missing";
-    private static final String ERROR_VERB_REPEATED = "Verb argument is repeated";
-    private static final String ERROR_NO_SETS = "Repository does not support sets";
+    private static final String ERROR_ARGUMENT_ILLEGAL = "OAI-PMH request contains illegal argument %1$s";
+    private static final String ERROR_ARGUMENT_EXCLUSIVE =
+            "OAI-PMH request contains both mutually exclusive arguments %1$s and %2$s";
+    private static final String ERROR_ARGUMENT_INVALID =
+            "OAI-PMH request contains argument %1$s with invalid value %2$s";
+    private static final String ERROR_ARGUMENT_MISSING = "OAI-PMH request is missing required argument %1$s";
+    private static final String ERROR_ARGUMENT_MISSING_EXCLUSIVE =
+            "OAI-PMH request is missing exclusively required arguments %1$s or %2$s";
+    private static final String ERROR_ARGUMENT_REPEATED = "OAI-PMH request contains repeated argument %1$s";
+    private static final String ERROR_NO_METADATA_FORMATS = "There are no metadata formats available";
 
     private final Clock clock;
     private final OaiPmhParameterConverterProvider provider;
@@ -74,24 +84,33 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
             @QueryParam(ARGUMENT_SET) final SetSpec set,
             @QueryParam(ARGUMENT_RESUMPTION_TOKEN) final String resumptionToken) throws MalformedURLException {
         try {
-            if (!info.getQueryParameters().containsKey(ARGUMENT_VERB)) {
-                error(OaiPmhErrorCode.BAD_VERB, ERROR_VERB_MISSING);
-            }
-            if (info.getQueryParameters().get(ARGUMENT_VERB).size() > 1) {
-                error(OaiPmhErrorCode.BAD_VERB, ERROR_VERB_REPEATED);
-            }
-            if (verb == null) {
-                error(OaiPmhErrorCode.BAD_VERB, ERROR_VERB_ILLEGAL);
-            }
-            return switch (verb) {
-                case IDENTIFY -> identify();
-                case LIST_METADATA_FORMATS -> listMetadataFormats(identifier);
-                case LIST_SETS -> (resumptionToken == null) ? listSets() : listSets(resumptionToken);
-                case LIST_IDENTIFIERS -> (resumptionToken == null) ? listIdentifiers(metadataPrefix, from, until, set)
-                        : listIdentifiers(resumptionToken);
-                case LIST_RECORDS -> (resumptionToken == null) ? listRecords(metadataPrefix, from, until, set)
-                        : listRecords(resumptionToken);
-                case GET_RECORD -> getRecord(metadataPrefix, identifier);
+            return switch (validateVerb(verb)) {
+                case IDENTIFY -> {
+                    validateIdentify();
+                    yield identify();
+                }
+                case LIST_METADATA_FORMATS -> {
+                    validateListMetadataFormats(identifier);
+                    yield listMetadataFormats(identifier);
+                }
+                case LIST_SETS -> {
+                    validateListSets(resumptionToken);
+                    yield listSets(resumptionToken);
+                }
+                case LIST_IDENTIFIERS -> {
+                    validateListIdentifiersListRecords(metadataPrefix, from, until, set, resumptionToken);
+                    yield (resumptionToken == null) ? listIdentifiers(metadataPrefix, from, until, set)
+                            : listIdentifiers(resumptionToken);
+                }
+                case LIST_RECORDS -> {
+                    validateListIdentifiersListRecords(metadataPrefix, from, until, set, resumptionToken);
+                    yield (resumptionToken == null) ? listRecords(metadataPrefix, from, until, set)
+                            : listRecords(resumptionToken);
+                }
+                case GET_RECORD -> {
+                    validateGetRecord(identifier, metadataPrefix);
+                    yield getRecord(identifier, metadataPrefix);
+                }
             };
         } catch (final OaiPmhException e) {
             final boolean isBadVerbOrBadArgument = e.getErrors().stream()
@@ -113,92 +132,77 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
 
     @Override
     public OaiPmhResponse<Identify> identify() throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
-        final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request,
+        return new OaiPmhResponse<>(clock.instant(), getRequest(),
                 new Identify(repositoryName, info.getAbsolutePath().toURL(), adminEmails, getEarliestDatestamp(),
-                        deletedRecord, granularity, compressions, List.of())); // TODO description
+                        deletedRecord, granularity, compressions, List.of())); // TODO descriptions
     }
 
     @Override
     public OaiPmhResponse<ListMetadataFormats> listMetadataFormats(final URI identifier)
             throws OaiPmhException, MalformedURLException {
-        final Request request = getRequest();
-        // TODO validate
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, new ListMetadataFormats(listMetadataFormats(datestamp)));
+        final List<MetadataFormat> metadataFormats = listMetadataFormats(datestamp, identifier);
+        if (metadataFormats.isEmpty()) {
+            throw new OaiPmhException(List.of(new OaiPmhError(ERROR_NO_METADATA_FORMATS,
+                    OaiPmhErrorCode.NO_METADATA_FORMATS)));
+        }
+        return new OaiPmhResponse<>(datestamp, getRequest(), new ListMetadataFormats(metadataFormats));
     }
 
     @Override
     public OaiPmhResponse<ListSets> listSets() throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
-        final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, listSets(datestamp, null));
+        return listSets(null);
     }
 
     @Override
-    public OaiPmhResponse<ListSets> listSets(final String resumptionToken)
-            throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
+    public OaiPmhResponse<ListSets> listSets(final String resumptionToken) throws MalformedURLException,
+            OaiPmhException {
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, listSets(datestamp, resumptionToken));
+        return new OaiPmhResponse<>(datestamp, getRequest(), listSets(datestamp, resumptionToken));
     }
 
     @Override
     public OaiPmhResponse<ListIdentifiers> listIdentifiers(final String metadataPrefix, final Instant from,
             final Instant until, final SetSpec set) throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, listIdentifiers(datestamp, metadataPrefix, from, until, set));
+        return new OaiPmhResponse<>(datestamp, getRequest(), listIdentifiers(datestamp, metadataPrefix, from, until,
+                set));
     }
 
     @Override
     public OaiPmhResponse<ListIdentifiers> listIdentifiers(final String resumptionToken) throws MalformedURLException {
-        final Request request = getRequest();
-        // TODO validate
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, listIdentifiers(datestamp, resumptionToken));
+        return new OaiPmhResponse<>(datestamp, getRequest(), listIdentifiers(datestamp, resumptionToken));
     }
 
     @Override
     public OaiPmhResponse<ListRecords> listRecords(final String metadataPrefix, final Instant from, final Instant until,
-            final SetSpec set) throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
+            final SetSpec set) throws MalformedURLException {
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, listRecords(datestamp, metadataPrefix, from, until, set));
+        return new OaiPmhResponse<>(datestamp, getRequest(), listRecords(datestamp, metadataPrefix, from, until, set));
     }
 
     @Override
     public OaiPmhResponse<ListRecords> listRecords(final String resumptionToken)
-            throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
+            throws MalformedURLException {
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request, listRecords(datestamp, resumptionToken));
+        return new OaiPmhResponse<>(datestamp, getRequest(), listRecords(datestamp, resumptionToken));
     }
 
     @Override
-    public OaiPmhResponse<GetRecord> getRecord(final String metadataPrefix, final URI identifier)
-            throws MalformedURLException, OaiPmhException {
-        final Request request = getRequest();
-        // TODO validate
+    public OaiPmhResponse<GetRecord> getRecord(final URI identifier, final String metadataPrefix)
+            throws MalformedURLException {
         final Instant datestamp = clock.instant();
-        return new OaiPmhResponse<>(datestamp, request,
-                new GetRecord(getRecord(datestamp, metadataPrefix, identifier)));
+        return new OaiPmhResponse<>(datestamp, getRequest(), new GetRecord(getRecord(datestamp, identifier,
+                metadataPrefix)));
     }
 
     protected abstract Instant getEarliestDatestamp();
 
-    protected abstract List<MetadataFormat> listMetadataFormats(final Instant datestamp);
+    protected abstract List<MetadataFormat> listMetadataFormats(final Instant datestamp, final URI identifier)
+            throws OaiPmhException;
 
-    protected ListSets listSets(final Instant datestamp, final String resumptionToken) throws OaiPmhException {
-        return error(OaiPmhErrorCode.NO_SET_HIERARCHY, ERROR_NO_SETS);
-    }
+    protected abstract ListSets listSets(final Instant datestamp, final String resumptionToken) throws OaiPmhException;
 
     protected abstract ListIdentifiers listIdentifiers(final Instant datestamp, final String metadataPrefix,
             final Instant from, final Instant until, final SetSpec set);
@@ -210,7 +214,120 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
 
     protected abstract ListRecords listRecords(final Instant datestamp, final String resumptionToken);
 
-    protected abstract Record getRecord(final Instant datestamp, final String metadataPrefix, final URI identifier);
+    protected abstract Record getRecord(final Instant datestamp, final URI identifier, final String metadataPrefix);
+
+    private Verb validateVerb(final Verb verb) throws OaiPmhException {
+        if (!info.getQueryParameters().containsKey(ARGUMENT_VERB)) {
+            throw new OaiPmhException(List.of(new OaiPmhError(ERROR_ARGUMENT_MISSING.formatted(ARGUMENT_VERB),
+                    OaiPmhErrorCode.BAD_VERB)));
+        } else if (info.getQueryParameters().get(ARGUMENT_VERB).size() > 1) {
+            throw new OaiPmhException(List.of(new OaiPmhError(ERROR_ARGUMENT_REPEATED.formatted(ARGUMENT_VERB),
+                    OaiPmhErrorCode.BAD_VERB)));
+        } else if (verb == null) {
+            throw new OaiPmhException(List.of(new OaiPmhError(ERROR_ARGUMENT_INVALID.formatted(ARGUMENT_VERB,
+                    info.getQueryParameters().get(ARGUMENT_VERB).getFirst()), OaiPmhErrorCode.BAD_VERB)));
+        }
+        return verb;
+    }
+
+    private void validateIdentify() throws OaiPmhException {
+        validate(checkIllegal(ARGUMENT_METADATA_PREFIX, ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET,
+                ARGUMENT_RESUMPTION_TOKEN, ARGUMENT_IDENTIFIER));
+    }
+
+    private void validateListMetadataFormats(final URI identifier) throws OaiPmhException {
+        validate(Stream.of(checkOptional(ARGUMENT_IDENTIFIER, identifier)),
+                checkIllegal(ARGUMENT_METADATA_PREFIX, ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET,
+                        ARGUMENT_RESUMPTION_TOKEN));
+    }
+
+    private void validateListSets(final String resumptionToken) throws OaiPmhException {
+        validate(Stream.of(checkOptional(ARGUMENT_RESUMPTION_TOKEN, resumptionToken)),
+                checkIllegal(ARGUMENT_METADATA_PREFIX, ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET,
+                        ARGUMENT_IDENTIFIER));
+    }
+
+    private void validateListIdentifiersListRecords(final String metadataPrefix, final Instant from,
+            final Instant until, final SetSpec set, final String resumptionToken) throws OaiPmhException {
+        validate(Stream.of(checkExclusive(ARGUMENT_METADATA_PREFIX, metadataPrefix, ARGUMENT_RESUMPTION_TOKEN,
+                resumptionToken)));
+        if (resumptionToken == null) {
+            validate(checkOptional(Map.of(ARGUMENT_FROM, from, ARGUMENT_UNTIL, until, ARGUMENT_SET, set)),
+                    Stream.of(checkIllegal(ARGUMENT_IDENTIFIER)));
+        } else {
+            validate(checkIllegal(ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET, ARGUMENT_IDENTIFIER));
+        }
+    }
+
+    private void validateGetRecord(final URI identifier, final String metadataPrefix) throws OaiPmhException {
+        validate(checkRequired(Map.of(ARGUMENT_IDENTIFIER, identifier, ARGUMENT_METADATA_PREFIX, metadataPrefix)),
+                checkIllegal(ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET, ARGUMENT_RESUMPTION_TOKEN));
+    }
+
+    private void validate(final Stream<OaiPmhError>... errors) throws OaiPmhException {
+        final List<OaiPmhError> list = Arrays.stream(errors).reduce(Stream.empty(), Stream::concat)
+                .filter(Objects::nonNull)
+                .toList();
+        if (!list.isEmpty()) {
+            throw new OaiPmhException(list);
+        }
+    }
+
+    private Stream<OaiPmhError> checkRequired(final Map<String, Object> argumentValues) {
+        return argumentValues.entrySet().stream()
+                .map(entry -> checkRequired(entry.getKey(), entry.getValue()));
+    }
+
+    private OaiPmhError checkRequired(final String argument, final Object value) {
+        if (!info.getQueryParameters().containsKey(argument)) {
+            return new OaiPmhError(ERROR_ARGUMENT_MISSING.formatted(argument), OaiPmhErrorCode.BAD_ARGUMENT);
+        } else if (info.getQueryParameters().get(argument).size() > 1) {
+            return new OaiPmhError(ERROR_ARGUMENT_REPEATED.formatted(argument), OaiPmhErrorCode.BAD_ARGUMENT);
+        } else if (value == null) {
+            return new OaiPmhError(ERROR_ARGUMENT_INVALID.formatted(argument,
+                    info.getQueryParameters().get(argument).getFirst()), OaiPmhErrorCode.BAD_ARGUMENT);
+        }
+        return null;
+    }
+
+    private Stream<OaiPmhError> checkOptional(final Map<String, Object> argumentValues) {
+        return argumentValues.entrySet().stream()
+                .map(entry -> checkOptional(entry.getKey(), entry.getValue()));
+    }
+
+    private OaiPmhError checkOptional(final String argument, final Object value) {
+        if (info.getQueryParameters().containsKey(argument) && (info.getQueryParameters().get(argument).size() > 1)) {
+            return new OaiPmhError(ERROR_ARGUMENT_REPEATED.formatted(argument), OaiPmhErrorCode.BAD_ARGUMENT);
+        } else if (info.getQueryParameters().containsKey(argument) && (value == null)) {
+            return new OaiPmhError(ERROR_ARGUMENT_INVALID.formatted(argument,
+                    info.getQueryParameters().get(argument).getFirst()), OaiPmhErrorCode.BAD_ARGUMENT);
+        }
+        return null;
+    }
+
+    private OaiPmhError checkExclusive(final String argument1, final Object value1, final String argument2,
+            final Object value2) {
+        if (!(info.getQueryParameters().containsKey(argument1) || info.getQueryParameters().containsKey(argument2))) {
+            return new OaiPmhError(ERROR_ARGUMENT_MISSING_EXCLUSIVE.formatted(argument1, argument2),
+                    OaiPmhErrorCode.BAD_ARGUMENT);
+        } else if (info.getQueryParameters().containsKey(argument1)
+                && info.getQueryParameters().containsKey(argument2)) {
+            return new OaiPmhError(ERROR_ARGUMENT_EXCLUSIVE.formatted(argument1, argument2),
+                    OaiPmhErrorCode.BAD_ARGUMENT);
+        }
+        return info.getQueryParameters().containsKey(argument1) ? checkOptional(argument1, value1)
+                : checkOptional(argument2, value2);
+    }
+
+    private Stream<OaiPmhError> checkIllegal(final String... arguments) {
+        return Arrays.stream(arguments)
+                .map(this::checkIllegal);
+    }
+
+    private OaiPmhError checkIllegal(final String argument) {
+        return info.getQueryParameters().containsKey(argument)
+                ? new OaiPmhError(ERROR_ARGUMENT_ILLEGAL.formatted(argument), OaiPmhErrorCode.BAD_ARGUMENT) : null;
+    }
 
     private Request getRequest() throws MalformedURLException {
         return new Request(info.getAbsolutePath().toURL(), getArgument(ARGUMENT_VERB, Verb.class),
@@ -223,9 +340,5 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
         final List<String> arguments = info.getQueryParameters().get(argument);
         return ((arguments == null) || arguments.isEmpty()) ? null : ((clazz == String.class) ? (T) arguments.getFirst()
                 : provider.getConverter(clazz, null, null).fromString(arguments.getFirst()));
-    }
-
-    private <T> T error(final OaiPmhErrorCode code, final String message) throws OaiPmhException {
-        throw new OaiPmhException(List.of(new OaiPmhError(message, code)));
     }
 }

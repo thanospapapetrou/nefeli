@@ -148,12 +148,12 @@ public class OaiPmhClient implements OaiPmh, AutoCloseable {
     }
 
     @Override
-    public OaiPmhResponse<GetRecord> getRecord(final String metadataPrefix, final URI identifier)
+    public OaiPmhResponse<GetRecord> getRecord(final URI identifier, final String metadataPrefix)
             throws IOException, OaiPmhException, RetryAfterException, WebApplicationException {
         return request(Map.of(
                 ARGUMENT_VERB, Verb.GET_RECORD,
-                ARGUMENT_METADATA_PREFIX, metadataPrefix,
-                ARGUMENT_IDENTIFIER, identifier
+                ARGUMENT_IDENTIFIER, identifier,
+                ARGUMENT_METADATA_PREFIX, metadataPrefix
         ));
     }
 
