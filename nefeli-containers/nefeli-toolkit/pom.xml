@@ -21,6 +21,10 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.github.thanospapapetrou.nefeli</groupId>
+            <artifactId>nefeli-oai-pmh</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
             <scope>test</scope>
@@ -29,10 +33,6 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.thanospapapetrou.nefeli</groupId>
-            <artifactId>nefeli-oai-pmh</artifactId>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
