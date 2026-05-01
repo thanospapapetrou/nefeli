@@ -12,6 +12,14 @@ import org.openarchives.oai._2.Verb
 import spock.lang.Unroll
 
 class OaiPmhErrorIT extends OaiPmhBase {
+    private static final Map<String, String> METADATA_FORMATS_ILLEGAL = [
+            (OaiPmh.ARGUMENT_METADATA_PREFIX) : 'foo',
+            (OaiPmh.ARGUMENT_FROM)            : 'bar',
+            (OaiPmh.ARGUMENT_UNTIL)           : 'baz',
+            (OaiPmh.ARGUMENT_SET)             : 'qux',
+            (OaiPmh.ARGUMENT_RESUMPTION_TOKEN): 'quux'
+    ]
+
     @Unroll('Test bad verb (error: #error)')
     def 'Test bad verb'() {
         when:
@@ -73,18 +81,12 @@ class OaiPmhErrorIT extends OaiPmhBase {
         !oaiPmh.body
     }
 
+    @Unroll('Test list metadata formats bad argument (errors: #errors)')
     def 'Test list metadata formats bad argument'() {
         given:
-        final Map<String, String> illegal = [
-                (OaiPmh.ARGUMENT_METADATA_PREFIX) : 'foo',
-                (OaiPmh.ARGUMENT_FROM)            : 'bar',
-                (OaiPmh.ARGUMENT_UNTIL)           : 'baz',
-                (OaiPmh.ARGUMENT_SET)             : 'qux',
-                (OaiPmh.ARGUMENT_RESUMPTION_TOKEN): 'quux'
-        ]
         WebTarget target = this.target.queryParam(OaiPmh.ARGUMENT_VERB, Verb.LIST_METADATA_FORMATS)
                 .queryParam(OaiPmh.ARGUMENT_IDENTIFIER, identifiers as String[])
-        illegal.each { target = target.queryParam(it.key, it.value) }
+        METADATA_FORMATS_ILLEGAL.each { target = target.queryParam(it.key, it.value) }
         when:
         final Response response = target.request().get()
         then:
@@ -101,13 +103,13 @@ class OaiPmhErrorIT extends OaiPmhBase {
         !oaiPmh.request.set
         !oaiPmh.request.resumptionToken
         oaiPmh.errors
-        oaiPmh.errors*.value == [error] + illegal.keySet().collect(AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.&formatted)
-        oaiPmh.errors*.code == [OaiPmhErrorCode.BAD_ARGUMENT] * (1 + illegal.size())
+        oaiPmh.errors*.value == errors
+        oaiPmh.errors*.code == [OaiPmhErrorCode.BAD_ARGUMENT] * (1 + METADATA_FORMATS_ILLEGAL.size())
         !oaiPmh.body
         where:
-        identifiers    || error
-        ['foo', 'bar'] || AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_IDENTIFIER)
-        [':foo']       || AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_IDENTIFIER, ':foo')
+        identifiers    || errors
+        ['foo', 'bar'] || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_IDENTIFIER)] + METADATA_FORMATS_ILLEGAL.keySet().collect(AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.&formatted)
+        [':foo']       || [AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_IDENTIFIER, ':foo')] + METADATA_FORMATS_ILLEGAL.keySet().collect(AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.&formatted)
     }
 
     def 'Test list sets bad argument'() {
@@ -143,6 +145,7 @@ class OaiPmhErrorIT extends OaiPmhBase {
         !oaiPmh.body
     }
 
+    @Unroll('Test list identifiers bad argument (errors: #errors)')
     def 'Test list identifiers bad argument'() {
         given:
         WebTarget target = this.target.queryParam(OaiPmh.ARGUMENT_VERB, Verb.LIST_IDENTIFIERS)
@@ -168,18 +171,55 @@ class OaiPmhErrorIT extends OaiPmhBase {
         !oaiPmh.request.set
         !oaiPmh.request.resumptionToken
         oaiPmh.errors
-        oaiPmh.errors*.value == [error, AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
-        oaiPmh.errors*.code == [OaiPmhErrorCode.BAD_ARGUMENT] * (1 + illegal.size())
+        oaiPmh.errors*.value == errors
+        oaiPmh.errors*.code == [OaiPmhErrorCode.BAD_ARGUMENT] * errors.size()
         !oaiPmh.body
         where:
-        prefixes       | froms          | untils            | sets                 | tokens         || error
-        []             | []             | []                | []                   | []             || AbstractOaiPmhServer.ERROR_ARGUMENT_MISSING_EXCLUSIVE.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX, OaiPmh.ARGUMENT_RESUMPTION_TOKEN)
-        ['bar']        | []             | []                | []                   | ['baz']        || AbstractOaiPmhServer.ERROR_ARGUMENT_EXCLUSIVE.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX, OaiPmh.ARGUMENT_RESUMPTION_TOKEN)
-        ['bar', 'baz'] | []             | []                | []                   | []             || AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX)
-        ['bar']        | ['baz', 'qux'] | ['quux', 'corge'] | ['grault', 'garply'] | []             || ''
-        ['bar']        | ['baz']        | ['qux']           | []                   | []             || ''
-        []             | []             | []                | []                   | ['bar', 'baz'] || AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_RESUMPTION_TOKEN)
+        prefixes       | froms          | untils            | sets                 | tokens         || errors
+        []             | []             | []                | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_MISSING_EXCLUSIVE.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX, OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar']        | []             | []                | []                   | ['baz']        || [AbstractOaiPmhServer.ERROR_ARGUMENT_EXCLUSIVE.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX, OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar', 'baz'] | []             | []                | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar']        | ['baz', 'qux'] | ['quux', 'corge'] | ['grault', 'garply'] | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_FROM), AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_UNTIL), AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_SET), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar']        | ['baz']        | ['qux']           | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_FROM, 'baz'), AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_UNTIL, 'qux'), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        []             | []             | []                | []                   | ['bar', 'baz'] || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
     }
 
-    // TODO empty strings should be invalid
+    @Unroll('Test list records bad argument (errors: #errors)')
+    def 'Test list records bad argument'() {
+        given:
+        WebTarget target = this.target.queryParam(OaiPmh.ARGUMENT_VERB, Verb.LIST_RECORDS)
+                .queryParam(OaiPmh.ARGUMENT_METADATA_PREFIX, prefixes as String[])
+                .queryParam(OaiPmh.ARGUMENT_FROM, froms as String[])
+                .queryParam(OaiPmh.ARGUMENT_UNTIL, untils as String[])
+                .queryParam(OaiPmh.ARGUMENT_SET, sets as String[])
+                .queryParam(OaiPmh.ARGUMENT_RESUMPTION_TOKEN, tokens as String[])
+                .queryParam(OaiPmh.ARGUMENT_IDENTIFIER, 'foo')
+        when:
+        final Response response = target.request().get()
+        then:
+        verify(response)
+        when:
+        final OaiPmhResponse<OaiPmhBody> oaiPmh = response.readEntity(new GenericType<OaiPmhResponse<OaiPmhBody>>() {})
+        then:
+        verify(oaiPmh)
+        !oaiPmh.request.verb
+        !oaiPmh.request.identifier
+        !oaiPmh.request.metadataPrefix
+        !oaiPmh.request.from
+        !oaiPmh.request.until
+        !oaiPmh.request.set
+        !oaiPmh.request.resumptionToken
+        oaiPmh.errors
+        oaiPmh.errors*.value == errors
+        oaiPmh.errors*.code == [OaiPmhErrorCode.BAD_ARGUMENT] * errors.size()
+        !oaiPmh.body
+        where:
+        prefixes       | froms          | untils            | sets                 | tokens         || errors
+        []             | []             | []                | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_MISSING_EXCLUSIVE.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX, OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar']        | []             | []                | []                   | ['baz']        || [AbstractOaiPmhServer.ERROR_ARGUMENT_EXCLUSIVE.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX, OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar', 'baz'] | []             | []                | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_METADATA_PREFIX), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar']        | ['baz', 'qux'] | ['quux', 'corge'] | ['grault', 'garply'] | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_FROM), AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_UNTIL), AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_SET), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        ['bar']        | ['baz']        | ['qux']           | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_FROM, 'baz'), AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_UNTIL, 'qux'), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+        []             | []             | []                | []                   | ['bar', 'baz'] || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
+    }
 }

@@ -250,13 +250,12 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
     private void validateListIdentifiersListRecords(final String metadataPrefix, final Instant from,
             final Instant until, final SetSpec set, final String resumptionToken) throws OaiPmhException {
         validate(Stream.of(checkExclusive(ARGUMENT_METADATA_PREFIX, metadataPrefix, ARGUMENT_RESUMPTION_TOKEN,
-                resumptionToken)));
-        if (resumptionToken == null) {
-            validate(checkOptional(Map.of(ARGUMENT_FROM, from, ARGUMENT_UNTIL, until, ARGUMENT_SET, set)),
-                    Stream.of(checkIllegal(ARGUMENT_IDENTIFIER)));
-        } else {
-            validate(checkIllegal(ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET, ARGUMENT_IDENTIFIER));
-        }
+                        resumptionToken)),
+                ((metadataPrefix != null) && (resumptionToken == null))
+                        ? Stream.of(checkOptional(ARGUMENT_FROM, from), checkOptional(ARGUMENT_UNTIL, until),
+                        checkOptional(ARGUMENT_SET, set))
+                        : Stream.empty(),
+                Stream.of(checkIllegal(OaiPmh.ARGUMENT_IDENTIFIER)));
     }
 
     private void validateGetRecord(final URI identifier, final String metadataPrefix) throws OaiPmhException {
@@ -288,11 +287,6 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
                     info.getQueryParameters().get(argument).getFirst()), OaiPmhErrorCode.BAD_ARGUMENT);
         }
         return null;
-    }
-
-    private Stream<OaiPmhError> checkOptional(final Map<String, Object> argumentValues) {
-        return argumentValues.entrySet().stream()
-                .map(entry -> checkOptional(entry.getKey(), entry.getValue()));
     }
 
     private OaiPmhError checkOptional(final String argument, final Object value) {
