@@ -6,9 +6,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import jakarta.mail.internet.InternetAddress;
 import jakarta.ws.rs.GET;
@@ -231,41 +229,53 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
     }
 
     private void validateIdentify() throws OaiPmhException {
-        validate(checkIllegal(ARGUMENT_METADATA_PREFIX, ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET,
-                ARGUMENT_RESUMPTION_TOKEN, ARGUMENT_IDENTIFIER));
+        validate(checkIllegal(ARGUMENT_METADATA_PREFIX),
+                checkIllegal(ARGUMENT_FROM),
+                checkIllegal(ARGUMENT_UNTIL),
+                checkIllegal(ARGUMENT_SET),
+                checkIllegal(ARGUMENT_RESUMPTION_TOKEN),
+                checkIllegal(ARGUMENT_IDENTIFIER));
     }
 
     private void validateListMetadataFormats(final URI identifier) throws OaiPmhException {
-        validate(Stream.of(checkOptional(ARGUMENT_IDENTIFIER, identifier)),
-                checkIllegal(ARGUMENT_METADATA_PREFIX, ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET,
-                        ARGUMENT_RESUMPTION_TOKEN));
+        validate(checkOptional(ARGUMENT_IDENTIFIER, identifier),
+                checkIllegal(ARGUMENT_METADATA_PREFIX),
+                checkIllegal(ARGUMENT_FROM),
+                checkIllegal(ARGUMENT_UNTIL),
+                checkIllegal(ARGUMENT_SET),
+                checkIllegal(ARGUMENT_RESUMPTION_TOKEN));
     }
 
     private void validateListSets(final String resumptionToken) throws OaiPmhException {
-        validate(Stream.of(checkOptional(ARGUMENT_RESUMPTION_TOKEN, resumptionToken)),
-                checkIllegal(ARGUMENT_METADATA_PREFIX, ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET,
-                        ARGUMENT_IDENTIFIER));
+        validate(checkOptional(ARGUMENT_RESUMPTION_TOKEN, resumptionToken),
+                checkIllegal(ARGUMENT_METADATA_PREFIX),
+                checkIllegal(ARGUMENT_FROM),
+                checkIllegal(ARGUMENT_UNTIL),
+                checkIllegal(ARGUMENT_SET),
+                checkIllegal(ARGUMENT_IDENTIFIER));
     }
 
     private void validateListIdentifiersListRecords(final String metadataPrefix, final Instant from,
             final Instant until, final SetSpec set, final String resumptionToken) throws OaiPmhException {
-        validate(Stream.of(checkExclusive(ARGUMENT_METADATA_PREFIX, metadataPrefix, ARGUMENT_RESUMPTION_TOKEN,
-                        resumptionToken)),
-                ((metadataPrefix != null) && (resumptionToken == null))
-                        ? Stream.of(checkOptional(ARGUMENT_FROM, from), checkOptional(ARGUMENT_UNTIL, until),
-                        checkOptional(ARGUMENT_SET, set))
-                        : Stream.empty(),
-                Stream.of(checkIllegal(OaiPmh.ARGUMENT_IDENTIFIER)));
+        final boolean initial = (metadataPrefix != null) && (resumptionToken == null);
+        validate(checkExclusive(ARGUMENT_METADATA_PREFIX, metadataPrefix, ARGUMENT_RESUMPTION_TOKEN, resumptionToken),
+                initial ? checkOptional(ARGUMENT_FROM, from) : null,
+                initial ? checkOptional(ARGUMENT_UNTIL, until) : null,
+                initial ? checkOptional(ARGUMENT_SET, set) : null,
+                checkIllegal(OaiPmh.ARGUMENT_IDENTIFIER));
     }
 
     private void validateGetRecord(final URI identifier, final String metadataPrefix) throws OaiPmhException {
-        validate(Stream.of(checkRequired(ARGUMENT_IDENTIFIER, identifier), checkRequired(ARGUMENT_METADATA_PREFIX,
-                        metadataPrefix)),
-                checkIllegal(ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET, ARGUMENT_RESUMPTION_TOKEN));
+        validate(checkRequired(ARGUMENT_IDENTIFIER, identifier),
+                checkRequired(ARGUMENT_METADATA_PREFIX, metadataPrefix),
+                checkIllegal(ARGUMENT_FROM),
+                checkIllegal(ARGUMENT_UNTIL),
+                checkIllegal(ARGUMENT_SET),
+                checkIllegal(ARGUMENT_RESUMPTION_TOKEN));
     }
 
-    private void validate(final Stream<OaiPmhError>... errors) throws OaiPmhException {
-        final List<OaiPmhError> list = Arrays.stream(errors).reduce(Stream.empty(), Stream::concat)
+    private void validate(final OaiPmhError... errors) throws OaiPmhException {
+        final List<OaiPmhError> list = Arrays.stream(errors)
                 .filter(Objects::nonNull)
                 .toList();
         if (!list.isEmpty()) {
@@ -307,11 +317,6 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
         }
         return info.getQueryParameters().containsKey(argument1) ? checkOptional(argument1, value1)
                 : checkOptional(argument2, value2);
-    }
-
-    private Stream<OaiPmhError> checkIllegal(final String... arguments) {
-        return Arrays.stream(arguments)
-                .map(this::checkIllegal);
     }
 
     private OaiPmhError checkIllegal(final String argument) {
