@@ -1,5 +1,6 @@
 package io.github.thanospapapetrou.nefeli.db.cdi;
 
+import java.net.URI;
 import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,12 +33,12 @@ public class Beans {
     @Produces
     public Map<String, String> getProperties(
             @Configuration.Property("nefeli.db.jdbc.driver") final String driver, // Class<?> cannot be injected
-            @Configuration.Property("nefeli.db.jdbc.url") final String url, // Java doesn't support jdbc://... URLs
+            @Configuration.Property("nefeli.db.jdbc.url") final URI url,
             @Configuration.Property("nefeli.db.jdbc.user") final String user,
             @Configuration.Property("nefeli.db.jdbc.password") final String password) {
         return Map.of(
                 PROPERTY_DRIVER, driver,
-                PROPERTY_URL, url,
+                PROPERTY_URL, url.toString(),
                 PROPERTY_USER, user,
                 PROPERTY_PASSWORD, password);
     }

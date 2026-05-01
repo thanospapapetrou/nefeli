@@ -6,6 +6,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Clock;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -76,6 +78,12 @@ public class Configuration {
     @Property
     public Duration getDuration(final InjectionPoint point) {
         return Duration.parse(getString(point));
+    }
+
+    @Produces
+    @Property
+    public URI getUri(final InjectionPoint point) throws URISyntaxException {
+        return new URI(getString(point));
     }
 
     @Produces
