@@ -62,7 +62,7 @@ public class Configuration {
                 .map(Property.class::cast)
                 .findFirst()
                 .orElseThrow(() ->
-                        new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Property.class.getName())))
+                        new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Property.class.getName())))
                 .value());
     }
 

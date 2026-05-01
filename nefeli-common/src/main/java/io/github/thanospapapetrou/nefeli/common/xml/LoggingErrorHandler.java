@@ -17,19 +17,19 @@ public class LoggingErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(final SAXParseException exception) {
-        LOGGER.warning(String.format(WARNING, exception.getSystemId(), exception.getLineNumber(),
+        LOGGER.warning(WARNING.formatted(exception.getSystemId(), exception.getLineNumber(),
                 exception.getColumnNumber(), exception.getMessage()));
     }
 
     @Override
     public void error(final SAXParseException exception) throws SAXException {
-        LOGGER.warning(String.format(ERROR, exception.getSystemId(), exception.getLineNumber(),
-                exception.getColumnNumber(), exception.getMessage()));
+        LOGGER.warning(ERROR.formatted(exception.getSystemId(), exception.getLineNumber(), exception.getColumnNumber(),
+                exception.getMessage()));
     }
 
     @Override
     public void fatalError(final SAXParseException exception) throws SAXException {
-        LOGGER.warning(String.format(FATAL_ERROR, exception.getSystemId(), exception.getLineNumber(),
+        LOGGER.warning(FATAL_ERROR.formatted(exception.getSystemId(), exception.getLineNumber(),
                 exception.getColumnNumber(), exception.getMessage()));
         throw exception;
     }

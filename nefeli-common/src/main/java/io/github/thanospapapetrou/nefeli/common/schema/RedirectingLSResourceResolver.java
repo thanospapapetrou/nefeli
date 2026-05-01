@@ -45,7 +45,7 @@ public class RedirectingLSResourceResolver implements LSResourceResolver {
                                 .get(MediaType.CHARSET_PARAMETER)), new URI(systemId).toURL());
             }
         } catch (final URISyntaxException | IOException e) {
-            LOGGER.log(Level.WARNING, String.format(ERROR_RESOLVING, systemId), e);
+            LOGGER.log(Level.WARNING, ERROR_RESOLVING.formatted(systemId), e);
             return null;
         }
     }

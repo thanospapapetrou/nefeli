@@ -88,7 +88,7 @@ public class Beans {
                 .filter(Jaxb.class::isInstance)
                 .map(Jaxb.class::cast)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Jaxb.class.getName())));
+                .orElseThrow(() -> new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Jaxb.class.getName())));
         final Marshaller marshaller = context.select(jaxb).get().createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -109,7 +109,7 @@ public class Beans {
                 .filter(Jaxb.class::isInstance)
                 .map(Jaxb.class::cast)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Jaxb.class.getName())));
+                .orElseThrow(() -> new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Jaxb.class.getName())));
         final Unmarshaller unmarshaller = context.select(jaxb).get().createUnmarshaller();
         unmarshaller.setSchema(schema.select(new Xsd.Literal(jaxb.value().getPackage().getAnnotation(XmlSchema.class)
                 .location())).get());
@@ -124,7 +124,7 @@ public class Beans {
                 .filter(Jaxb.class::isInstance)
                 .map(Jaxb.class::cast)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Jaxb.class.getName())))
+                .orElseThrow(() -> new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Jaxb.class.getName())))
                 .value());
     }
 
@@ -137,7 +137,7 @@ public class Beans {
                         .filter(Xsd.class::isInstance)
                         .map(Xsd.class::cast)
                         .findFirst()
-                        .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Xsd.class.getName()))))
+                        .orElseThrow(() -> new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Xsd.class.getName()))))
                 .get().newDocumentBuilder();
         builder.setEntityResolver(resolver);
         builder.setErrorHandler(handler);
@@ -162,7 +162,7 @@ public class Beans {
                         .filter(Xsd.class::isInstance)
                         .map(Xsd.class::cast)
                         .findFirst()
-                        .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Xsd.class.getName()))))
+                        .orElseThrow(() -> new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Xsd.class.getName()))))
                 .get());
         return factory;
     }
@@ -175,7 +175,7 @@ public class Beans {
                 .filter(Xsd.class::isInstance)
                 .map(Xsd.class::cast)
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException(String.format(ERROR_NO_QUALIFIER, Xsd.class.getName())))
+                .orElseThrow(() -> new IllegalStateException(ERROR_NO_QUALIFIER.formatted(Xsd.class.getName())))
                 .value()).toURL());
     }
 

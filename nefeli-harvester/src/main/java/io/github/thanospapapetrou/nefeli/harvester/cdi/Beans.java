@@ -45,6 +45,6 @@ public class Beans {
     @Produces
     public ThreadFactory getWorkerThreadFactory() {
         final AtomicInteger threads = new AtomicInteger(0);
-        return new DaemonThreadFactory(() -> String.format(THREAD__WORKER, threads.getAndIncrement()));
+        return new DaemonThreadFactory(() -> THREAD__WORKER.formatted(threads.getAndIncrement()));
     }
 }

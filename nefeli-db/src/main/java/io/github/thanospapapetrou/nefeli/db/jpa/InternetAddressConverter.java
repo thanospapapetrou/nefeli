@@ -20,7 +20,7 @@ public class InternetAddressConverter implements AttributeConverter<InternetAddr
         try {
             return (string == null) ? null : new InternetAddress(string);
         } catch (AddressException e) {
-            throw new PersistenceException(String.format(ERROR_CONVERTING, string, InternetAddress.class.getName()), e);
+            throw new PersistenceException(ERROR_CONVERTING.formatted(string, InternetAddress.class.getName()), e);
         }
     }
 }

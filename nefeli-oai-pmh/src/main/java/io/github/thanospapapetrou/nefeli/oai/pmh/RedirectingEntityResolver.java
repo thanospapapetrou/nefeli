@@ -35,7 +35,7 @@ public class RedirectingEntityResolver implements EntityResolver {
             source.setByteStream(connection.getInputStream());
             return source;
         } catch (final URISyntaxException e) {
-            throw new IOException(String.format(ERROR_RESOLVING, publicId, systemId), e);
+            throw new IOException(ERROR_RESOLVING.formatted(publicId, systemId), e);
         }
     }
 }

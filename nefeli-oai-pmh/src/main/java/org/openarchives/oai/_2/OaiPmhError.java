@@ -55,6 +55,6 @@ public class OaiPmhError {
 
     @Override
     public String toString() {
-        return String.format(value, code);
+        return FORMAT.formatted(value, code);
     }
 }

@@ -50,7 +50,7 @@ public class OaiPmhReader<T extends OaiPmhBody> implements MessageBodyReader<Oai
     public boolean isReadable(final Class<?> clazz, final Type type, final Annotation[] annotations,
             final MediaType mediaType) {
         if (!mediaType.equals(MediaType.TEXT_XML_TYPE.withCharset(StandardCharsets.UTF_8.name().toLowerCase(Locale.ROOT)))) {
-            LOGGER.warning(String.format(WARNING_INVALID_MEDIA_TYPE, mediaType));
+            LOGGER.warning(WARNING_INVALID_MEDIA_TYPE.formatted(mediaType));
         }
         return true;
     }

@@ -18,7 +18,7 @@ public class LoggingValidationEventHandler implements ValidationEventHandler {
     @Override
     public boolean handleEvent(final ValidationEvent event) {
         if (event.getSeverity() != ValidationEvent.FATAL_ERROR) {
-            LOGGER.warning(String.format(MESSAGES.get(event.getSeverity()), event.getMessage()));
+            LOGGER.warning(MESSAGES.get(event.getSeverity()).formatted(event.getMessage()));
         }
         return event.getSeverity() != ValidationEvent.FATAL_ERROR;
     }

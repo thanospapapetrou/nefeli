@@ -40,7 +40,7 @@ public class DelegatingContainerAdapter extends ContainerAdapter<Container> {
         }
         final Optional<ContainerProvider<Container>> provider = getProvider(container).map(ServiceLoader.Provider::get);
         if (provider.isEmpty()) {
-            throw new JAXBException(String.format(ERROR_NO_CONTAINER_PROVIDER_CLASS, container.getClass().getName()));
+            throw new JAXBException(ERROR_NO_CONTAINER_PROVIDER_CLASS.formatted(container.getClass().getName()));
         }
         return provider.get().getAdapter().marshal(container);
     }
@@ -49,7 +49,7 @@ public class DelegatingContainerAdapter extends ContainerAdapter<Container> {
     public Container unmarshal(final Element element) throws JAXBException {
         final Optional<ContainerProvider<Container>> provider = getProvider(element).map(ServiceLoader.Provider::get);
         if (provider.isEmpty()) {
-            LOGGER.warning(String.format(ERROR_NO_CONTAINER_PROVIDER_ELEMENT, new QName(element.getNamespaceURI(),
+            LOGGER.warning(ERROR_NO_CONTAINER_PROVIDER_ELEMENT.formatted(new QName(element.getNamespaceURI(),
                     element.getLocalName())));
             return new GenericContainer(element);
         }
@@ -57,8 +57,7 @@ public class DelegatingContainerAdapter extends ContainerAdapter<Container> {
         try {
             return adapter.unmarshal(element);
         } catch (final JAXBException e) {
-            LOGGER.warning(String.format(ERROR_UNMARSHALLING, new QName(element.getNamespaceURI(),
-                    element.getLocalName())));
+            LOGGER.warning(ERROR_UNMARSHALLING.formatted(new QName(element.getNamespaceURI(), element.getLocalName())));
             return new GenericContainer(element);
         }
     }

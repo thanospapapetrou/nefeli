@@ -123,7 +123,7 @@ public class Harvester implements AutoCloseable, Runnable {
     }
 
     private CompletableFuture<Void> identify(final OaiPmhClient client) {
-        return step(client::identify, client, String.format(ERROR_IDENTIFYING, client.getUrl()))
+        return step(client::identify, client, ERROR_IDENTIFYING.formatted(client.getUrl()))
                 .thenComposeAsync(identify -> step(() -> {
                     repositoryDao.update(
                             new Repository(identify.getBody().getBaseUrl(), identify.getResponseDate(), null,
@@ -131,23 +131,23 @@ public class Harvester implements AutoCloseable, Runnable {
                                     identify.getBody().getEarliestDatestamp(), identify.getBody().getDeletedRecord(),
                                     identify.getBody().getGranularity(), identify.getBody().getCompressions()));
                     return identify.getBody().getBaseUrl();
-                }, client, String.format(ERROR_UPDATING, identify.getBody().getBaseUrl())), workers)
+                }, client, ERROR_UPDATING.formatted(identify.getBody().getBaseUrl())), workers)
                 .thenComposeAsync(url -> step(() -> {
                     if (!client.getUrl().toString().equals(url.toString())) {
                         repositoryDao.delete(client.getUrl());
                         // TODO do not continue using same client, stop chain
                     }
                     return null;
-                }, client, String.format(ERROR_DELETING, url)), workers);
+                }, client, ERROR_DELETING.formatted(url)), workers);
     }
 
     private CompletableFuture<String> listSets(final OaiPmhClient client, final String token) {
         return step(() -> (token == null) ? client.listSets() : client.listSets(token), client,
-                String.format(ERROR_LISTING_SETS, client.getUrl()))
+                ERROR_LISTING_SETS.formatted(client.getUrl()))
                 .thenComposeAsync(listSets -> {
                     final CompletableFuture<String> batch = step(() -> {
                         listSets.getBody().getSets().forEach(set ->
-                                LOGGER.info(String.format("Processing set: %1$s %2$s", set.getSetSpec(),
+                                LOGGER.info("Processing set: %1$s %2$s".formatted(set.getSetSpec(),
                                         set.getSetName()))); // TODO
                         return (listSets.getBody().getResumptionToken() == null) ? null
                                 : listSets.getBody().getResumptionToken().getValue();
@@ -161,7 +161,7 @@ public class Harvester implements AutoCloseable, Runnable {
         return step(() -> client.listMetadataFormats(null), client, "Error listing metadata formats") // TODO
                 .thenComposeAsync(listMetadataFormats -> step(() -> {
                     listMetadataFormats.getBody().getMetadataFormats().forEach(metadataFormat -> {
-                        LOGGER.info(String.format("Processing metadata format: %1$s %2$s %3$s", // TODO
+                        LOGGER.info("Processing metadata format: %1$s %2$s %3$s".formatted( // TODO
                                 metadataFormat.getMetadataPrefix(), metadataFormat.getSchema(), metadataFormat.getMetadataNamespace()));
                     });
                     return null;
@@ -174,7 +174,7 @@ public class Harvester implements AutoCloseable, Runnable {
             try {
                 future.complete(step.call());
             } catch (final RetryAfterException e) {
-                LOGGER.info(String.format("Waiting %1$s for %2$d seconds", client.getUrl(), e.getSeconds()));
+                LOGGER.info("Waiting %1$s for %2$d seconds".formatted(client.getUrl(), e.getSeconds()));
                 scheduler.schedule(() -> {
                     step(step, client, error).thenAcceptAsync(future::complete, workers);
                 }, e.getSeconds(), TimeUnit.SECONDS);
@@ -182,7 +182,7 @@ public class Harvester implements AutoCloseable, Runnable {
             } catch (final Exception e) {
                 final String unrecoverable = getUnrecoverableError(e);
                 if (unrecoverable != null) {
-                    LOGGER.log(Level.WARNING, String.format(FORMAT_ERROR_UNRECOVERABLE, error, unrecoverable));
+                    LOGGER.log(Level.WARNING, FORMAT_ERROR_UNRECOVERABLE.formatted(error, unrecoverable));
                     setRepositoryError(client.getUrl(), unrecoverable);
                 } else {
                     LOGGER.log(Level.WARNING, error, e);
@@ -200,9 +200,9 @@ public class Harvester implements AutoCloseable, Runnable {
                     .map(OaiPmhErrorCode::toString)
                     .collect(Collectors.joining(DELIMITER));
         } else if (e instanceof WebApplicationException w) {
-            return String.format(ERROR_HTTP, w.getResponse().getStatus());
+            return ERROR_HTTP.formatted(w.getResponse().getStatus());
         } else if (e instanceof HttpRetryException r) {
-            return String.format(ERROR_REDIRECT, r.responseCode(), r.getLocation());
+            return ERROR_REDIRECT.formatted(r.responseCode(), r.getLocation());
         } else if ((e instanceof IOException) && (e.getCause() instanceof ProcessingException)
                 && ((e.getCause().getCause() instanceof UnknownHostException)
                 || (e.getCause().getCause() instanceof ConnectException)
@@ -218,7 +218,7 @@ public class Harvester implements AutoCloseable, Runnable {
         try {
             repositoryDao.update(new Repository(url, clock.instant(), error, null, null, null, null, null, null));
         } catch (final DaoException e) {
-            LOGGER.warning(String.format(ERROR_SETTING_ERROR, url));
+            LOGGER.warning(ERROR_SETTING_ERROR.formatted(url));
         }
     }
 }
