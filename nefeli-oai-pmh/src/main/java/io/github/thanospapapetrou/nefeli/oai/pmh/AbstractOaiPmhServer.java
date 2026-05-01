@@ -259,7 +259,8 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
     }
 
     private void validateGetRecord(final URI identifier, final String metadataPrefix) throws OaiPmhException {
-        validate(checkRequired(Map.of(ARGUMENT_IDENTIFIER, identifier, ARGUMENT_METADATA_PREFIX, metadataPrefix)),
+        validate(Stream.of(checkRequired(ARGUMENT_IDENTIFIER, identifier), checkRequired(ARGUMENT_METADATA_PREFIX,
+                        metadataPrefix)),
                 checkIllegal(ARGUMENT_FROM, ARGUMENT_UNTIL, ARGUMENT_SET, ARGUMENT_RESUMPTION_TOKEN));
     }
 
@@ -270,11 +271,6 @@ public abstract class AbstractOaiPmhServer implements OaiPmh {
         if (!list.isEmpty()) {
             throw new OaiPmhException(list);
         }
-    }
-
-    private Stream<OaiPmhError> checkRequired(final Map<String, Object> argumentValues) {
-        return argumentValues.entrySet().stream()
-                .map(entry -> checkRequired(entry.getKey(), entry.getValue()));
     }
 
     private OaiPmhError checkRequired(final String argument, final Object value) {

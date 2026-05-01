@@ -222,4 +222,40 @@ class OaiPmhErrorIT extends OaiPmhBase {
         ['bar']        | ['baz']        | ['qux']           | []                   | []             || [AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_FROM, 'baz'), AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_UNTIL, 'qux'), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
         []             | []             | []                | []                   | ['bar', 'baz'] || [AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.formatted(OaiPmh.ARGUMENT_RESUMPTION_TOKEN), AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.formatted(OaiPmh.ARGUMENT_IDENTIFIER)]
     }
+
+    @Unroll('Test get record bad argument (errors: #errors)')
+    def 'Test get record bad argument'() {
+        given:
+        WebTarget target = this.target.queryParam(OaiPmh.ARGUMENT_VERB, Verb.GET_RECORD)
+                .queryParam(OaiPmh.ARGUMENT_IDENTIFIER, identifiers as String[])
+                .queryParam(OaiPmh.ARGUMENT_METADATA_PREFIX, prefixes as String[])
+                .queryParam(OaiPmh.ARGUMENT_FROM, 'foo')
+                .queryParam(OaiPmh.ARGUMENT_UNTIL, 'bar')
+                .queryParam(OaiPmh.ARGUMENT_SET, 'baz')
+                .queryParam(OaiPmh.ARGUMENT_RESUMPTION_TOKEN, 'qux')
+        when:
+        final Response response = target.request().get()
+        then:
+        verify(response)
+        when:
+        final OaiPmhResponse<OaiPmhBody> oaiPmh = response.readEntity(new GenericType<OaiPmhResponse<OaiPmhBody>>() {})
+        then:
+        verify(oaiPmh)
+        !oaiPmh.request.verb
+        !oaiPmh.request.identifier
+        !oaiPmh.request.metadataPrefix
+        !oaiPmh.request.from
+        !oaiPmh.request.until
+        !oaiPmh.request.set
+        !oaiPmh.request.resumptionToken
+        oaiPmh.errors
+        oaiPmh.errors*.value == errors
+        oaiPmh.errors*.code == [OaiPmhErrorCode.BAD_ARGUMENT] * errors.size()
+        !oaiPmh.body
+        where:
+        identifiers       | prefixes             || errors
+        []                | []                   || [OaiPmh.ARGUMENT_IDENTIFIER, OaiPmh.ARGUMENT_METADATA_PREFIX].collect(AbstractOaiPmhServer.ERROR_ARGUMENT_MISSING.&formatted) + [OaiPmh.ARGUMENT_FROM, OaiPmh.ARGUMENT_UNTIL, OaiPmh.ARGUMENT_SET, OaiPmh.ARGUMENT_RESUMPTION_TOKEN].collect(AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.&formatted)
+        ['quux', 'corge'] | ['grault', 'garply'] || [OaiPmh.ARGUMENT_IDENTIFIER, OaiPmh.ARGUMENT_METADATA_PREFIX].collect(AbstractOaiPmhServer.ERROR_ARGUMENT_REPEATED.&formatted) + [OaiPmh.ARGUMENT_FROM, OaiPmh.ARGUMENT_UNTIL, OaiPmh.ARGUMENT_SET, OaiPmh.ARGUMENT_RESUMPTION_TOKEN].collect(AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.&formatted)
+        [':quux']         | ['foo']              || [AbstractOaiPmhServer.ERROR_ARGUMENT_INVALID.formatted(OaiPmh.ARGUMENT_IDENTIFIER, ':quux')] + [OaiPmh.ARGUMENT_FROM, OaiPmh.ARGUMENT_UNTIL, OaiPmh.ARGUMENT_SET, OaiPmh.ARGUMENT_RESUMPTION_TOKEN].collect(AbstractOaiPmhServer.ERROR_ARGUMENT_ILLEGAL.&formatted)
+    }
 }
